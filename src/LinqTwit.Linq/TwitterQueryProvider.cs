@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,6 +9,13 @@ namespace LinqTwit.Linq
 {
     public class TwitterQueryProvider : IQueryProvider
     {
+        private readonly ILinqApi linqApi;
+
+        public TwitterQueryProvider(ILinqApi linqApi)
+        {
+            this.linqApi = linqApi;
+        }
+
         public IQueryable CreateQuery(Expression expression)
         {
             throw new NotImplementedException();
@@ -15,7 +23,7 @@ namespace LinqTwit.Linq
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            return new TwitterQueryable<TElement>(this, expression);
+            return new TwitterQueryable<TElement>(linqApi, this, expression);
         }
 
         public object Execute(Expression expression)
@@ -25,7 +33,10 @@ namespace LinqTwit.Linq
 
         public TResult Execute<TResult>(Expression expression)
         {
-            throw new NotImplementedException();
+            bool IsEnumerable = (typeof(TResult).Name == "IEnumerable`1");
+
+            TwitterQuery query = new TwitterQuery(expression, IsEnumerable, this.linqApi);
+            return (TResult)query.Execute();
         }
     }
 }

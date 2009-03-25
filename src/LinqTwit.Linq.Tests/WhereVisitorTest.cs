@@ -11,12 +11,14 @@ namespace LinqTwit.Linq.Tests
     {
         private WhereVisitor visitor;
         private Mock<IUser> user;
+        private Mock<ILinqApi> api;
+        private readonly MockFactory factory = new MockFactory(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
 
-        private readonly MockFactory factory = new MockFactory(MockBehavior.Loose){DefaultValue = DefaultValue.Mock};
 
         [SetUp]
         public void SetUp()
         {
+            api = factory.Create<ILinqApi>();
             visitor = new WhereVisitor();
             user = factory.Create<IUser>();
 
@@ -26,7 +28,7 @@ namespace LinqTwit.Linq.Tests
         public void TestFoo()
         {
 
-            var queryable = from u in new Twitter().Users
+            var queryable = from u in new Twitter(api.Object).Users
                             where u.Name == "yo"
                             select u.Name;
 

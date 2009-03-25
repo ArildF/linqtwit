@@ -9,15 +9,18 @@ namespace LinqTwit.Linq
 {
     public class TwitterQueryable<T> : IQueryable<T>
     {
-        public TwitterQueryable()
+        private readonly ILinqApi linqApi;
+
+        public TwitterQueryable(ILinqApi linqApi)
         {
-            Provider = new TwitterQueryProvider();
+            Provider = new TwitterQueryProvider(linqApi);
             Expression = Expression.Constant(this);
 
         }
 
-        public TwitterQueryable(TwitterQueryProvider provider, Expression expression)
+        public TwitterQueryable(ILinqApi linqApi, TwitterQueryProvider provider, Expression expression)
         {
+            this.linqApi = linqApi;
             this.Expression = expression;
             this.Provider = provider;
         }
@@ -36,7 +39,8 @@ namespace LinqTwit.Linq
 
         public IEnumerator<T> GetEnumerator()
         {
-            return Provider.Execute<IEnumerator<T>>(this.Expression);
+            return
+                Provider.Execute<IEnumerable<T>>(this.Expression).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

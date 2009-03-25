@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LinqTwit.Twitter;
+using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -11,11 +13,15 @@ namespace LinqTwit.Linq.Tests
     public class TwitterTest
     {
         private Twitter _twitter;
+        private Mock<ILinqApi> api;
+        private readonly MockFactory factory = new MockFactory(MockBehavior.Loose){DefaultValue = DefaultValue.Mock};
 
         [SetUp]
         public void SetUp()
         {
-            _twitter = new Twitter();
+            api = factory.Create<ILinqApi>();
+
+            _twitter = new Twitter(api.Object);
         }
 
         [Test]
@@ -48,11 +54,14 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void QueryTweetById()
         {
+            var status = new Status {Id = "123456"};
+            api.Setup(a => a.GetStatus("123456")).Returns(status);
+
             var tweets = from tweet in _twitter.Tweets
                         where tweet.Id == "123456"
                         select tweet;
 
-            Assert.That(tweets.Count(), Is.EqualTo(1));
+            Assert.That(tweets.ToList()[0].Id, Is.EqualTo("123456"));
         }
     }
 }

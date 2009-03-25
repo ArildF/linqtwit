@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -12,10 +9,15 @@ namespace LinqTwit.Linq.Tests
     {
         private TwitterQueryable<IUser> queryable;
 
+        private Mock<ILinqApi> api;
+        private readonly MockFactory factory = new MockFactory(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
+
         [SetUp]
         public void SetUp()
         {
-            queryable = new TwitterQueryable<IUser>();
+            api = factory.Create<ILinqApi>();
+
+            queryable = new TwitterQueryable<IUser>(api.Object);
         }
 
         [Test]

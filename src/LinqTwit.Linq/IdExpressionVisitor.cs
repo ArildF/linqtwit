@@ -5,7 +5,7 @@ namespace LinqTwit.Linq
 {
     class IdExpressionVisitor : ExpressionVisitor
     {
-        public bool FindIdExpression(Expression<Func<ITweet, bool>> expression)
+        public bool FindIdExpression(LambdaExpression expression)
         {
             this.Visit(expression);
 

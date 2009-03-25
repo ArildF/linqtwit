@@ -62,6 +62,10 @@
       <Project>{6E738C49-89BB-4DC6-8B26-2899D191047B}</Project>
       <Name>LinqTwit.Linq</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Twitter\LinqTwit.Twitter.csproj">
+      <Project>{E2D0487D-4D2D-4263-B51D-E1F62969C743}</Project>
+      <Name>LinqTwit.Twitter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

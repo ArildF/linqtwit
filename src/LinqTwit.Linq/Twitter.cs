@@ -4,10 +4,10 @@ namespace LinqTwit.Linq
 {
     public class Twitter
     {
-        public Twitter()
+        public Twitter(ILinqApi linqApi)
         {
-            Users = new TwitterQueryable<IUser>();
-            Tweets = new TwitterQueryable<ITweet>();
+            Users = new TwitterQueryable<IUser>(linqApi);
+            Tweets = new TwitterQueryable<ITweet>(linqApi);
         }
         public IQueryable<IUser> Users { get; private set; }
 

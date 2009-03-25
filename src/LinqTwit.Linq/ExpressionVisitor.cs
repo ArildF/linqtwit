@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
 namespace LinqTwit.Linq
@@ -31,7 +34,17 @@ namespace LinqTwit.Linq
 
         protected virtual Expression VisitCall(MethodCallExpression expr)
         {
+            VisitList(expr.Arguments);
+
             return expr;
+        }
+
+        private void VisitList(IEnumerable<Expression> expressions)
+        {
+            foreach (var expression in expressions)
+            {
+                Visit(expression);
+            }
         }
 
         protected virtual Expression VisitLambda(LambdaExpression lambda)

@@ -25,7 +25,7 @@ namespace LinqTwit.Linq.Tests
         }
 
         [Test]
-        public void TestFoo()
+        public void FindsWhereEvenWithSelect()
         {
 
             var queryable = from u in new Twitter(api.Object).Users
@@ -45,6 +45,20 @@ namespace LinqTwit.Linq.Tests
 
             ret = lambda.Compile().DynamicInvoke(user.Object);
             Assert.That(ret, Is.False);
+
+
+        }
+
+        [Test]
+        public void FindsWhereWithoutSelect()
+        {
+
+            var queryable = from u in new Twitter(api.Object).Users
+                            where u.Name == "yo"
+                            select u;
+
+            MethodCallExpression expr = visitor.FindWhere(queryable.Expression);
+            Assert.That(expr, Is.Not.Null);
 
 
         }

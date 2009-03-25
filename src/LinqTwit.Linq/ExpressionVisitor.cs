@@ -1,4 +1,3 @@
-using System;
 using System.Linq.Expressions;
 
 namespace LinqTwit.Linq
@@ -18,9 +17,16 @@ namespace LinqTwit.Linq
                     return this.VisitLambda((LambdaExpression) expr);
                 case ExpressionType.Call:
                     return this.VisitCall((MethodCallExpression) expr);
+                case ExpressionType.Equal:
+                    return this.VisitBinaryExpression((BinaryExpression) expr);
                 default:
                     return expr;
             }
+        }
+
+        protected virtual Expression VisitBinaryExpression(BinaryExpression expression)
+        {
+            return expression;
         }
 
         protected virtual Expression VisitCall(MethodCallExpression expr)
@@ -30,6 +36,7 @@ namespace LinqTwit.Linq
 
         protected virtual Expression VisitLambda(LambdaExpression lambda)
         {
+            Visit(lambda.Body);
             return lambda;
         }
     }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace LinqTwit.Linq
 {
@@ -10,8 +7,10 @@ namespace LinqTwit.Linq
         public Twitter()
         {
             Users = new TwitterQueryable<IUser>();
-
+            Tweets = new TwitterQueryable<ITweet>();
         }
         public IQueryable<IUser> Users { get; private set; }
+
+        public IQueryable<ITweet> Tweets { get; private set; }
     }
 }

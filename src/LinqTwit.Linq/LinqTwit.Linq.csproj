@@ -46,6 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpressionVisitor.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="IdExpressionVisitor.cs" />
+    <Compile Include="ITweet.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Twitter.cs" />

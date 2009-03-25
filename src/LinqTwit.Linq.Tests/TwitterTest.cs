@@ -27,7 +27,13 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void Users()
         {
-            Assert.That(_twitter.Users, Is.Not.Null);
+            Assert.That(_twitter.Users, Is.InstanceOfType(typeof(IQueryable<IUser>  )));
+        }
+
+        [Test]
+        public void Tweets()
+        {
+            Assert.That(_twitter.Tweets, Is.InstanceOfType(typeof(IQueryable<ITweet>)));
         }
 
         [Test]
@@ -37,8 +43,16 @@ namespace LinqTwit.Linq.Tests
                         where user.Name == "rogue_code"
                         select user;
             Assert.That(users.ToList(), Is.Not.Null);
-            ;
+        }
 
+        [Test]
+        public void QueryTweetById()
+        {
+            var tweets = from tweet in _twitter.Tweets
+                        where tweet.Id == "123456"
+                        select tweet;
+
+            Assert.That(tweets.Count(), Is.EqualTo(1));
         }
     }
 }

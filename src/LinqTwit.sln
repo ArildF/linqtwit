@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.Shell", "LinqTwit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositeWPFContrib.Composite.StructureMapExtensions", "CompositeWPFContrib.Composite.StructureMapExtensions\CompositeWPFContrib.Composite.StructureMapExtensions.csproj", "{2F591031-B7BA-4E9A-B3FF-21553D778A18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.QueryModule", "LinqTwit.QueryModule\LinqTwit.QueryModule.csproj", "{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.QueryModule.Tests", "LinqTwit.QueryModule.Tests\LinqTwit.QueryModule.Tests.csproj", "{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,14 @@ Global
 		{2F591031-B7BA-4E9A-B3FF-21553D778A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F591031-B7BA-4E9A-B3FF-21553D778A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F591031-B7BA-4E9A-B3FF-21553D778A18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

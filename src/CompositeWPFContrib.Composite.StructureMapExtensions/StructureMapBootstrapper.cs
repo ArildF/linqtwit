@@ -7,6 +7,7 @@ using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Logging;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Presentation.Regions;
+using Microsoft.Practices.Composite.Presentation.Regions.Behaviors;
 using Microsoft.Practices.Composite.Regions;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
@@ -57,12 +58,14 @@ namespace CompositeWPFContrib.Composite.StructureMapExtensions
 
             logger.Log("Configuring region adapters", Category.Debug, Priority.Low);
             ConfigureRegionAdapterMappings();
+            ConfigureDefaultRegionBehaviors();
 
             logger.Log("Creating shell", Category.Debug, Priority.Low);
             var shell = CreateShell();
             if (shell != null)
             {
                 RegionManager.SetRegionManager(shell, Container.GetInstance<IRegionManager>());
+                RegionManager.UpdateRegions();
             }
 
             logger.Log("Initializing modules", Category.Debug, Priority.Low);
@@ -79,6 +82,8 @@ namespace CompositeWPFContrib.Composite.StructureMapExtensions
         {
             Container.Configure(reg =>
                                     {
+
+                                        RegisterTypeIfMissing<IServiceLocator, StructureMapServiceLocator>(true);
                                         reg.ForRequestedType<ILoggerFacade>().TheDefault.IsThis(LoggerFacade);
                                         reg.ForRequestedType<IContainer>().TheDefault.IsThis(Container);
 
@@ -88,11 +93,12 @@ namespace CompositeWPFContrib.Composite.StructureMapExtensions
                                         RegisterTypeIfMissing
                                             <IModuleManager, ModuleManager>(true);
 
-                                        RegisterTypeIfMissing<IServiceLocator, StructureMapServiceLocator>(true);
                                         RegisterTypeIfMissing<IEventAggregator, EventAggregator>(true);
                                         RegisterTypeIfMissing<RegionAdapterMappings, RegionAdapterMappings>(true);
                                         RegisterTypeIfMissing<IRegionManager, RegionManager>(true);
                                         RegisterTypeIfMissing<IModuleInitializer, ModuleInitializer>(true);
+                                        RegisterTypeIfMissing<IRegionBehaviorFactory, RegionBehaviorFactory>(true);
+                                        RegisterTypeIfMissing<IRegionViewRegistry, RegionViewRegistry>(true);
                                     });
 
             ServiceLocator.SetLocatorProvider(() => this.Container.GetInstance<IServiceLocator>());
@@ -119,8 +125,8 @@ namespace CompositeWPFContrib.Composite.StructureMapExtensions
 
         /// <summary>
         /// Initializes the modules. May be overwritten in a derived class to use custom
-        /// module loading and avoid using an <seealso cref="IModuleLoader"/> and
-        /// <seealso cref="IModuleEnumerator"/>.
+        /// module loading and avoid using an <seealso cref="IModuleCatalog"/> and
+        /// <seealso cref="IModuleInitializer"/>.
         /// </summary>
         protected virtual void InitializeModules()
         {
@@ -149,6 +155,32 @@ namespace CompositeWPFContrib.Composite.StructureMapExtensions
         protected virtual IContainer CreateContainer()
         {
             return new Container();
+        }
+
+        protected virtual IRegionBehaviorFactory ConfigureDefaultRegionBehaviors()
+        {
+            var defaultRegionBehaviorTypesDictionary = Container.GetInstance<IRegionBehaviorFactory>();
+
+            if (defaultRegionBehaviorTypesDictionary != null)
+            {
+                defaultRegionBehaviorTypesDictionary.AddIfMissing(AutoPopulateRegionBehavior.BehaviorKey,
+                    typeof(AutoPopulateRegionBehavior));
+
+                defaultRegionBehaviorTypesDictionary.AddIfMissing(BindRegionContextToDependencyObjectBehavior.BehaviorKey,
+                    typeof(BindRegionContextToDependencyObjectBehavior));
+
+                defaultRegionBehaviorTypesDictionary.AddIfMissing(RegionActiveAwareBehavior.BehaviorKey,
+                    typeof(RegionActiveAwareBehavior));
+
+                defaultRegionBehaviorTypesDictionary.AddIfMissing(SyncRegionContextWithHostBehavior.BehaviorKey,
+                    typeof(SyncRegionContextWithHostBehavior));
+
+                defaultRegionBehaviorTypesDictionary.AddIfMissing(RegionManagerRegistrationBehavior.BehaviorKey,
+                    typeof(RegionManagerRegistrationBehavior));
+
+            }
+            return defaultRegionBehaviorTypesDictionary;
+
         }
 
         /// <summary>

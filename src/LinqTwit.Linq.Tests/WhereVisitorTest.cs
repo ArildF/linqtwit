@@ -59,8 +59,6 @@ namespace LinqTwit.Linq.Tests
 
             MethodCallExpression expr = visitor.FindWhere(queryable.Expression);
             Assert.That(expr, Is.Not.Null);
-
-
         }
     }
 }

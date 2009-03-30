@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.QueryModule", "Lin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.QueryModule.Tests", "LinqTwit.QueryModule.Tests\LinqTwit.QueryModule.Tests.csproj", "{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.Utilities", "LinqTwit.Utilities\LinqTwit.Utilities.csproj", "{AD3BD729-AA94-426A-9488-640A902BE9ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09A8C59D-B07F-4FA6-BA3F-7A5AA804D774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3BD729-AA94-426A-9488-640A902BE9ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3BD729-AA94-426A-9488-640A902BE9ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3BD729-AA94-426A-9488-640A902BE9ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3BD729-AA94-426A-9488-640A902BE9ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

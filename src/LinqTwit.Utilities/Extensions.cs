@@ -2,9 +2,9 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace LinqTwit.Linq
+namespace LinqTwit.Utilities
 {
-    static class Extensions
+    public static class Extensions
     {
         public static bool IsProperty<T>(this MemberInfo info, Expression<Func<T, object>> expr)
         {

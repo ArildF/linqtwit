@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpressionVisitor.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="IdExpressionVisitor.cs" />
     <Compile Include="ILinqApi.cs" />
     <Compile Include="ITweet.cs" />
@@ -63,6 +62,10 @@
     <ProjectReference Include="..\LinqTwit.Twitter\LinqTwit.Twitter.csproj">
       <Project>{E2D0487D-4D2D-4263-B51D-E1F62969C743}</Project>
       <Name>LinqTwit.Twitter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
+      <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>
+      <Name>LinqTwit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

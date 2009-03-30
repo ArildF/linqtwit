@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using LinqTwit.Utilities;
 
 namespace LinqTwit.Linq
 {

@@ -92,6 +92,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
+      <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>
+      <Name>LinqTwit.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

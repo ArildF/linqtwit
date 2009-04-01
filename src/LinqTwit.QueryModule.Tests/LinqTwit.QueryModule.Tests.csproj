@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -64,6 +67,10 @@
     <ProjectReference Include="..\LinqTwit.QueryModule\LinqTwit.QueryModule.csproj">
       <Project>{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}</Project>
       <Name>LinqTwit.QueryModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
+      <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>
+      <Name>LinqTwit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

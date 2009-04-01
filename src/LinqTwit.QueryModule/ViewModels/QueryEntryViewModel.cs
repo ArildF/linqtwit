@@ -1,15 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
+using LinqTwit.Utilities;
+using Microsoft.Practices.Composite.Presentation.Commands;
 
 namespace LinqTwit.QueryModule.ViewModels
 {
-    public class QueryEntryViewModel : IQueryEntryViewModel
+    public class QueryEntryViewModel : IQueryEntryViewModel, IRaisePropertyChanged, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public QueryEntryViewModel(IQueryEntryView view)
         {
             View = view;
+            View.DataContext = this;
+
+            this.submitQueryCommand =
+                new DelegateCommand<object>(OnSubmitQuery, o => !String.IsNullOrEmpty(QueryText));
+
+        }
+
+        private void OnSubmitQuery(object obj)
+        {
+            
         }
 
         public IQueryEntryView View
@@ -17,6 +33,33 @@ namespace LinqTwit.QueryModule.ViewModels
             get; private set;
         }
 
-        public string QueryText { get; set; }
+        private string queryText;
+
+        public string QueryText
+        {
+            get { return queryText; }
+            set
+            {
+                queryText = value;
+                this.OnPropertyChanged(x => x.QueryText);
+                this.submitQueryCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public ICommand SubmitQueryCommand
+        {
+            get { return submitQueryCommand; }
+        }
+
+        void IRaisePropertyChanged.RaisePropertyChanged(string propName)
+        {
+            if (this.PropertyChanged != null)
+            {
+                this.PropertyChanged(this,
+                                     new PropertyChangedEventArgs(propName));
+            }
+        }
+
+        private readonly DelegateCommand<object> submitQueryCommand;
     }
 }

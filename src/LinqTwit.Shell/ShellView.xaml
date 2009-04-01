@@ -11,8 +11,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Column="0" Grid.Row="0" cal:RegionManager.RegionName="QueryEntry" Background="AliceBlue"/>
-        <ItemsControl Grid.Column="0" Grid.Row="1" cal:RegionManager.RegionName="QueryResults" Background="Red"/>
+        <ContentControl Grid.Column="0" Grid.Row="0" cal:RegionManager.RegionName="QueryEntry" Background="AliceBlue"/>
+        <ContentControl Grid.Column="0" Grid.Row="1" cal:RegionManager.RegionName="QueryResults" Background="Red"/>
         
     </Grid>
 </Window>

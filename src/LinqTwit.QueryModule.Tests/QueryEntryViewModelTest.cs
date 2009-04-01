@@ -1,3 +1,4 @@
+using System;
 using LinqTwit.QueryModule.ViewModels;
 using Moq;
 using NUnit.Framework;
@@ -34,6 +35,31 @@ namespace LinqTwit.QueryModule.Tests
         {
             vm.QueryText = "Hi";
             Assert.That(vm.QueryText, Is.EqualTo("Hi"));
+        }
+
+        [Test]
+        public void SubmitQueryDisabledWhenQueryTextEmpty()
+        {
+            vm.QueryText = String.Empty;
+            Assert.That(vm.SubmitQueryCommand.CanExecute(null), Is.False);
+        }
+
+        [Test]
+        public void SubmitQueryEnabledWhenQueryTextSet()
+        {
+            vm.QueryText = "Hai";
+            Assert.That(vm.SubmitQueryCommand.CanExecute(null), Is.True);
+        }
+
+        [Test]
+        public void SettingQueryTextRaiseCanExecuteChangedOnSubmitQueryCommand()
+        {
+            bool raised = false;
+            vm.SubmitQueryCommand.CanExecuteChanged += (_1, _2) => raised = true;
+
+            vm.QueryText = "Hai";
+            Assert.That(raised, Is.True);
+
         }
     }
 }

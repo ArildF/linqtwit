@@ -5,16 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using LinqTwit.Utilities;
+using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Presentation.Commands;
 
 namespace LinqTwit.QueryModule.ViewModels
 {
     public class QueryEntryViewModel : IQueryEntryViewModel, IRaisePropertyChanged, INotifyPropertyChanged
     {
+        private readonly IEventAggregator aggregator;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public QueryEntryViewModel(IQueryEntryView view)
+        public QueryEntryViewModel(IQueryEntryView view, IEventAggregator aggregator)
         {
+            this.aggregator = aggregator;
             View = view;
             View.DataContext = this;
 
@@ -25,7 +28,7 @@ namespace LinqTwit.QueryModule.ViewModels
 
         private void OnSubmitQuery(object obj)
         {
-            
+            this.aggregator.GetEvent<QuerySubmittedEvent>().Publish(this.QueryText);
         }
 
         public IQueryEntryView View

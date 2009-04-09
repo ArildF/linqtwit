@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Linq.Expressions;
+using LinqTwit.Twitter;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;

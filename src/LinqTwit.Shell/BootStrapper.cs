@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using CompositeWPFContrib.Composite.StructureMapExtensions;
+using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Modularity;
 
 namespace LinqTwit.Shell
@@ -32,11 +33,16 @@ namespace LinqTwit.Shell
                                     {
                                         x.ForRequestedType<IShellView>().
                                             TheDefaultIsConcreteType
-                                            <Shell.ShellView>();
+                                            <ShellView>();
 
                                         x.ForRequestedType<IShellPresenter>().
                                             TheDefaultIsConcreteType
                                             <ShellPresenter>();
+
+                                        x.ForRequestedType<ILinqApi>().
+                                            TheDefaultIsConcreteType
+                                            <TwitterRestClient>();
+
                                     });
 
             Container.AssertConfigurationIsValid();

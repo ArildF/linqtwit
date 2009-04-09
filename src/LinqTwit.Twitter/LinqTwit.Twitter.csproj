@@ -54,9 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILinqApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITwitterRestServiceContract.cs" />
     <Compile Include="Status.cs" />
+    <Compile Include="Statuses.cs" />
     <Compile Include="TwitterRestClient.cs" />
   </ItemGroup>
   <ItemGroup>

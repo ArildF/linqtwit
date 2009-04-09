@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="ExpressionVisitor.cs" />
     <Compile Include="IdExpressionVisitor.cs" />
-    <Compile Include="ILinqApi.cs" />
     <Compile Include="ITweet.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

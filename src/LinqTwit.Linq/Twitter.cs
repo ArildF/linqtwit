@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using LinqTwit.Twitter;
 
 namespace LinqTwit.Linq
 {

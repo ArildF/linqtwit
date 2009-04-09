@@ -14,5 +14,10 @@ namespace LinqTwit.Twitter
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/show/{id}.xml")]
         Status GetStatus(string id);
 
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/user_timeline/{id}.xml")]
+        Statuses UserTimeLine(string id);
+
     }
 }

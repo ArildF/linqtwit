@@ -45,6 +45,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -97,6 +100,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -111,6 +115,10 @@
     <ProjectReference Include="..\LinqTwit.QueryModule\LinqTwit.QueryModule.csproj">
       <Project>{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}</Project>
       <Name>LinqTwit.QueryModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Twitter\LinqTwit.Twitter.csproj">
+      <Project>{E2D0487D-4D2D-4263-B51D-E1F62969C743}</Project>
+      <Name>LinqTwit.Twitter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

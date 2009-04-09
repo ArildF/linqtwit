@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="events.cs" />
     <Compile Include="IQueryEntryView.cs" />
     <Compile Include="IQueryEntryViewModel.cs" />
     <Compile Include="IQueryResultsView.cs" />
@@ -93,6 +94,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LinqTwit.Linq\LinqTwit.Linq.csproj">
+      <Project>{6E738C49-89BB-4DC6-8B26-2899D191047B}</Project>
+      <Name>LinqTwit.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Twitter\LinqTwit.Twitter.csproj">
+      <Project>{E2D0487D-4D2D-4263-B51D-E1F62969C743}</Project>
+      <Name>LinqTwit.Twitter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
       <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>
       <Name>LinqTwit.Utilities</Name>

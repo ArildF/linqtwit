@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="AliceBlue">
     <Grid>
         <DockPanel>
-            <Button DockPanel.Dock="Bottom" Command="{Binding Path=SubmitQueryCommand}" >Submit</Button>
+            <Button DockPanel.Dock="Bottom" Command="{Binding Path=SubmitQueryCommand}" >_Submit</Button>
             <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" Text="{Binding Path=QueryText,  UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
     </Grid>

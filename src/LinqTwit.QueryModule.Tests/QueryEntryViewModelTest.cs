@@ -1,5 +1,6 @@
 using System;
 using LinqTwit.QueryModule.ViewModels;
+using Microsoft.Practices.Composite.Events;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -13,13 +14,18 @@ namespace LinqTwit.QueryModule.Tests
         private QueryEntryViewModel vm;
         private readonly MockFactory factory = new MockFactory(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
         private Mock<IQueryEntryView> view;
+        private Mock<IEventAggregator> aggregator;
+        private Mock<QuerySubmittedEvent> querySubmittedEvent;
 
         [SetUp]
         public void SetUp()
         {
             this.view = factory.Create<IQueryEntryView>();
+            this.aggregator = factory.Create<IEventAggregator>();
+            this.querySubmittedEvent = factory.Create<QuerySubmittedEvent>();
 
-            vm = new QueryEntryViewModel(view.Object);
+
+            vm = new QueryEntryViewModel(view.Object, aggregator.Object);
         }
 
         [Test]
@@ -59,6 +65,20 @@ namespace LinqTwit.QueryModule.Tests
 
             vm.QueryText = "Hai";
             Assert.That(raised, Is.True);
+
+        }
+
+        [Test]
+        public void QueryIsPublishedWhenSubmitted()
+        {
+            aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
+                querySubmittedEvent.Object);
+
+            vm.QueryText = "Hai";
+
+            vm.SubmitQueryCommand.Execute(null);
+
+            querySubmittedEvent.Verify(evt => evt.Publish("Hai"));
 
         }
     }

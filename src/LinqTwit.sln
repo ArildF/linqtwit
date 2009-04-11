@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.Utilities", "LinqT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.Utilities.Tests", "LinqTwit.Utilities.Tests\LinqTwit.Utilities.Tests.csproj", "{51F3730B-610E-4938-9894-5755475557BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqTwit.Infrastructure", "LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj", "{87F39058-B8F1-4B40-807D-ECD77037E012}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{51F3730B-610E-4938-9894-5755475557BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51F3730B-610E-4938-9894-5755475557BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51F3730B-610E-4938-9894-5755475557BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F39058-B8F1-4B40-807D-ECD77037E012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F39058-B8F1-4B40-807D-ECD77037E012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F39058-B8F1-4B40-807D-ECD77037E012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F39058-B8F1-4B40-807D-ECD77037E012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

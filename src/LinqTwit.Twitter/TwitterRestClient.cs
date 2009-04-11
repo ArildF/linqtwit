@@ -18,6 +18,11 @@ namespace LinqTwit.Twitter
             return UserTimeLine(user).ToArray();
         }
 
+        public Statuses FriendsTimeLine()
+        {
+            return this.Channel.FriendsTimeLine();
+        }
+
         public Statuses UserTimeLine(string user)
         {
             return this.Channel.UserTimeLine(user);

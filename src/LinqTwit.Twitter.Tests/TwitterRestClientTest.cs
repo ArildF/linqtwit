@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Web;
@@ -12,6 +13,22 @@ namespace LinqTwit.Twitter.Tests
     [TestFixture]
     public class TwitterRestClientTest
     {
+        private string username;
+        private string password;
+
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            var credentialsFile =
+                Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\credentials.txt");
+            if (File.Exists(credentialsFile))
+            {
+                var lines = File.ReadAllLines(credentialsFile);
+                this.username = lines[0];
+                this.password = lines[1];
+
+            }
+        }
         [Test]
         public void Status()
         {
@@ -40,12 +57,23 @@ namespace LinqTwit.Twitter.Tests
 
         }
 
-        private static void WithChannel(Action<ITwitterRestServiceContract> action)
+        [Test]
+        public void FriendsTimeLine()
         {
-            using (WebChannelFactory<ITwitterRestServiceContract> factory = new WebChannelFactory<ITwitterRestServiceContract>())
+            WithChannel(channel =>
+                            {
+                                Statuses statuses =
+                                    channel.FriendsTimeLine();
+                                Assert.That(statuses.Count, Is.Not.EqualTo(0));
+                            });
+        }
+
+        private void WithChannel(Action<ITwitterRestServiceContract> action)
+        {
+            using (WebChannelFactory<ITwitterRestServiceContract> factory = new WebChannelFactory<ITwitterRestServiceContract>("twitterEndpoint"))
             {
-                factory.Endpoint.Address =
-                    new EndpointAddress("http://twitter.com/");
+                factory.Credentials.UserName.UserName = this.username;
+                factory.Credentials.UserName.Password = this.password;
 
                 var channel = factory.CreateChannel();
 

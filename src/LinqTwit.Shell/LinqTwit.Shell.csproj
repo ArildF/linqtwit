@@ -56,15 +56,28 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Resources\DialogWindowStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -111,6 +124,10 @@
     <ProjectReference Include="..\CompositeWPFContrib.Composite.StructureMapExtensions\CompositeWPFContrib.Composite.StructureMapExtensions.csproj">
       <Project>{2F591031-B7BA-4E9A-B3FF-21553D778A18}</Project>
       <Name>CompositeWPFContrib.Composite.StructureMapExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
+      <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
+      <Name>LinqTwit.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\LinqTwit.QueryModule\LinqTwit.QueryModule.csproj">
       <Project>{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}</Project>

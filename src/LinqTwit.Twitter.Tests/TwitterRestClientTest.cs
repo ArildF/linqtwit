@@ -13,6 +13,7 @@ namespace LinqTwit.Twitter.Tests
     [TestFixture]
     public class TwitterRestClientTest
     {
+        private const string KnownStatusId = "1376755488";
         private string username;
         private string password;
 
@@ -34,7 +35,7 @@ namespace LinqTwit.Twitter.Tests
         {
             WithChannel(channel =>
                             {
-                                Status status = channel.GetStatus("1376755488");
+                                Status status = channel.GetStatus(KnownStatusId);
                                 Assert.That(status, Is.Not.Null);
                                 Assert.That(status.Text,
                                             Is.EqualTo(
@@ -43,6 +44,26 @@ namespace LinqTwit.Twitter.Tests
                                             Is.Not.EqualTo(DateTime.MinValue));
                             });
             
+        }
+
+        [Test]
+        public void StatusWithScreenName()
+        {
+            WithChannel(channel =>
+                {
+                    var status = channel.GetStatus(KnownStatusId);
+                    Assert.That(status.User.ScreenName, Is.EqualTo("rogue_code"));
+                });
+        }
+
+        [Test]
+        public void StatusWithName()
+        {
+            WithChannel(channel =>
+            {
+                var status = channel.GetStatus(KnownStatusId);
+                Assert.That(status.User.Name, Is.EqualTo("Arild Fines"));
+            });
         }
 
         [Test]
@@ -66,6 +87,29 @@ namespace LinqTwit.Twitter.Tests
                                     channel.FriendsTimeLine();
                                 Assert.That(statuses.Count, Is.Not.EqualTo(0));
                             });
+        }
+
+        [Test]
+        public void SetCredentials()
+        {
+            var client = new TwitterRestClient("twitterEndpoint");
+
+            client.SetCredentials(this.username, this.password);
+            Statuses statuses =
+                                    client.FriendsTimeLine();
+            Assert.That(statuses.Count, Is.Not.EqualTo(0));
+        }
+
+        [Test]
+        [ExpectedException(typeof(TwitterAuthorizationException))]
+        public void WrongCredentialsThrowsAuthorizationException()
+        {
+            var client = new TwitterRestClient("twitterEndpoint");
+
+            client.SetCredentials("rogue_code", "wrong passwrord");
+            var statuses = 
+                client.FriendsTimeLine();
+
         }
 
         private void WithChannel(Action<ITwitterRestServiceContract> action)

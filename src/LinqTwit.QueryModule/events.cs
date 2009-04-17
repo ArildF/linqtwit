@@ -10,4 +10,14 @@ namespace LinqTwit.QueryModule
     {
         
     }
+
+    public class InitialViewActivatedEvent : CompositePresentationEvent<object>
+    {
+        
+    }
+
+
+    public class AuthorizationStateChangedEvent : CompositePresentationEvent<bool>
+    {
+    }
 }

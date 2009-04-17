@@ -22,18 +22,34 @@ namespace LinqTwit.QueryModule.ViewModels
 
             View.DataContext = this;
 
-            this.Statuses = new ObservableCollection<Status>();
+            this.Tweets = new ObservableCollection<TweetViewModel>();
 
             this.aggregator.GetEvent<QuerySubmittedEvent>().Subscribe(
                 QuerySubmitted);
+            this.aggregator.GetEvent<AuthorizationStateChangedEvent>().Subscribe
+                (
+                AuthorizationStateChanged);
+        }
+
+        private void AuthorizationStateChanged(bool newState)
+        {
+            if (newState)
+            {
+                var statuses = this.api.FriendsTimeLine();
+                this.SetStatuses(statuses); 
+            }
         }
 
         private void QuerySubmitted(string query)
         {
             var statuses = this.api.UserTimeLine(query);
-            this.Statuses.Clear();
-            statuses.ForEach(this.Statuses.Add);
+            SetStatuses(statuses);
+        }
 
+        private void SetStatuses(IEnumerable<Status> statuses)
+        {
+            this.Tweets.Clear();
+            statuses.Select(s => new TweetViewModel(s)).ForEach((this.Tweets.Add));
         }
 
         public IQueryResultsView View
@@ -42,6 +58,6 @@ namespace LinqTwit.QueryModule.ViewModels
             private set;
         }
 
-        public ObservableCollection<Status> Statuses { get; private set; }
+        public ObservableCollection<TweetViewModel> Tweets { get; private set; }
     }
 }

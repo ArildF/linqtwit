@@ -189,29 +189,29 @@ namespace CompositeWPFContrib.Composite.StructureMapExtensions
         /// <remarks>
         /// When using the default initialization behavior, this method must be overwritten by a derived class.
         /// </remarks>
-        /// <returns>An instance of <see cref="IModuleEnumerator"/> that will be used to initialize the modules.</returns>
+        /// <returns>An instance of <see cref="ModuleCatalog"/> that will be used to initialize the modules.</returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         protected virtual ModuleCatalog GetModuleCatalog()
         {
             return null;
         }
 
-        protected void RegisterTypeIfMissing<FROMTYPE, TOTYPE>(bool registerAsSingleton) 
-            where FROMTYPE : class 
-            where TOTYPE : class, FROMTYPE
+        protected void RegisterTypeIfMissing<TFromtype, TToType>(bool registerAsSingleton) 
+            where TFromtype : class 
+            where TToType : class, TFromtype
         {
             var logger = LoggerFacade;
 
-            if (Container.TryGetInstance<FROMTYPE>() != null)
+            if (Container.TryGetInstance<TFromtype>() != null)
             {
-                logger.Log(string.Format("{0} is already registered", typeof(FROMTYPE).Name), 
+                logger.Log(string.Format("{0} is already registered", typeof(TFromtype).Name), 
                            Category.Debug, Priority.Low);
             }
             else
             {
                 Container.Configure(x =>
                                         {
-                                            var exp = x.BuildInstancesOf<FROMTYPE>().TheDefaultIsConcreteType<TOTYPE>();
+                                            var exp = x.BuildInstancesOf<TFromtype>().TheDefaultIsConcreteType<TToType>();
                                             if (registerAsSingleton)
                                                 exp.AsSingletons();
                                         });

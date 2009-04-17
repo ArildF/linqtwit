@@ -20,6 +20,7 @@ namespace LinqTwit.Shell
             return (DependencyObject) view;
         }
 
+
         protected override Microsoft.Practices.Composite.Modularity.ModuleCatalog GetModuleCatalog()
         {
             return new ModuleCatalog().AddModule(typeof(QueryModule.QueryModule));
@@ -28,6 +29,8 @@ namespace LinqTwit.Shell
         protected override void ConfigureContainer()
         {
             base.ConfigureContainer();
+
+            TwitterRestClient client = new TwitterRestClient("twitterEndpoint");
 
             Container.Configure(x =>
                                     {
@@ -40,12 +43,12 @@ namespace LinqTwit.Shell
                                             <ShellPresenter>();
 
                                         x.ForRequestedType<ILinqApi>().
-                                            TheDefaultIsConcreteType
-                                            <TwitterRestClient>();
+                                            TheDefault.IsThis(client);
+
 
                                     });
 
-            Container.AssertConfigurationIsValid();
+            //Container.AssertConfigurationIsValid();
         }
     }
     

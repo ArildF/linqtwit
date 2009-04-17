@@ -13,13 +13,15 @@ namespace LinqTwit.QueryModule.ViewModels
     public class QueryEntryViewModel : IQueryEntryViewModel, IRaisePropertyChanged, INotifyPropertyChanged
     {
         private readonly IEventAggregator aggregator;
+        private readonly ILoginController controller;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public QueryEntryViewModel(IQueryEntryView view, IEventAggregator aggregator)
+        public QueryEntryViewModel(IQueryEntryView view, IEventAggregator aggregator, ILoginController controller)
         {
             this.aggregator = aggregator;
+            this.controller = controller;
             View = view;
-            View.DataContext = this;
+            View.SetModel(this);
 
             this.submitQueryCommand =
                 new DelegateCommand<object>(OnSubmitQuery, o => !String.IsNullOrEmpty(QueryText));

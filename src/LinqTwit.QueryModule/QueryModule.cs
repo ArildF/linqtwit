@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using LinqTwit.QueryModule.Controllers;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.QueryModule.Views;
-using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Regions;
-using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 
 namespace LinqTwit.QueryModule
@@ -30,13 +25,6 @@ namespace LinqTwit.QueryModule
 
             var entry = this.container.GetInstance<IQueryEntryViewModel>();
             var results = this.container.GetInstance<IQueryResultsViewModel>();
-
-            //var aggregator = this.container.GetInstance<IEventAggregator>();
-
-            GC.Collect();
-
-            //aggregator.GetEvent<QuerySubmittedEvent>().Publish("Pay loads");
-
 
             this.regionManager.Regions["QueryResults"].Add(results.View);
             this.regionManager.Regions["QueryEntry"].Add(entry.View);
@@ -62,6 +50,14 @@ namespace LinqTwit.QueryModule
                                                  <IQueryResultsView>().
                                                  TheDefaultIsConcreteType
                                                  <QueryResultsView>();
+                                             c.ForRequestedType
+                                                 <ILoginController>().
+                                                 TheDefaultIsConcreteType
+                                                 <LoginController>();
+                                             c.ForRequestedType<ILoginView>().
+                                                 TheDefaultIsConcreteType
+                                                 <LoginView>();
+
 
                                          });
         }

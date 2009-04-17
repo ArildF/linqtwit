@@ -59,7 +59,9 @@
     <Compile Include="ITwitterRestServiceContract.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="Statuses.cs" />
+    <Compile Include="TwitterAuthorizationException.cs" />
     <Compile Include="TwitterRestClient.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

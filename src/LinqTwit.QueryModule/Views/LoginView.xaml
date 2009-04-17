@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="LinqTwit.QueryModule.Views.LoginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:infr="clr-namespace:LinqTwit.Infrastructure;assembly=LinqTwit.Infrastructure"
+             xmlns:mu="clr-namespace:LinqTwit.Infrastructure.MarkupExtensions;assembly=LinqTwit.Infrastructure"
+    Height="138" Width="262" Background="Transparent"
+             FocusManager.FocusedElement="{mu:FirstFocusedElement}">
+    <Grid Background="SteelBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Center">Provide credentials:</Label>
+        <Label Grid.Column="0" Grid.Row="1" >Username</Label>
+        <Label Grid.Column="0" Grid.Row="2" >Password</Label>
+        <TextBox Grid.Column="1" Grid.Row="1" Margin="5" TabIndex="0" Text="{Binding Path=Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <PasswordBox Grid.Column="1" Grid.Row="2" Margin="5"  TabIndex="1" infr:PasswordBoxAssistant.BindPassword="true" 
+                     infr:PasswordBoxAssistant.BoundPassword="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        
+        <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Width="60" Margin="5" TabIndex="3" Command="ApplicationCommands.Close" IsCancel="True">Cancel</Button>
+            <Button Width="60" Margin="5" TabIndex="2" Command="{Binding Path=ProvideCredentialsCommand}" IsDefault="True">Ok</Button>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

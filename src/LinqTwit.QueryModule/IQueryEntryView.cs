@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LinqTwit.QueryModule.ViewModels;
+﻿using Microsoft.Practices.Composite;
 
 namespace LinqTwit.QueryModule
 {
-    public interface IQueryEntryView
+    public interface IQueryEntryView : IActiveAware
     {
-        object DataContext { get; set; }
+        void SetModel(IQueryEntryViewModel model);
+
     }
 }

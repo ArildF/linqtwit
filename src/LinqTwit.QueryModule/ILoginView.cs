@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LinqTwit.QueryModule.Controllers;
 
 namespace LinqTwit.QueryModule
 {
-    public interface IQueryEntryViewModel
+    public interface ILoginView
     {
-        IQueryEntryView View { get; }
+        object DataContext { get; set; }
     }
 }

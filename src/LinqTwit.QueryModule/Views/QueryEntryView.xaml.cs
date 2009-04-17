@@ -1,27 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Microsoft.Practices.Composite.Events;
 
 namespace LinqTwit.QueryModule.Views
 {
     /// <summary>
     /// Interaction logic for QueryEntryView.xaml
     /// </summary>
-    public partial class QueryEntryView : UserControl, IQueryEntryView
+    public partial class QueryEntryView : IQueryEntryView
     {
-        public QueryEntryView()
+        public QueryEntryView(IEventAggregator eventAggregator)
         {
             InitializeComponent();
+
+            this.eventAggregator = eventAggregator;
+        }
+
+        private bool isActive;
+        private bool hasBeenActivated;
+        private readonly IEventAggregator eventAggregator;
+
+        public bool IsActive
+        {
+            get { return this.isActive; }
+            set
+            {
+                this.isActive = value;
+                if (this.IsActiveChanged != null)
+                {
+                    this.IsActiveChanged(this, EventArgs.Empty);
+                }
+
+                if (this.IsActive && !hasBeenActivated)
+                {
+                    this.eventAggregator.GetEvent<InitialViewActivatedEvent>().
+                        Publish(null);
+                    hasBeenActivated = true;
+
+                }
+            }
+        }
+
+        public event EventHandler IsActiveChanged;
+        public void SetModel(IQueryEntryViewModel model)
+        {
+            this.DataContext = model;
         }
     }
 }

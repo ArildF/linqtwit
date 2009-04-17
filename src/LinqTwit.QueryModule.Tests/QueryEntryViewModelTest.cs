@@ -15,7 +15,9 @@ namespace LinqTwit.QueryModule.Tests
         private readonly MockFactory factory = new MockFactory(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
         private Mock<IQueryEntryView> view;
         private Mock<IEventAggregator> aggregator;
+        private Mock<ILoginController> controller;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
+        private Mock<InitialViewActivatedEvent> initialViewActivatedEvent;
 
         [SetUp]
         public void SetUp()
@@ -23,9 +25,10 @@ namespace LinqTwit.QueryModule.Tests
             this.view = factory.Create<IQueryEntryView>();
             this.aggregator = factory.Create<IEventAggregator>();
             this.querySubmittedEvent = factory.Create<QuerySubmittedEvent>();
+            this.controller = factory.Create<ILoginController>();
+            this.initialViewActivatedEvent = factory.Create<InitialViewActivatedEvent>();
 
-
-            vm = new QueryEntryViewModel(view.Object, aggregator.Object);
+            vm = new QueryEntryViewModel(view.Object, aggregator.Object, this.controller.Object);
         }
 
         [Test]
@@ -79,7 +82,8 @@ namespace LinqTwit.QueryModule.Tests
             vm.SubmitQueryCommand.Execute(null);
 
             querySubmittedEvent.Verify(evt => evt.Publish("Hai"));
-
         }
+
+       
     }
 }

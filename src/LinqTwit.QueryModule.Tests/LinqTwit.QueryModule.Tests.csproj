@@ -42,6 +42,9 @@
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="Prism, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Prism.dll</HintPath>
@@ -67,11 +70,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoginControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryEntryViewModelTest.cs" />
     <Compile Include="QueryResultsViewModelTest.cs" />
+    <Compile Include="TweetViewModelTest.cs" />
+    <Compile Include="UserFullNameConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
+      <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
+      <Name>LinqTwit.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Linq\LinqTwit.Linq.csproj">
       <Project>{6E738C49-89BB-4DC6-8B26-2899D191047B}</Project>
       <Name>LinqTwit.Linq</Name>

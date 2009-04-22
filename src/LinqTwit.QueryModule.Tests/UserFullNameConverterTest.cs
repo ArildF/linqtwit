@@ -26,9 +26,17 @@ namespace LinqTwit.QueryModule.Tests
         }
 
         [Test]
-        public void TestFoo()
+        public void Convert()
         {
             Assert.That(cut.Convert("Arild Fines", typeof(string), null, CultureInfo.InvariantCulture), Is.EqualTo(" (Arild Fines) "));
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void ConvertBackNotSupported()
+        {
+            object val = cut.ConvertBack("", typeof (string), null,
+                            CultureInfo.InvariantCulture);
 
         }
     }

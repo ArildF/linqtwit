@@ -44,10 +44,14 @@
                             <ColumnDefinition Width="110"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Path=Created}" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="8"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Text}" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-                        <StackPanel HorizontalAlignment="Right" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft" TextBlock.FontSize="8">
-                            <TextBlock Text="{Binding Path=FullName, Converter={StaticResource userFullNameConverter}}"/><TextBlock Text="{Binding Path=ScreenName}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Path=Created}" 
+                                   HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="8"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Path=Text}" 
+                                   HorizontalAlignment="Left" TextWrapping="Wrap"/>
+                        <StackPanel HorizontalAlignment="Right" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" 
+                                    Orientation="Horizontal" FlowDirection="RightToLeft" TextBlock.FontSize="8">
+                            <TextBlock Text="{Binding Path=FullName, Converter={StaticResource userFullNameConverter}}"/>
+                            <TextBlock Text="{Binding Path=ScreenName}"/>
                         </StackPanel>
                     </Grid>
                 </Border>

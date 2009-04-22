@@ -27,6 +27,7 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<InitialViewActivatedEvent> initialViewEvent;
         private Mock<AuthorizationStateChangedEvent> asChangedEvent;
         private Mock<ILinqApi> api;
+        private Mock<ICredentialsStore> cs;
 
         [SetUp]
         public void SetUp()
@@ -37,6 +38,7 @@ namespace LinqTwit.QueryModule.Tests
             region = factory.Create<IRegion>();
             api = factory.Create<ILinqApi>();
             asChangedEvent = factory.Create<AuthorizationStateChangedEvent>();
+            cs = factory.Create<ICredentialsStore>();
 
             initialViewEvent = factory.Create<InitialViewActivatedEvent>();
 
@@ -47,7 +49,13 @@ namespace LinqTwit.QueryModule.Tests
                 Returns(initialViewEvent.Object);
 
 
-            loginController = new LoginController(aggregator.Object, regionManager.Object, view.Object, api.Object);
+            CreateController();
+        }
+
+        private void CreateController()
+        {
+            this.loginController = new LoginController(this.aggregator.Object, 
+                this.regionManager.Object, this.view.Object, this.api.Object, this.cs.Object);
         }
 
         [Test]
@@ -135,6 +143,35 @@ namespace LinqTwit.QueryModule.Tests
         {
             TestAuthorizationStateChanged(true, () =>
                 {});
+        }
+
+        [Test]
+        public void GetsCredentialsFromStore()
+        {
+            cs.SetupGet(s => s.Password).Returns("password");
+            cs.SetupGet(s => s.Username).Returns("username");
+
+            CreateController();
+
+            Assert.That(this.loginController.Password, Is.EqualTo("password"));
+            Assert.That(this.loginController.Username, Is.EqualTo("username"));
+        }
+
+        [Test]
+        public void CredentialsPersistedOnLogin()
+        {
+            this.cs.SetupAllProperties();
+
+            this.loginController.Username = "username";
+            this.loginController.Password = "password";
+
+            TestAuthorizationStateChanged(true, () => {});
+
+            Assert.That(cs.Object.Username, Is.EqualTo("username"));
+            Assert.That(cs.Object.Password, Is.EqualTo("password"));
+
+            cs.Verify(s => s.PersistCredentials());
+
         }
 
         private void TestAuthorizationStateChanged(object expectedState, Action action)

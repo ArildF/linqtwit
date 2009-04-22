@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows;
 using CompositeWPFContrib.Composite.StructureMapExtensions;
 using LinqTwit.Infrastructure;
+using LinqTwit.Infrastructure.ApplicationServices;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Presentation.Commands;
@@ -48,6 +49,9 @@ namespace LinqTwit.Shell
                                         x.ForRequestedType<ILinqApi>().
                                             TheDefault.IsThis(client);
 
+                                        x.ForRequestedType<ICredentialsStore>().
+                                            TheDefaultIsConcreteType
+                                            <CredentialsStore>();
 
                                     });
         }

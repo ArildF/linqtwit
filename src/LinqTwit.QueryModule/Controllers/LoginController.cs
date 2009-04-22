@@ -21,12 +21,14 @@ namespace LinqTwit.QueryModule.Controllers
         private readonly IEventAggregator eventAggregator;
         private readonly ILoginView view;
         private readonly ILinqApi api;
+        private readonly ICredentialsStore store;
         private readonly DelegateCommand<object> provideCredentialsCommand;
         private readonly IRegion region;
         private bool authorizationState;
 
 
-        public LoginController(IEventAggregator eventAggregator, IRegionManager regionManager, ILoginView view, ILinqApi api)
+        public LoginController(IEventAggregator eventAggregator, 
+            IRegionManager regionManager, ILoginView view, ILinqApi api, ICredentialsStore store)
         {
             eventAggregator.GetEvent<InitialViewActivatedEvent>().Subscribe(
                 DoLogin);
@@ -36,7 +38,11 @@ namespace LinqTwit.QueryModule.Controllers
             this.eventAggregator = eventAggregator;
             this.view = view;
             this.api = api;
+            this.store = store;
             this.region.Add(this.view);
+
+            this.username = store.Username;
+            this.password = store.Password;
 
             this.view.DataContext = this;
 
@@ -63,6 +69,16 @@ namespace LinqTwit.QueryModule.Controllers
 
             this.region.Deactivate(this.view);
             this.AuthorizationState = true;
+
+            this.PersistCredentials();
+        }
+
+        private void PersistCredentials()
+        {
+            this.store.Username = username;
+            this.store.Password = password;
+
+            this.store.PersistCredentials();
         }
 
         private bool AuthorizationState

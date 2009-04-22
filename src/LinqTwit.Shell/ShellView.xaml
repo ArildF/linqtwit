@@ -3,9 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="clr-namespace:Microsoft.Practices.Composite.Presentation.Regions;assembly=Prism"
     xmlns:behaviors="clr-namespace:LinqTwit.Infrastructure.Behaviors;assembly=LinqTwit.Infrastructure"
+    xmlns:Infrastructure="clr-namespace:LinqTwit.Infrastructure;assembly=LinqTwit.Infrastructure"
     Title="ShellView" Height="530" Width="431"
     behaviors:DialogRegionBehaviors.DialogWindowStyle="{StaticResource DialogWindowStyle}"
         behaviors:DialogRegionBehaviors.DialogRegionName="DialogRegion" ShowInTaskbar="True">
+    <Window.InputBindings>
+        <KeyBinding Key="J" Command="Infrastructure:GlobalCommands.UpCommand"/>
+        <KeyBinding Key="Up" Command="Infrastructure:GlobalCommands.UpCommand"/>
+        <KeyBinding Key="K" Command="Infrastructure:GlobalCommands.DownCommand"/>
+        <KeyBinding Key="Down" Command="Infrastructure:GlobalCommands.DownCommand"/>
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="6*"/>

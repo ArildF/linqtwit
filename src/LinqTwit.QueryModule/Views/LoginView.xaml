@@ -4,7 +4,7 @@
              xmlns:infr="clr-namespace:LinqTwit.Infrastructure;assembly=LinqTwit.Infrastructure"
              xmlns:mu="clr-namespace:LinqTwit.Infrastructure.MarkupExtensions;assembly=LinqTwit.Infrastructure"
     Height="138" Width="262" Background="Transparent"
-             FocusManager.FocusedElement="{mu:FirstFocusedElement}">
+             FocusManager.FocusedElement="{mu:FirstFocusable}">
     <Grid Background="SteelBlue">
         <Grid.RowDefinitions>
             <RowDefinition />

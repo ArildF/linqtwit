@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using CompositeWPFContrib.Composite.StructureMapExtensions;
+using LinqTwit.Infrastructure;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Modularity;
+using Microsoft.Practices.Composite.Presentation.Commands;
 
 namespace LinqTwit.Shell
 {
@@ -17,11 +19,12 @@ namespace LinqTwit.Shell
             IShellView view = presenter.View;
             view.ShowView();
 
+
             return (DependencyObject) view;
         }
 
 
-        protected override Microsoft.Practices.Composite.Modularity.ModuleCatalog GetModuleCatalog()
+        protected override ModuleCatalog GetModuleCatalog()
         {
             return new ModuleCatalog().AddModule(typeof(QueryModule.QueryModule));
         }
@@ -47,8 +50,6 @@ namespace LinqTwit.Shell
 
 
                                     });
-
-            //Container.AssertConfigurationIsValid();
         }
     }
     

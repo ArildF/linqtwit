@@ -7,13 +7,13 @@ namespace LinqTwit.Twitter
     [DataContract(Namespace="", Name = "status")]
     public class Status
     {
-        [DataMember(Name = "id")]
+        [DataMember(Name = "id", Order=2)]
         public string Id { get; set; }
 
-        [DataMember(Name="text")]
+        [DataMember(Name="text", Order=3)]
         public string Text { get; set; }
 
-        [DataMember(Name = "created_at")] private string createdAt;
+        [DataMember(Name = "created_at", Order=1)] private string createdAt;
 
         public DateTime CreatedAt
         {
@@ -21,7 +21,8 @@ namespace LinqTwit.Twitter
         }
 
 
-        [DataMember(Name="user")]
+        [DataMember(Name="user", Order=10)]
         public User User { get; set; }
+
     }
 }

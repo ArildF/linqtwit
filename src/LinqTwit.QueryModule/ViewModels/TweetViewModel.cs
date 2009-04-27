@@ -38,5 +38,7 @@ namespace LinqTwit.QueryModule.ViewModels
         {
             get { return this.status.User.ScreenName; }
         }
+
+        public string ProfileImageUrl { get{ return this.status.User.ProfileImageUrl;}}
     }
 }

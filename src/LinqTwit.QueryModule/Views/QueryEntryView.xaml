@@ -1,10 +1,13 @@
 ﻿<UserControl x:Class="LinqTwit.QueryModule.Views.QueryEntryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="AliceBlue">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+             Background="Transparent">
     <Grid>
         <DockPanel>
-            <Button DockPanel.Dock="Bottom" Command="{Binding Path=SubmitQueryCommand}" >_Submit</Button>
-            <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" Text="{Binding Path=QueryText,  UpdateSourceTrigger=PropertyChanged}" />
+            <Button DockPanel.Dock="Bottom" Command="{Binding Path=SubmitQueryCommand}" Background="Transparent" >_Submit</Button>
+            <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" 
+                     Text="{Binding Path=QueryText,  UpdateSourceTrigger=PropertyChanged}" 
+                     Background="AliceBlue" Foreground="AliceBlue" />
         </DockPanel>
     </Grid>
 </UserControl>

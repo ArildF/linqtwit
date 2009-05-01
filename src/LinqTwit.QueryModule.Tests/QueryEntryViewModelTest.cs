@@ -48,6 +48,8 @@ namespace LinqTwit.QueryModule.Tests
         {
             PropertyChangedTester<QueryEntryViewModel> tester = new PropertyChangedTester<QueryEntryViewModel>(vm);
 
+            vm.ActiveForInput = true;
+
             tester.VerifyAllPublicProperties();
         }
 
@@ -111,6 +113,8 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void DeactivatedByDeactivateCommand()
         {
+            vm.ActiveForInput = true;
+
             PropertyChangedTester<QueryEntryViewModel> tester =
                 new PropertyChangedTester<QueryEntryViewModel>(vm);
 

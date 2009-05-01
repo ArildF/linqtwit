@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using LinqTwit.Infrastructure;
 using LinqTwit.Twitter;
 
 namespace LinqTwit.QueryModule.ViewModels
 {
-    public class TweetViewModel : INotifyPropertyChanged
+    public class TweetViewModel : ViewModelBase
     {
         private readonly Status status;
 

@@ -13,13 +13,11 @@ using Microsoft.Practices.Composite.Presentation.Commands;
 
 namespace LinqTwit.QueryModule.ViewModels
 {
-    public class QueryResultsViewModel : IQueryResultsViewModel, INotifyPropertyChanged, IRaisePropertyChanged
+    public class QueryResultsViewModel : ViewModelBase, IQueryResultsViewModel
     {
         private readonly IEventAggregator aggregator;
         private readonly ILinqApi api;
         private TweetViewModel selectedTweet;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api)
         {
@@ -114,14 +112,6 @@ namespace LinqTwit.QueryModule.ViewModels
                     selectedTweet = value;
                     this.OnPropertyChanged(p => p.SelectedTweet);
                 }
-            }
-        }
-
-        void IRaisePropertyChanged.RaisePropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
             }
         }
     }

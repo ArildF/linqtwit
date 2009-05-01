@@ -82,11 +82,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RegionNames.cs" />
+    <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CompositeWPFContrib.Composite.StructureMapExtensions\CompositeWPFContrib.Composite.StructureMapExtensions.csproj">
       <Project>{2F591031-B7BA-4E9A-B3FF-21553D778A18}</Project>
       <Name>CompositeWPFContrib.Composite.StructureMapExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
+      <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>
+      <Name>LinqTwit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

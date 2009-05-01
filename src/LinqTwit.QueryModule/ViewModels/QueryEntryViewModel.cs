@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
-using System.Xml.Linq;
 using LinqTwit.Infrastructure;
 using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Events;
@@ -13,10 +9,11 @@ using Microsoft.Practices.Composite.Regions;
 
 namespace LinqTwit.QueryModule.ViewModels
 {
-    public class QueryEntryViewModel : IQueryEntryViewModel, IRaisePropertyChanged, INotifyPropertyChanged
+   
+
+    public class QueryEntryViewModel : ViewModelBase, IQueryEntryViewModel
     {
         private readonly IEventAggregator aggregator;
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public QueryEntryViewModel(IQueryEntryView view, IEventAggregator aggregator, IRegionManager regionManager)
         {
@@ -32,7 +29,6 @@ namespace LinqTwit.QueryModule.ViewModels
             this.deactivateCommand = new DelegateCommand<object>(OnDeactivate);
 
             GlobalCommands.CommandLineCommand.RegisterCommand(new DelegateCommand<object>(CommandLineExecuted));
-
         }
 
         private void OnDeactivate(object obj)
@@ -94,15 +90,6 @@ namespace LinqTwit.QueryModule.ViewModels
             get
             {
                 return deactivateCommand;
-            }
-        }
-
-        void IRaisePropertyChanged.RaisePropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this,
-                                     new PropertyChangedEventArgs(propName));
             }
         }
 

@@ -1,6 +1,9 @@
 using System;
+using LinqTwit.Infrastructure;
 using LinqTwit.QueryModule.ViewModels;
+using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Events;
+using Microsoft.Practices.Composite.Regions;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
@@ -18,6 +21,8 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<ILoginController> controller;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
         private Mock<InitialViewActivatedEvent> initialViewActivatedEvent;
+        private Mock<IRegionManager> regionManager;
+        private Mock<IRegion> region;
 
         [SetUp]
         public void SetUp()
@@ -27,8 +32,15 @@ namespace LinqTwit.QueryModule.Tests
             this.querySubmittedEvent = factory.Create<QuerySubmittedEvent>();
             this.controller = factory.Create<ILoginController>();
             this.initialViewActivatedEvent = factory.Create<InitialViewActivatedEvent>();
+            this.regionManager = factory.Create<IRegionManager>();
+            this.region = factory.Create<IRegion>();
 
-            vm = new QueryEntryViewModel(view.Object, aggregator.Object, this.controller.Object);
+            this.regionManager.SetupGet(
+                rm => rm.Regions[RegionNames.QueryEntryRegion]).Returns(
+                region.Object);
+
+
+            vm = new QueryEntryViewModel(this.view.Object, this.aggregator.Object, this.regionManager.Object);
         }
 
         [Test]
@@ -82,6 +94,30 @@ namespace LinqTwit.QueryModule.Tests
             vm.SubmitQueryCommand.Execute(null);
 
             querySubmittedEvent.Verify(evt => evt.Publish("Hai"));
+        }
+
+        [Test]
+        public void ActivatedByCommandLineCommand()
+        {
+            PropertyChangedTester<QueryEntryViewModel> tester = new PropertyChangedTester<QueryEntryViewModel>(vm);
+            GlobalCommands.CommandLineCommand.Execute(null);
+
+            region.Verify(r => r.Activate(this.view.Object));
+
+            Assert.That(tester.PropertyChanged(v => v.ActiveForInput), Is.True);
+            Assert.That(vm.ActiveForInput, Is.True);
+        }
+
+        [Test]
+        public void DeactivatedByDeactivateCommand()
+        {
+            PropertyChangedTester<QueryEntryViewModel> tester =
+                new PropertyChangedTester<QueryEntryViewModel>(vm);
+
+            vm.DeactivateCommand.Execute();
+
+            Assert.That(tester.PropertyChanged(v => v.ActiveForInput), Is.True);
+            Assert.That(vm.ActiveForInput, Is.False);
         }
 
        

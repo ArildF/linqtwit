@@ -5,6 +5,5 @@ namespace LinqTwit.QueryModule
     public interface IQueryEntryView : IActiveAware
     {
         void SetModel(IQueryEntryViewModel model);
-
     }
 }

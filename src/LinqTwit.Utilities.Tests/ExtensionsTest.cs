@@ -34,6 +34,21 @@ namespace LinqTwit.Utilities.Tests
             
         }
 
+        [Test]
+        public void DebugEvents()
+        {
+            ClassWithEvent c = new ClassWithEvent();
+            c.DebugEvent("Yohoo", o => o.Event += null);
+
+            Mock<ClassWithEvent> mock = new Mock<ClassWithEvent>();
+            mock.Raise();
+        }
+
+        class ClassWithEvent
+        {
+            public event EventHandler Event;
+        }
+
 
     }
 }

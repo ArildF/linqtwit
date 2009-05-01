@@ -64,11 +64,14 @@
     <Compile Include="ApplicationServices\CredentialsStore.cs" />
     <Compile Include="Behaviors\DialogRegionBehavior.cs" />
     <Compile Include="Behaviors\DialogRegionBehaviors.cs" />
+    <Compile Include="DataResource.cs" />
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FocusBehavior.cs" />
     <Compile Include="GlobalCommands.cs" />
     <Compile Include="ICredentialsStore.cs" />
+    <Compile Include="InputBindingBehavior.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="MarkupExtensions\FirstFocusableExtension.cs" />
     <Compile Include="PasswordBoxAssistant.cs" />

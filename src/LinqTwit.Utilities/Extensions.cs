@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace LinqTwit.Utilities
 {
@@ -41,6 +42,16 @@ namespace LinqTwit.Utilities
             {
                 action(item);
             }
+        }
+
+        public static void Execute(this ICommand cmd)
+        {
+            cmd.Execute(null);
+        }
+
+        public static void DebugEvents<T>(this T o, string formatString, string eventsRegex)
+        {
+            DebugUtils.DebugEvents(o, formatString, eventsRegex);
         }
     }
 }

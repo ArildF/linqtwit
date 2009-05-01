@@ -26,6 +26,8 @@ namespace LinqTwit.QueryModule
             var entry = this.container.GetInstance<IQueryEntryViewModel>();
             var results = this.container.GetInstance<IQueryResultsViewModel>();
 
+            var ignored = this.container.GetInstance<ILoginController>();
+
             this.regionManager.Regions["QueryResults"].Add(results.View);
             this.regionManager.Regions["QueryEntry"].Add(entry.View);
         }

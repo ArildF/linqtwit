@@ -23,5 +23,13 @@ namespace LinqTwit.Infrastructure
             get { return downCommand; }
             set { downCommand = value; }
         }
+
+        private static CompositeCommand commandLineCommand = new CompositeCommand();
+
+        public static CompositeCommand CommandLineCommand
+        {
+            get { return commandLineCommand; }
+            set { commandLineCommand = value; }
+        }
     }
 }

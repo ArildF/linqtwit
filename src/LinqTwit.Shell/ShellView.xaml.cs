@@ -22,6 +22,13 @@ namespace LinqTwit.Shell
         public ShellView()
         {
             InitializeComponent();
+
+            CommandManager.AddPreviewCanExecuteHandler(this, Handler);
+        }
+
+        private void Handler(object sender, CanExecuteRoutedEventArgs args)
+        {
+            
         }
 
         public void ShowView()

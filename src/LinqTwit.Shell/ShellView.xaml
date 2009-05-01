@@ -17,6 +17,7 @@
         <KeyBinding Key="Up" Command="Infrastructure:GlobalCommands.UpCommand"/>
         <KeyBinding Key="K" Command="Infrastructure:GlobalCommands.DownCommand"/>
         <KeyBinding Key="Down" Command="Infrastructure:GlobalCommands.DownCommand"/>
+        <KeyBinding Command="Infrastructure:GlobalCommands.CommandLineCommand" Key="Tab"/> 
     </Window.InputBindings>
     <Border BorderThickness="3" BorderBrush="SteelBlue" CornerRadius="5" Background="Black" >
         <Grid>

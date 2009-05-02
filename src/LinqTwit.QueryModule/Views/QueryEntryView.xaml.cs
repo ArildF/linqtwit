@@ -18,30 +18,10 @@ namespace LinqTwit.QueryModule.Views
 
             this.eventAggregator = eventAggregator;
 
-            //this.EntryTextBox.DebugEvents("$EVENT {sender.IsEnabled} $STACKTRACE",
-            //                              "IsEnabledChanged");
-
-            this.binding = new Binding("ActiveForInput")
-                {
-                    NotifyOnSourceUpdated = true,
-                    NotifyOnTargetUpdated = true,
-                    NotifyOnValidationError = true
-                };
-
-            Binding.AddSourceUpdatedHandler(this.EntryTextBox, SourceUpdatedHandler);
-            Binding.AddTargetUpdatedHandler(this.EntryTextBox, TargetUpdatedHandler);
-
-            this.EntryTextBox.SetBinding(IsEnabledProperty, this.binding);
+          
         }
 
-        private void TargetUpdatedHandler(object sender, DataTransferEventArgs e)
-        {
-        }
-
-        private void SourceUpdatedHandler(object sender, DataTransferEventArgs args)
-        {
-            
-        }
+      
 
         private bool isActive;
         private bool hasBeenActivated;

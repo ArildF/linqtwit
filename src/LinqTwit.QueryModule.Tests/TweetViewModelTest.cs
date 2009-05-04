@@ -59,11 +59,14 @@ namespace LinqTwit.QueryModule.Tests
 
             user.Name = "Arild Fines";
             user.ScreenName = "rogue_code";
+            user.ProfileImageUrl = "http://whatever";
+
 
             Assert.That(vm.Text, Is.EqualTo("Yo"));
             Assert.That(vm.Created, Is.EqualTo(now.ToTwitterAccuracy()));
             Assert.That(vm.FullName, Is.EqualTo("Arild Fines"));
             Assert.That(vm.ScreenName, Is.EqualTo("rogue_code"));
+            Assert.That(vm.ProfileImageUrl, Is.EqualTo("http://whatever"));
         }
     }
 

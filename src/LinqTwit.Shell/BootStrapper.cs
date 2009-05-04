@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 using CompositeWPFContrib.Composite.StructureMapExtensions;
 using LinqTwit.Infrastructure;
 using LinqTwit.Infrastructure.ApplicationServices;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Presentation.Commands;
+using StructureMap.Pipeline;
 
 namespace LinqTwit.Shell
 {
@@ -53,6 +56,16 @@ namespace LinqTwit.Shell
                                             TheDefaultIsConcreteType
                                             <CredentialsStore>();
 
+                                        x.ForRequestedType
+                                            <IDispatcherFacade>().
+                                            TheDefaultIsConcreteType<DispatcherFacade>();
+
+                                        x.ForRequestedType<Dispatcher>().TheDefault.Is.ConstructedBy(() => Dispatcher.CurrentDispatcher);
+
+
+                                        x.ForRequestedType<IAsyncManager>().
+                                            TheDefaultIsConcreteType
+                                            <AsyncManager>();
                                     });
         }
     }

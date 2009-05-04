@@ -62,15 +62,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationServices\CredentialsStore.cs" />
+    <Compile Include="AsyncManager.cs" />
     <Compile Include="Behaviors\DialogRegionBehavior.cs" />
     <Compile Include="Behaviors\DialogRegionBehaviors.cs" />
     <Compile Include="DataResource.cs" />
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DispatcherFacade.cs" />
     <Compile Include="FocusBehavior.cs" />
     <Compile Include="GlobalCommands.cs" />
+    <Compile Include="IAsyncManager.cs" />
     <Compile Include="ICredentialsStore.cs" />
+    <Compile Include="IDispatcherFacade.cs" />
     <Compile Include="InputBindingBehavior.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="MarkupExtensions\FirstFocusableExtension.cs" />
@@ -82,6 +86,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RegionNames.cs" />
+    <Compile Include="SynchronousAsyncManager.cs" />
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>

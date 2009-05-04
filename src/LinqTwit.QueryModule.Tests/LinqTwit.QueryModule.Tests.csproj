@@ -78,6 +78,10 @@
     <Compile Include="UserFullNameConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LinqTwit.Infrastructure.Tests\LinqTwit.Infrastructure.Tests.csproj">
+      <Project>{26E70485-8AF4-45DC-8411-6E881B589869}</Project>
+      <Name>LinqTwit.Infrastructure.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
       <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
       <Name>LinqTwit.Infrastructure</Name>

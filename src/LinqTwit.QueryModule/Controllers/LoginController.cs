@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Input;
 using LinqTwit.Infrastructure;
 using LinqTwit.Twitter;
@@ -22,13 +24,14 @@ namespace LinqTwit.QueryModule.Controllers
         private readonly ILoginView view;
         private readonly ILinqApi api;
         private readonly ICredentialsStore store;
+        private readonly IAsyncManager manager;
         private readonly DelegateCommand<object> provideCredentialsCommand;
         private readonly IRegion region;
         private bool authorizationState;
 
 
         public LoginController(IEventAggregator eventAggregator, 
-            IRegionManager regionManager, ILoginView view, ILinqApi api, ICredentialsStore store)
+            IRegionManager regionManager, ILoginView view, ILinqApi api, ICredentialsStore store, IAsyncManager manager)
         {
             eventAggregator.GetEvent<InitialViewActivatedEvent>().Subscribe(
                 DoLogin);
@@ -39,6 +42,7 @@ namespace LinqTwit.QueryModule.Controllers
             this.view = view;
             this.api = api;
             this.store = store;
+            this.manager = manager;
             this.region.Add(this.view);
 
             this.username = store.Username;
@@ -55,22 +59,36 @@ namespace LinqTwit.QueryModule.Controllers
 
         private void ProvideCredentials(object obj)
         {
+            manager.RunAsync(DoProvideCredentials());
+        }
+
+        private IEnumerable<Action> DoProvideCredentials()
+        {
+
             api.SetCredentials(this.Username, this.Password);
 
+            Status[] timeline = null;
+            yield return () =>
+                {
+                    try
+                    {
+                        timeline = api.FriendsTimeLine();
+                    }
+                    catch (TwitterAuthorizationException)
+                    {
+                    }
+                };
 
-            try
+            if (timeline == null)
             {
-                var timeline = api.FriendsTimeLine();
-            }
-            catch (TwitterAuthorizationException)
-            {
-                return;
+                yield break;
             }
 
             this.region.Deactivate(this.view);
             this.AuthorizationState = true;
 
-            this.PersistCredentials();
+
+            yield return () => this.PersistCredentials();
         }
 
         private void PersistCredentials()

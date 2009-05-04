@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LinqTwit.Infrastructure;
+using LinqTwit.Infrastructure.Tests;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Events;
@@ -23,6 +24,7 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<ILinqApi> api;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
         private Mock<AuthorizationStateChangedEvent> authorizationEvent;
+        private IAsyncManager asyncManager;
 
         private readonly MockFactory factory =
             new MockFactory(MockBehavior.Loose)
@@ -38,14 +40,15 @@ namespace LinqTwit.QueryModule.Tests
                                       {CallBase = true};
             authorizationEvent = factory.Create<AuthorizationStateChangedEvent>();
 
-
             aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
                 this.querySubmittedEvent.Object);
             aggregator.Setup(a => a.GetEvent<AuthorizationStateChangedEvent>()).
                 Returns(this.authorizationEvent.Object);
 
+            asyncManager = new AsyncManager(new MockDispatcherFacade());
 
-            vm = new QueryResultsViewModel(view.Object, aggregator.Object, api.Object);
+
+            vm = new QueryResultsViewModel(view.Object, aggregator.Object, api.Object, asyncManager);
         }
 
         [Test]

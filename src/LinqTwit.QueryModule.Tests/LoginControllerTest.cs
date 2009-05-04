@@ -29,6 +29,8 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<ILinqApi> api;
         private Mock<ICredentialsStore> cs;
 
+        private SynchronousAsyncManager mgr = new SynchronousAsyncManager();
+
         [SetUp]
         public void SetUp()
         {
@@ -55,7 +57,7 @@ namespace LinqTwit.QueryModule.Tests
         private void CreateController()
         {
             this.loginController = new LoginController(this.aggregator.Object, 
-                this.regionManager.Object, this.view.Object, this.api.Object, this.cs.Object);
+                this.regionManager.Object, this.view.Object, this.api.Object, this.cs.Object, mgr);
         }
 
         [Test]

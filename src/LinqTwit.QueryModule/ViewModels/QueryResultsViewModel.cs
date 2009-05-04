@@ -18,10 +18,12 @@ namespace LinqTwit.QueryModule.ViewModels
         private readonly IEventAggregator aggregator;
         private readonly ILinqApi api;
         private TweetViewModel selectedTweet;
+        private IAsyncManager asyncManager;
 
-        public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api)
+        public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, IAsyncManager asyncManager)
         {
             this.aggregator = aggregator;
+            this.asyncManager = asyncManager;
             this.api = api;
             View = view;
 
@@ -58,14 +60,26 @@ namespace LinqTwit.QueryModule.ViewModels
         {
             if (newState)
             {
-                var statuses = this.api.FriendsTimeLine();
-                this.SetStatuses(statuses); 
+                asyncManager.RunAsync(GetFriendsTimeLine());
             }
+        }
+
+        private IEnumerable<Action> GetFriendsTimeLine()
+        {
+            Status[] statuses = null;
+            yield return () => statuses = this.api.FriendsTimeLine();
+            this.SetStatuses(statuses);
         }
 
         private void QuerySubmitted(string query)
         {
-            var statuses = this.api.UserTimeLine(query);
+            asyncManager.RunAsync(GetUserTimeLine(query));
+        }
+
+        private IEnumerable<Action> GetUserTimeLine(string query)
+        {
+            Status[] statuses = null;
+            yield return () => statuses = this.api.UserTimeLine(query);
             SetStatuses(statuses);
         }
 

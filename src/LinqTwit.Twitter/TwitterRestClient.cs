@@ -34,6 +34,7 @@ namespace LinqTwit.Twitter
             this.ClientCredentials.UserName.Password = pass;
         }
 
+
         public Statuses FriendsTimeLine()
         {
             return Invoke(() => this.Channel.FriendsTimeLine());

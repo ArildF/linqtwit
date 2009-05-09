@@ -18,7 +18,7 @@ namespace LinqTwit.QueryModule.ViewModels
         private readonly IEventAggregator aggregator;
         private readonly ILinqApi api;
         private TweetViewModel selectedTweet;
-        private IAsyncManager asyncManager;
+        private readonly IAsyncManager asyncManager;
 
         public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, IAsyncManager asyncManager)
         {
@@ -74,6 +74,7 @@ namespace LinqTwit.QueryModule.ViewModels
         private void QuerySubmitted(string query)
         {
             asyncManager.RunAsync(GetUserTimeLine(query));
+
         }
 
         private IEnumerable<Action> GetUserTimeLine(string query)

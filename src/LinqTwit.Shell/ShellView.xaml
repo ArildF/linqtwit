@@ -6,19 +6,31 @@
     xmlns:Infrastructure="clr-namespace:LinqTwit.Infrastructure;assembly=LinqTwit.Infrastructure"
     Title="ShellView" Height="530" Width="431"
     behaviors:DialogRegionBehaviors.DialogWindowStyle="{StaticResource DialogWindowStyle}"
-        behaviors:DialogRegionBehaviors.DialogRegionName="DialogRegion" ShowInTaskbar="True"
+        behaviors:DialogRegionBehaviors.DialogRegionName="DialogRegion" 
+        ShowInTaskbar="True"
         WindowStyle="None"
         Opacity="0.98"
+        WindowStartupLocation="CenterScreen"
         Background="Transparent"
+        
         AllowsTransparency="True"
         >
     <Window.InputBindings>
-        <KeyBinding Key="J"  Command="Infrastructure:GlobalCommands.UpCommand"/>
+      <!--  
         <KeyBinding Key="Up" Command="Infrastructure:GlobalCommands.UpCommand"/>
-        <KeyBinding Key="K" Command="Infrastructure:GlobalCommands.DownCommand"/>
-        <KeyBinding Key="Down" Command="Infrastructure:GlobalCommands.DownCommand"/>
+     
+        <KeyBinding Key="Down" Command="Infrastructure:GlobalCommands.DownCommand"/>-->
         <KeyBinding Command="Infrastructure:GlobalCommands.CommandLineCommand" Key="Tab"/> 
     </Window.InputBindings>
+    
+    <Infrastructure:InputBehavior.CustomKeyBindings>
+        <Infrastructure:CustomKeyBindingsCollection>
+            <Infrastructure:CustomKeyBinding Text=":" Command="Infrastructure:GlobalCommands.CommandLineCommand"/>
+            <Infrastructure:CustomKeyBinding Text="k" Command="Infrastructure:GlobalCommands.DownCommand"/>
+            <Infrastructure:CustomKeyBinding Text="j"  Command="Infrastructure:GlobalCommands.UpCommand"/>
+
+        </Infrastructure:CustomKeyBindingsCollection>        
+    </Infrastructure:InputBehavior.CustomKeyBindings>
     <Border BorderThickness="3" BorderBrush="SteelBlue" CornerRadius="5" Background="Black" >
         <Grid>
             <Grid.RowDefinitions>

@@ -65,6 +65,8 @@
     <Compile Include="AsyncManager.cs" />
     <Compile Include="Behaviors\DialogRegionBehavior.cs" />
     <Compile Include="Behaviors\DialogRegionBehaviors.cs" />
+    <Compile Include="CustomKeyBinding.cs" />
+    <Compile Include="CustomKeyBindingsCollection.cs" />
     <Compile Include="DataResource.cs" />
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
@@ -75,6 +77,7 @@
     <Compile Include="IAsyncManager.cs" />
     <Compile Include="ICredentialsStore.cs" />
     <Compile Include="IDispatcherFacade.cs" />
+    <Compile Include="InputBehavior.cs" />
     <Compile Include="InputBindingBehavior.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="MarkupExtensions\FirstFocusableExtension.cs" />

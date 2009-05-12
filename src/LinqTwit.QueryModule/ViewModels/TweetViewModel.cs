@@ -17,9 +17,6 @@ namespace LinqTwit.QueryModule.ViewModels
             this.status = status;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-
         public DateTime Created
         {
             get { return this.status.CreatedAt; }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using LinqTwit.Utilities;
@@ -27,18 +23,10 @@ namespace LinqTwit.Infrastructure
                 if (this.element != null)
                 {
                     this.element.PreviewTextInput -= ElementPreviewTextInput;
-                    //this.element.TextInput -= ElementTextInput;
                 }
                 this.element = value;
                 this.element.PreviewTextInput += ElementPreviewTextInput;
-                //this.element.TextInput += ElementTextInput;
             }
-
-        }
-
-        private void ElementTextInput(object sender, TextCompositionEventArgs e)
-        {
-            HandleTextInput(e);
         }
 
 

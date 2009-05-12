@@ -30,5 +30,13 @@ namespace LinqTwit.Infrastructure
         {
             this.dispatcher.Invoke(action, MapPriority(priority));
         }
+
+        public void CreateRecurringEvent(TimeSpan timeSpan , Action action)
+        {
+            DispatcherTimer timer = new DispatcherTimer {Interval = timeSpan};
+            timer.Tick += delegate {  action(); };
+
+            timer.Start();
+        }
     }
 }

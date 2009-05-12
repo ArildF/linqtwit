@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using LinqTwit.Infrastructure;
 using LinqTwit.Infrastructure.Tests;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.Twitter;
+using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Events;
+using Microsoft.Practices.Composite.Presentation.Commands;
 using NUnit.Framework;
 using Moq;
 using NUnit.Framework.SyntaxHelpers;
@@ -24,6 +27,7 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<ILinqApi> api;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
         private Mock<AuthorizationStateChangedEvent> authorizationEvent;
+        private Mock<RefreshEvent> refreshEvent;
         private IAsyncManager asyncManager;
 
         private readonly MockFactory factory =
@@ -33,17 +37,34 @@ namespace LinqTwit.QueryModule.Tests
         [SetUp]
         public void SetUp()
         {
+            var commands =
+                from prop in
+                    typeof (GlobalCommands).GetProperties(BindingFlags.Static |
+                                                          BindingFlags.Public)
+                where
+                    typeof(CompositeCommand).IsAssignableFrom(prop.PropertyType)
+                select prop.GetValue(null, null) as CompositeCommand;
+            foreach (var command in commands)
+            {
+                command.RegisteredCommands.ForEach(command.UnregisterCommand);
+            }
+
+            
             view = factory.Create<IQueryResultsView>();
             api = factory.Create<ILinqApi>();
             aggregator = factory.Create<IEventAggregator>();
             querySubmittedEvent = new Mock<QuerySubmittedEvent>
                                       {CallBase = true};
             authorizationEvent = factory.Create<AuthorizationStateChangedEvent>();
+            refreshEvent = factory.Create<RefreshEvent>();
 
             aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
                 this.querySubmittedEvent.Object);
             aggregator.Setup(a => a.GetEvent<AuthorizationStateChangedEvent>()).
                 Returns(this.authorizationEvent.Object);
+            aggregator.Setup(a => a.GetEvent<RefreshEvent>()).Returns(
+                this.refreshEvent.Object);
+
 
             asyncManager = new AsyncManager(new MockDispatcherFacade());
 
@@ -151,6 +172,29 @@ namespace LinqTwit.QueryModule.Tests
 
         }
 
+        [Test]
+        public void RefreshesWhenRefreshEventFired()
+        {
+            TestRefresh(true, 1);
+        }
+
+        [Test]
+        public void DoesNotRefreshWhenRefreshEventFiredIfNotAuthorized()
+        {
+            TestRefresh(false, 0);
+        }
+
+        private void TestRefresh(bool authorizationState, int count)
+        {
+            SetupFriendsTimelineCall();
+
+            this.authorizationEvent.Object.Publish(authorizationState);
+
+            this.refreshEvent.Object.Publish(null);
+
+            this.api.Verify(a => a.FriendsTimeLine(), Times.Exactly(count));
+        }
+
         private static void ExecuteMovedown()
         {
             GlobalCommands.DownCommand.Execute(null);
@@ -158,9 +202,14 @@ namespace LinqTwit.QueryModule.Tests
 
         private void GetStatuses()
         {
-            api.Setup(a => a.FriendsTimeLine()).Returns(new[] { new Status(){Text = "tweet 1"}, new Status(){Text = "tweet 2"} });
+            SetupFriendsTimelineCall();
 
             this.authorizationEvent.Object.Publish(true);
+        }
+
+        private void SetupFriendsTimelineCall()
+        {
+            this.api.Setup(a => a.FriendsTimeLine()).Returns(new[] { new Status(){Text = "tweet 1"}, new Status(){Text = "tweet 2"} });
         }
     }
 }

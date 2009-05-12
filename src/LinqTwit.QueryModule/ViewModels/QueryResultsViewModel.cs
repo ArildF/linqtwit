@@ -10,6 +10,7 @@ using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Events;
 using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Presentation.Commands;
+using Microsoft.Practices.Composite.Presentation.Events;
 
 namespace LinqTwit.QueryModule.ViewModels
 {
@@ -19,6 +20,7 @@ namespace LinqTwit.QueryModule.ViewModels
         private readonly ILinqApi api;
         private TweetViewModel selectedTweet;
         private readonly IAsyncManager asyncManager;
+        private bool authorized;
 
         public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, IAsyncManager asyncManager)
         {
@@ -37,8 +39,17 @@ namespace LinqTwit.QueryModule.ViewModels
                 (
                 AuthorizationStateChanged);
 
+            this.aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh, 
+                ThreadOption.UIThread, true,
+                _ => this.authorized);
+
             GlobalCommands.UpCommand.RegisterCommand(new DelegateCommand<object>(MoveUp));
             GlobalCommands.DownCommand.RegisterCommand(new DelegateCommand<object>(MoveDown));
+        }
+
+        private void Refresh(object _)
+        {
+            this.GetFriendsTimeLine();
         }
 
         private void MoveDown(object obj)
@@ -60,11 +71,18 @@ namespace LinqTwit.QueryModule.ViewModels
         {
             if (newState)
             {
-                asyncManager.RunAsync(GetFriendsTimeLine());
+                GetFriendsTimeLine();
             }
+
+            authorized = newState;
         }
 
-        private IEnumerable<Action> GetFriendsTimeLine()
+        private void GetFriendsTimeLine()
+        {
+            this.asyncManager.RunAsync(GetFriendsTimeLineAsync());
+        }
+
+        private IEnumerable<Action> GetFriendsTimeLineAsync()
         {
             Status[] statuses = null;
             yield return () => statuses = this.api.FriendsTimeLine();

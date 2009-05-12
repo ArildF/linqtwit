@@ -91,6 +91,7 @@
     <Compile Include="RegionNames.cs" />
     <Compile Include="SynchronousAsyncManager.cs" />
     <Compile Include="ViewModelBase.cs" />
+    <Compile Include="VoidCompositePresentationEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CompositeWPFContrib.Composite.StructureMapExtensions\CompositeWPFContrib.Composite.StructureMapExtensions.csproj">

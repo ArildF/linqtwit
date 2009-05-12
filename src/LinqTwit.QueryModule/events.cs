@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LinqTwit.Infrastructure;
 using Microsoft.Practices.Composite.Presentation.Events;
 
 namespace LinqTwit.QueryModule
@@ -18,6 +19,10 @@ namespace LinqTwit.QueryModule
 
 
     public class AuthorizationStateChangedEvent : CompositePresentationEvent<bool>
+    {
+    }
+
+    public class RefreshEvent : CompositePresentationEvent<object>
     {
     }
 }

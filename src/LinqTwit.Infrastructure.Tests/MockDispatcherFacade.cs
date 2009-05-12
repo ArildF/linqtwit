@@ -51,6 +51,11 @@ namespace LinqTwit.Infrastructure.Tests
             DoInvoke(action);
         }
 
+        public void CreateRecurringEvent(TimeSpan timeSpan, Action action)
+        {
+            
+        }
+
         private object DoInvoke(Delegate action)
         {
             var operation = new Operation(action);

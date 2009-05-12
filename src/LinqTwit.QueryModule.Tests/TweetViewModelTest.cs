@@ -74,12 +74,13 @@ namespace LinqTwit.QueryModule.Tests
     {
         public static void SetCreatedAt(this Status status, DateTime dt)
         {
-            status.GetType().GetField("createdAt", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(status, dt.ToString("ddd MMM dd HH:mm:ss zzzz yyyy"));
+            status.GetType().GetField("createdAt", BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(status, dt.ToString("ddd MMM dd HH:mm:ss zzzz yyyy", CultureInfo.InvariantCulture));
         }
 
         public static DateTime ToTwitterAccuracy(this DateTime dt)
         {
-            return DateTime.ParseExact(dt.ToString("ddd MMM dd HH:mm:ss zzzz yyyy"),
+            return DateTime.ParseExact(dt.ToString("ddd MMM dd HH:mm:ss zzzz yyyy", CultureInfo.InvariantCulture),
                 "ddd MMM dd HH:mm:ss zzzz yyyy", CultureInfo.InvariantCulture);
         }
     }

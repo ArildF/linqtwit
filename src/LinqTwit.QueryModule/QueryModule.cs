@@ -1,6 +1,9 @@
-﻿using LinqTwit.QueryModule.Controllers;
+﻿using System;
+using LinqTwit.Infrastructure;
+using LinqTwit.QueryModule.Controllers;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.QueryModule.Views;
+using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Regions;
 using StructureMap;
@@ -30,6 +33,13 @@ namespace LinqTwit.QueryModule
 
             this.regionManager.Regions["QueryResults"].Add(results.View);
             this.regionManager.Regions["QueryEntry"].Add(entry.View);
+
+            var dispatcherFacade =
+                this.container.GetInstance<IDispatcherFacade>();
+            var eventAggregator = this.container.GetInstance<IEventAggregator>();
+
+            dispatcherFacade.CreateRecurringEvent(TimeSpan.FromMinutes(1), 
+                () => eventAggregator.GetEvent<RefreshEvent>().Publish(null));
         }
 
         private void RegisterViewsAndServices()

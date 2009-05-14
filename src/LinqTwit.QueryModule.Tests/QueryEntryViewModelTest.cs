@@ -1,5 +1,6 @@
 using System;
 using LinqTwit.Infrastructure;
+using LinqTwit.Infrastructure.Commands;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Events;
@@ -23,6 +24,13 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<InitialViewActivatedEvent> initialViewActivatedEvent;
         private Mock<IRegionManager> regionManager;
         private Mock<IRegion> region;
+        private Mock<ICommandExecutor> _executor;
+        private PropertyChangedTester<QueryEntryViewModel> _tester;
+
+        public QueryEntryViewModelTest()
+        {
+            
+        }
 
         [SetUp]
         public void SetUp()
@@ -35,12 +43,18 @@ namespace LinqTwit.QueryModule.Tests
             this.regionManager = factory.Create<IRegionManager>();
             this.region = factory.Create<IRegion>();
 
+            _executor = factory.Create<ICommandExecutor>();
+
+
             this.regionManager.SetupGet(
                 rm => rm.Regions[RegionNames.QueryEntryRegion]).Returns(
                 region.Object);
 
 
-            vm = new QueryEntryViewModel(this.view.Object, this.aggregator.Object, this.regionManager.Object);
+            vm = new QueryEntryViewModel(this.view.Object, this.aggregator.Object, 
+                this.regionManager.Object, _executor.Object);
+
+            _tester = new PropertyChangedTester<QueryEntryViewModel>(this.vm);
         }
 
         [Test]
@@ -86,27 +100,13 @@ namespace LinqTwit.QueryModule.Tests
         }
 
         [Test]
-        public void QueryIsPublishedWhenSubmitted()
-        {
-            aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
-                querySubmittedEvent.Object);
-
-            vm.QueryText = "Hai";
-
-            vm.SubmitQueryCommand.Execute(null);
-
-            querySubmittedEvent.Verify(evt => evt.Publish("Hai"));
-        }
-
-        [Test]
         public void ActivatedByCommandLineCommand()
         {
-            PropertyChangedTester<QueryEntryViewModel> tester = new PropertyChangedTester<QueryEntryViewModel>(vm);
             GlobalCommands.CommandLineCommand.Execute(null);
 
             region.Verify(r => r.Activate(this.view.Object));
 
-            Assert.That(tester.PropertyChanged(v => v.ActiveForInput), Is.True);
+            Assert.That(this._tester.PropertyChanged(v => v.ActiveForInput), Is.True);
             Assert.That(vm.ActiveForInput, Is.True);
         }
 
@@ -115,15 +115,42 @@ namespace LinqTwit.QueryModule.Tests
         {
             vm.ActiveForInput = true;
 
-            PropertyChangedTester<QueryEntryViewModel> tester =
-                new PropertyChangedTester<QueryEntryViewModel>(vm);
-
             vm.DeactivateCommand.Execute();
 
-            Assert.That(tester.PropertyChanged(v => v.ActiveForInput), Is.True);
+            Assert.That(_tester.PropertyChanged(v => v.ActiveForInput), Is.True);
             Assert.That(vm.ActiveForInput, Is.False);
         }
 
-       
+        [Test]
+        public void ExecuteCommand()
+        {
+            InvokeCommand("Foo.Command");
+
+            _executor.Verify(e => e.Execute("Foo.Command"));
+        }
+
+        [Test]
+        public void DeactivatedAfterExecuteCommand()
+        {
+            vm.ActiveForInput = true;
+
+            InvokeCommand("Command");
+
+            Assert.That(_tester.PropertyChanged(m => m.ActiveForInput), Is.True);
+            Assert.That(vm.ActiveForInput, Is.False);
+        }
+
+        [Test]
+        public void QueryClearedAfterExecuting()
+        {
+            InvokeCommand("Command");
+            Assert.That(vm.QueryText, Is.Empty);
+        }
+
+        private void InvokeCommand(string command)
+        {
+            this.vm.QueryText = command;
+            this.vm.SubmitQueryCommand.Execute(null);
+        }
     }
 }

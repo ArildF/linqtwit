@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using LinqTwit.Infrastructure;
+using LinqTwit.Infrastructure.Commands;
 using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Presentation.Commands;
@@ -14,10 +15,13 @@ namespace LinqTwit.QueryModule.ViewModels
     public class QueryEntryViewModel : ViewModelBase, IQueryEntryViewModel
     {
         private readonly IEventAggregator aggregator;
+        private readonly ICommandExecutor _executor;
 
-        public QueryEntryViewModel(IQueryEntryView view, IEventAggregator aggregator, IRegionManager regionManager)
+        public QueryEntryViewModel(IQueryEntryView view, IEventAggregator aggregator, IRegionManager regionManager, 
+            ICommandExecutor executor)
         {
             this.aggregator = aggregator;
+            _executor = executor;
             View = view;
             View.SetModel(this);
 
@@ -44,7 +48,10 @@ namespace LinqTwit.QueryModule.ViewModels
 
         private void OnSubmitQuery(object obj)
         {
-            this.aggregator.GetEvent<QuerySubmittedEvent>().Publish(this.QueryText);
+            _executor.Execute(QueryText);
+
+            this.QueryText = String.Empty;
+            this.ActiveForInput = false;
         }
 
         public IQueryEntryView View

@@ -105,7 +105,7 @@ namespace LinqTwit.QueryModule.ViewModels
         private void SetStatuses(IEnumerable<Status> statuses)
         {
             this.Tweets.Clear();
-            statuses.Select(s => new TweetViewModel(s)).ForEach((this.Tweets.Add));
+            statuses.Select(s => new TweetViewModel(s)).ForEach(this.Tweets.Add);
             this.SelectedTweet = this.Tweets.Count > 0 ? this.Tweets[0] : null;
             SelectedIndex = this.Tweets.Count > 0 ? 0 : -1;
         }

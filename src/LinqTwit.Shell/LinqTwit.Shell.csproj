@@ -142,6 +142,10 @@
       <Project>{2F591031-B7BA-4E9A-B3FF-21553D778A18}</Project>
       <Name>CompositeWPFContrib.Composite.StructureMapExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Commands\LinqTwit.Commands.csproj">
+      <Project>{A87C3457-0B73-4888-82DF-F7D62EB2E12E}</Project>
+      <Name>LinqTwit.Commands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
       <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
       <Name>LinqTwit.Infrastructure</Name>

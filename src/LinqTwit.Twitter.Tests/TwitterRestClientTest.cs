@@ -31,6 +31,7 @@ namespace LinqTwit.Twitter.Tests
 
             }
         }
+
         [Test]
         public void Status()
         {

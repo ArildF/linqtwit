@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using CompositeWPFContrib.Composite.StructureMapExtensions;
+using LinqTwit.Commands;
 using LinqTwit.Infrastructure;
 using LinqTwit.Infrastructure.ApplicationServices;
 using LinqTwit.Twitter;
@@ -66,7 +67,11 @@ namespace LinqTwit.Shell
                                         x.ForRequestedType<IAsyncManager>().
                                             TheDefaultIsConcreteType
                                             <AsyncManager>();
+
+                                        x.AddRegistry<CommandsRegistry>();
+                                        x.AddRegistry<InfrastructureRegistry>();
                                     });
+
         }
     }
     

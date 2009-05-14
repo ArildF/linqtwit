@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{87F39058-B8F1-4B40-807D-ECD77037E012}</ProjectGuid>
+    <ProjectGuid>{A87C3457-0B73-4888-82DF-F7D62EB2E12E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LinqTwit.Infrastructure</RootNamespace>
-    <AssemblyName>LinqTwit.Infrastructure</AssemblyName>
+    <RootNamespace>LinqTwit.Commands</RootNamespace>
+    <AssemblyName>LinqTwit.Commands</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CompositeWPFContrib.Composite.StructureMapExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\CompositeWPFContrib.Composite.StructureMapExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=3.0.308.2, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -57,73 +69,24 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationServices\CredentialsStore.cs" />
-    <Compile Include="AsyncManager.cs" />
-    <Compile Include="Behaviors\DialogRegionBehavior.cs" />
-    <Compile Include="Behaviors\DialogRegionBehaviors.cs" />
-    <Compile Include="Commands\CommandExecutor.cs" />
-    <Compile Include="Commands\CommandInvokedEvent.cs" />
-    <Compile Include="Commands\ICommandExecutor.cs" />
-    <Compile Include="CustomKeyBinding.cs" />
-    <Compile Include="CustomKeyBindingsCollection.cs" />
-    <Compile Include="DataResource.cs" />
-    <Compile Include="DialogWindow.xaml.cs">
-      <DependentUpon>DialogWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DispatcherFacade.cs" />
-    <Compile Include="FocusBehavior.cs" />
-    <Compile Include="GlobalCommands.cs" />
-    <Compile Include="IAsyncManager.cs" />
-    <Compile Include="CommandBase.cs" />
-    <Compile Include="ICredentialsStore.cs" />
-    <Compile Include="IDispatcherFacade.cs" />
-    <Compile Include="InfrastructureRegistry.cs" />
-    <Compile Include="InputBehavior.cs" />
-    <Compile Include="InputBindingBehavior.cs" />
-    <Compile Include="ListBoxBehavior.cs" />
-    <Compile Include="MarkupExtensions\FirstFocusableExtension.cs" />
-    <Compile Include="PasswordBoxAssistant.cs" />
+    <Compile Include="CommandsRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="RegionNames.cs" />
-    <Compile Include="SynchronousAsyncManager.cs" />
-    <Compile Include="ViewModelBase.cs" />
-    <Compile Include="VoidCompositePresentationEvent.cs" />
+    <Compile Include="RefreshCommand.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompositeWPFContrib.Composite.StructureMapExtensions\CompositeWPFContrib.Composite.StructureMapExtensions.csproj">
-      <Project>{2F591031-B7BA-4E9A-B3FF-21553D778A18}</Project>
-      <Name>CompositeWPFContrib.Composite.StructureMapExtensions</Name>
+    <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
+      <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
+      <Name>LinqTwit.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
-      <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>
-      <Name>LinqTwit.Utilities</Name>
+    <ProjectReference Include="..\LinqTwit.QueryModule\LinqTwit.QueryModule.csproj">
+      <Project>{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}</Project>
+      <Name>LinqTwit.QueryModule</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="DialogWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

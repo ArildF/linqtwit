@@ -44,34 +44,11 @@ namespace LinqTwit.QueryModule
 
         private void RegisterViewsAndServices()
         {
-            this.container.Configure(c =>
-                                         {
-                                             c.ForRequestedType
-                                                 <IQueryEntryViewModel>().
-                                                 TheDefaultIsConcreteType
-                                                 <QueryEntryViewModel>();
-
-                                             c.ForRequestedType
-                                                 <IQueryResultsViewModel>().
-                                                 TheDefaultIsConcreteType
-                                                 <QueryResultsViewModel>();
-                                             c.ForRequestedType<IQueryEntryView>
-                                                 ().TheDefaultIsConcreteType
-                                                 <QueryEntryView>();
-                                             c.ForRequestedType
-                                                 <IQueryResultsView>().
-                                                 TheDefaultIsConcreteType
-                                                 <QueryResultsView>();
-                                             c.ForRequestedType
-                                                 <ILoginController>().
-                                                 TheDefaultIsConcreteType
-                                                 <LoginController>();
-                                             c.ForRequestedType<ILoginView>().
-                                                 TheDefaultIsConcreteType
-                                                 <LoginView>();
-
-
-                                         });
+            this.container.Configure(c => c.Scan(x =>
+                {
+                    x.TheCallingAssembly();
+                    x.WithDefaultConventions();
+                }));
         }
     }
 }

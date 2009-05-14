@@ -22,6 +22,7 @@ namespace LinqTwit.Infrastructure.Tests.Commands
 
         private Mock<IServiceLocator> _locator;
         private IEnumerable<ICommand> _commands;
+        private MooCommand _command;
 
         private CommandExecutor CommandExecutor
         {
@@ -40,6 +41,10 @@ namespace LinqTwit.Infrastructure.Tests.Commands
         public void SetUp()
         {
             _locator = _factory.Create<IServiceLocator>();
+             _command = new MooCommand();
+             _commands = new[] {this._command};
+
+            _commandExecutor = null;
 
             _locator.Setup(l => l.GetAllInstances<ICommand>()).Returns(() => _commands);
         }
@@ -47,33 +52,72 @@ namespace LinqTwit.Infrastructure.Tests.Commands
         [Test]
         public void Execute()
         {
-            var command = new MooCommand();
-            _commands = new[] {command};
-
-            CommandExecutor.Execute(typeof (MooCommand).FullName);
-
-            Assert.That(command.Executed, Is.True);
+            TestIsExecuted(typeof (MooCommand).FullName);
         }
 
-        private class MooCommand : ICommand
+        [Test]
+        public void CanAddPrefix()
         {
-            public bool Executed;
-            public bool CanExecuted;
-            public bool ShouldExecute = true;
+            var name = typeof (MooCommand).Name;
+            var ns = typeof (MooCommand).Namespace;
 
-            public void Execute(object parameter)
-            {
-                Executed = true;
-            }
+            CommandExecutor.AddPrefix(ns + ".");
 
-            public bool CanExecute(object parameter)
-            {
-                CanExecuted = true;
-
-                return ShouldExecute;
-            }
-
-            public event EventHandler CanExecuteChanged;
+            TestIsExecuted(name);
         }
+
+        [Test]
+        public void CanAddRedundantSuffix()
+        {
+            CommandExecutor.AddRedundantSuffix("Command");
+            var name = typeof (MooCommand).FullName;
+            name = name.Substring(0, name.Length - "Command".Length);
+
+            TestIsExecuted(name);
+        }
+
+        [Test]
+        public void SuffixAndPrefix()
+        {
+            var name = typeof(MooCommand).Name;
+            var ns = typeof(MooCommand).Namespace;
+
+            CommandExecutor.AddPrefix(ns + ".");
+            CommandExecutor.AddRedundantSuffix("Command");
+
+            TestIsExecuted("Moo");
+        }
+
+
+
+        private void TestIsExecuted(string commandString)
+        {
+            this.CommandExecutor.Execute(commandString);
+
+            Assert.That(this._command.Executed, Is.True);
+        }
+
+        
+    }
+
+    class MooCommand : ICommand
+    {
+        public bool Executed;
+        public bool CanExecuted;
+        public bool ShouldExecute = true;
+
+        public void Execute(object parameter)
+        {
+            Executed = true;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            CanExecuted = true;
+
+            return ShouldExecute;
+        }
+
+        public event EventHandler CanExecuteChanged;
     }
 }

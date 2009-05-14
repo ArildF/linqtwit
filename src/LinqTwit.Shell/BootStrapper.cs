@@ -11,7 +11,9 @@ using LinqTwit.Infrastructure.ApplicationServices;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Presentation.Commands;
+using Microsoft.Practices.Composite.Presentation.Events;
 using StructureMap.Pipeline;
+using IDispatcherFacade=LinqTwit.Infrastructure.IDispatcherFacade;
 
 namespace LinqTwit.Shell
 {

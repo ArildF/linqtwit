@@ -12,7 +12,12 @@ namespace LinqTwit.Infrastructure
         public InfrastructureRegistry()
         {
             ForRequestedType<ICommandExecutor>().TheDefaultIsConcreteType
-                <CommandExecutor>();
+                <CommandExecutor>().OnCreation(executor =>
+                    {
+                        executor.AddPrefix("LinqTwit.Commands.");
+                        executor.AddRedundantSuffix("Command");
+
+                    });
         }
     }
 }

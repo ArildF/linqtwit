@@ -21,8 +21,10 @@ namespace LinqTwit.QueryModule.ViewModels
         private TweetViewModel selectedTweet;
         private readonly IAsyncManager asyncManager;
         private bool authorized;
-
-        public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, IAsyncManager asyncManager)
+        private IList<MenuViewModel> _contextMenu;
+        
+        public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, 
+            IAsyncManager asyncManager, ContextMenuRoot menu)
         {
             this.aggregator = aggregator;
             this.asyncManager = asyncManager;
@@ -45,6 +47,16 @@ namespace LinqTwit.QueryModule.ViewModels
 
             GlobalCommands.UpCommand.RegisterCommand(new DelegateCommand<object>(MoveUp));
             GlobalCommands.DownCommand.RegisterCommand(new DelegateCommand<object>(MoveDown));
+
+            _contextMenu = menu;
+        }
+
+        public IList<MenuViewModel> ContextMenu
+        {
+            get
+            {
+                return _contextMenu;
+            }
         }
 
         private void Refresh(object _)

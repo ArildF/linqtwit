@@ -30,6 +30,8 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<RefreshEvent> refreshEvent;
         private IAsyncManager asyncManager;
 
+        private ContextMenuRoot _menuRoot;
+
         private readonly MockFactory factory =
             new MockFactory(MockBehavior.Loose)
                 {DefaultValue = DefaultValue.Mock, CallBase = true};
@@ -65,11 +67,19 @@ namespace LinqTwit.QueryModule.Tests
             aggregator.Setup(a => a.GetEvent<RefreshEvent>()).Returns(
                 this.refreshEvent.Object);
 
+            _menuRoot = new ContextMenuRoot();
+
 
             asyncManager = new AsyncManager(new MockDispatcherFacade());
 
 
-            vm = new QueryResultsViewModel(view.Object, aggregator.Object, api.Object, asyncManager);
+            vm = new QueryResultsViewModel(view.Object, aggregator.Object, api.Object, asyncManager, _menuRoot);
+        }
+
+        [Test]
+        public void ContextMenu()
+        {
+            Assert.That(vm.ContextMenu, Is.SameAs(_menuRoot));
         }
 
         [Test]

@@ -28,6 +28,15 @@
                 </Style.Resources>
             </Style>
         </ListBox.ItemContainerStyle>
+        <ListBox.ContextMenu>
+            <ContextMenu ItemsSource="{Binding ContextMenu}">
+                <ContextMenu.ItemTemplate>
+                    <DataTemplate>
+                        <MenuItem Header="{Binding Text}" Command="{Binding Command}"/>
+                    </DataTemplate>
+                </ContextMenu.ItemTemplate>
+            </ContextMenu>
+        </ListBox.ContextMenu>
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Border Style="{StaticResource borderStyle}" Margin="3" Padding="3">

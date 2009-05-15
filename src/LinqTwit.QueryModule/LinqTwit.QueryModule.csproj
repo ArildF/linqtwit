@@ -79,6 +79,7 @@
     <Compile Include="QueryModule.cs" />
     <Compile Include="ValueConverters\UserFullNameConverter.cs" />
     <Compile Include="ViewModels\QueryEntryViewModel.cs" />
+    <Compile Include="ViewModels\QueryResultsContextMenu.cs" />
     <Compile Include="ViewModels\QueryResultsViewModel.cs" />
     <Compile Include="ViewModels\TweetViewModel.cs" />
     <Compile Include="Views\LoginView.xaml.cs">

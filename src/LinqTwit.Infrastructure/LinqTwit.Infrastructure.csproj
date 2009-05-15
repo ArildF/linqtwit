@@ -72,6 +72,7 @@
     <Compile Include="Commands\CommandExecutor.cs" />
     <Compile Include="Commands\CommandInvokedEvent.cs" />
     <Compile Include="Commands\ICommandExecutor.cs" />
+    <Compile Include="ContextMenuRoot.cs" />
     <Compile Include="CustomKeyBinding.cs" />
     <Compile Include="CustomKeyBindingsCollection.cs" />
     <Compile Include="DataResource.cs" />
@@ -90,6 +91,8 @@
     <Compile Include="InputBindingBehavior.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="MarkupExtensions\FirstFocusableExtension.cs" />
+    <Compile Include="MenuKeyNames.cs" />
+    <Compile Include="MenuViewModel.cs" />
     <Compile Include="PasswordBoxAssistant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

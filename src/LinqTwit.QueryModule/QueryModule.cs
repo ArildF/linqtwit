@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using LinqTwit.Infrastructure;
 using LinqTwit.QueryModule.Controllers;
 using LinqTwit.QueryModule.ViewModels;
@@ -7,6 +8,8 @@ using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Regions;
 using StructureMap;
+using StructureMap.Configuration.DSL.Expressions;
+using StructureMap.Pipeline;
 
 namespace LinqTwit.QueryModule
 {
@@ -44,11 +47,32 @@ namespace LinqTwit.QueryModule
 
         private void RegisterViewsAndServices()
         {
-            this.container.Configure(c => c.Scan(x =>
+
+            this.container.Configure(c =>
                 {
-                    x.TheCallingAssembly();
-                    x.WithDefaultConventions();
-                }));
+                    c.InstanceOf<IQueryResultsViewModel>().Is.OfConcreteType
+                        <QueryResultsViewModel>()
+                        .CtorDependency<ContextMenuRoot>().Is
+                        <QueryResultsContextMenu>();
+
+                    c.Scan(x =>
+                        {
+                            x.TheCallingAssembly();
+                            x.WithDefaultConventions();
+                        });
+                });
+        }
+
+        private void CreateContextMenu(IInstanceExpression<ContextMenuRoot> expr)
+        {
+            Func<string, ICommand> gc =
+                name => this.container.GetInstance<ICommand>(name);
+
+            expr.IsThis(
+                new ContextMenuRoot()
+                    {
+                        new MenuViewModel("Refresh", gc("Refresh"))
+                    });
         }
     }
 }

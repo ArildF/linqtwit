@@ -13,7 +13,7 @@ namespace LinqTwit.QueryModule.ViewModels
     {
         public QueryResultsContextMenu(IContainer container)
         {
-            new[]{MenuKeyNames.Refresh}
+            new[]{MenuKeyNames.Refresh, MenuKeyNames.Exit}
                 .Select(name => CreateItem(container, name))
                 .Where(item => item != null)
                 .ForEach(Add);

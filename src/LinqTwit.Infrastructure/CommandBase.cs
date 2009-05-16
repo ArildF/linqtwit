@@ -15,7 +15,10 @@ namespace LinqTwit.Infrastructure
             return this.CanExecute((T) parameter);
         }
 
-        public abstract bool CanExecute(T parameter);
+        public virtual bool CanExecute(T parameter)
+        {
+            return true;
+        }
 
         public event EventHandler CanExecuteChanged;
 

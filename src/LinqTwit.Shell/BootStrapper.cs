@@ -12,6 +12,7 @@ using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Presentation.Commands;
 using Microsoft.Practices.Composite.Presentation.Events;
+using StructureMap.Attributes;
 using StructureMap.Pipeline;
 using IDispatcherFacade=LinqTwit.Infrastructure.IDispatcherFacade;
 
@@ -44,13 +45,21 @@ namespace LinqTwit.Shell
 
             Container.Configure(x =>
                                     {
-                                        x.ForRequestedType<IShellView>().
-                                            TheDefaultIsConcreteType
+                                        x.ForRequestedType<IShellView>()
+                                            .CacheBy(InstanceScope.Singleton)
+                                            .TheDefaultIsConcreteType
                                             <ShellView>();
 
                                         x.ForRequestedType<IShellPresenter>().
                                             TheDefaultIsConcreteType
                                             <ShellPresenter>();
+
+                                    
+                                        x.ForRequestedType
+                                            <IApplicationController>().
+                                            TheDefaultIsConcreteType
+                                            <ApplicationController>();
+
 
                                         x.ForRequestedType<ILinqApi>().
                                             TheDefault.IsThis(client);

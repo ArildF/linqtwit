@@ -80,8 +80,10 @@
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DispatcherFacade.cs" />
+    <Compile Include="events.cs" />
     <Compile Include="FocusBehavior.cs" />
     <Compile Include="GlobalCommands.cs" />
+    <Compile Include="IApplicationController.cs" />
     <Compile Include="IAsyncManager.cs" />
     <Compile Include="CommandBase.cs" />
     <Compile Include="ICredentialsStore.cs" />

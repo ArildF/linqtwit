@@ -7,6 +7,7 @@ namespace LinqTwit.Infrastructure
 {
     public static class MenuKeyNames
     {
+        public const string Exit = "Exit";
         public const string Refresh = "Refresh";
 
     }

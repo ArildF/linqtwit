@@ -1,7 +1,8 @@
 namespace LinqTwit.Shell
 {
-    internal interface IShellPresenter
+    public interface IShellPresenter
     {
         IShellView View { get; }
+        bool TryExit();
     }
 }

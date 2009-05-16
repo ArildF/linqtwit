@@ -15,6 +15,10 @@ namespace LinqTwit.Commands
             this.InstanceOf<ICommand>().Is.OfConcreteType<RefreshCommand>().
                 WithName(MenuKeyNames.Refresh);
 
+            this.InstanceOf<ICommand>().Is.OfConcreteType<ExitCommand>().
+                WithName(MenuKeyNames.Exit);
+
+
             Scan(s =>
                 {
                     s.TheCallingAssembly();

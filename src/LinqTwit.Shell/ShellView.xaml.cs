@@ -35,5 +35,10 @@ namespace LinqTwit.Shell
         {
             this.Show();
         }
+
+        public void Exit()
+        {
+            this.Close();
+        }
     }
 }

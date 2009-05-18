@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncManagerTest.cs" />
+    <Compile Include="ClipboardService.cs" />
     <Compile Include="Commands\CommandExecutorTest.cs" />
     <Compile Include="MockDispatcherFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
       <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
       <Name>LinqTwit.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.TestUtilities\LinqTwit.TestUtilities.csproj">
+      <Project>{41A7EAEA-A93B-47BD-BC73-EB3E23F36A61}</Project>
+      <Name>LinqTwit.TestUtilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
       <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>

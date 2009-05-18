@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using LinqTwit.Common;
 using LinqTwit.Infrastructure;
 using LinqTwit.Infrastructure.Tests;
 using LinqTwit.QueryModule.ViewModels;
+using LinqTwit.TestUtilities;
 using LinqTwit.Twitter;
 using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Events;
@@ -18,12 +20,11 @@ using TestUtilities;
 namespace LinqTwit.QueryModule.Tests
 {
     [TestFixture]
-    public class QueryResultsViewModelTest
+    public class QueryResultsViewModelTest : TestBase
     {
-        private QueryResultsViewModel vm;
+        private QueryResultsViewModel _vm;
 
         private Mock<IQueryResultsView> view;
-        private Mock<IEventAggregator> aggregator;
         private Mock<ILinqApi> api;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
         private Mock<AuthorizationStateChangedEvent> authorizationEvent;
@@ -32,12 +33,8 @@ namespace LinqTwit.QueryModule.Tests
 
         private ContextMenuRoot _menuRoot;
 
-        private readonly MockFactory factory =
-            new MockFactory(MockBehavior.Loose)
-                {DefaultValue = DefaultValue.Mock, CallBase = true};
 
-        [SetUp]
-        public void SetUp()
+        protected override void  OnSetup()
         {
             var commands =
                 from prop in
@@ -52,19 +49,19 @@ namespace LinqTwit.QueryModule.Tests
             }
 
             
-            view = factory.Create<IQueryResultsView>();
-            api = factory.Create<ILinqApi>();
-            aggregator = factory.Create<IEventAggregator>();
+            view = this._factory.Create<IQueryResultsView>();
+            api = this._factory.Create<ILinqApi>();
+            this._aggregator = this._factory.Create<IEventAggregator>();
             querySubmittedEvent = new Mock<QuerySubmittedEvent>
                                       {CallBase = true};
-            authorizationEvent = factory.Create<AuthorizationStateChangedEvent>();
-            refreshEvent = factory.Create<RefreshEvent>();
+            authorizationEvent = this._factory.Create<AuthorizationStateChangedEvent>();
+            refreshEvent = this._factory.Create<RefreshEvent>();
 
-            aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
+            this._aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
                 this.querySubmittedEvent.Object);
-            aggregator.Setup(a => a.GetEvent<AuthorizationStateChangedEvent>()).
+            this._aggregator.Setup(a => a.GetEvent<AuthorizationStateChangedEvent>()).
                 Returns(this.authorizationEvent.Object);
-            aggregator.Setup(a => a.GetEvent<RefreshEvent>()).Returns(
+            this._aggregator.Setup(a => a.GetEvent<RefreshEvent>()).Returns(
                 this.refreshEvent.Object);
 
             _menuRoot = new ContextMenuRoot();
@@ -73,13 +70,13 @@ namespace LinqTwit.QueryModule.Tests
             asyncManager = new AsyncManager(new MockDispatcherFacade());
 
 
-            vm = new QueryResultsViewModel(view.Object, aggregator.Object, api.Object, asyncManager, _menuRoot);
+            this._vm = new QueryResultsViewModel(view.Object, this._aggregator.Object, api.Object, asyncManager, _menuRoot);
         }
 
         [Test]
         public void ContextMenu()
         {
-            Assert.That(vm.ContextMenu, Is.SameAs(_menuRoot));
+            Assert.That(this._vm.ContextMenu, Is.SameAs(_menuRoot));
         }
 
         [Test]
@@ -95,7 +92,7 @@ namespace LinqTwit.QueryModule.Tests
 
             this.querySubmittedEvent.Object.Publish("rogue_code");
 
-            Assert.That(this.vm.Tweets.Count, Is.EqualTo(2));
+            Assert.That(this._vm.Tweets.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -106,7 +103,7 @@ namespace LinqTwit.QueryModule.Tests
 
             this.authorizationEvent.Object.Publish(true);
 
-            Assert.That(this.vm.Tweets.Count, Is.EqualTo(2));
+            Assert.That(this._vm.Tweets.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -114,7 +111,7 @@ namespace LinqTwit.QueryModule.Tests
         {
             GetStatuses();
 
-            Assert.That(vm.SelectedTweet, Is.SameAs(vm.Tweets[0]));
+            Assert.That(this._vm.SelectedTweet, Is.SameAs(this._vm.Tweets[0]));
         }
 
         [Test]
@@ -123,9 +120,9 @@ namespace LinqTwit.QueryModule.Tests
             GetStatuses();
 
             PropertyChangedTester<QueryResultsViewModel> tester =
-                new PropertyChangedTester<QueryResultsViewModel>(vm);
+                new PropertyChangedTester<QueryResultsViewModel>(this._vm);
 
-            vm.SelectedTweet = vm.Tweets[0];
+            this._vm.SelectedTweet = this._vm.Tweets[0];
 
             tester.PropertyChanged(v => v.SelectedTweet);
         }
@@ -134,11 +131,11 @@ namespace LinqTwit.QueryModule.Tests
         public void MoveUp()
         {
             GetStatuses();
-            this.vm.SelectedTweet = this.vm.Tweets[1];
+            this._vm.SelectedTweet = this._vm.Tweets[1];
 
             ExecuteMoveUp();
 
-            Assert.That(vm.SelectedTweet, Is.SameAs(vm.Tweets[0]));
+            Assert.That(this._vm.SelectedTweet, Is.SameAs(this._vm.Tweets[0]));
 
         }
 
@@ -154,7 +151,7 @@ namespace LinqTwit.QueryModule.Tests
 
             ExecuteMovedown();
 
-            Assert.That(vm.SelectedTweet, Is.SameAs(vm.Tweets[1]));
+            Assert.That(this._vm.SelectedTweet, Is.SameAs(this._vm.Tweets[1]));
         }
 
         [Test]
@@ -162,7 +159,7 @@ namespace LinqTwit.QueryModule.Tests
         {
             GetStatuses();
 
-            var tester = new PropertyChangedTester<QueryResultsViewModel>(vm);
+            var tester = new PropertyChangedTester<QueryResultsViewModel>(this._vm);
             ExecuteMovedown();
 
             tester.PropertyChanged(v => v.SelectedTweet);
@@ -173,9 +170,9 @@ namespace LinqTwit.QueryModule.Tests
         public void MoveUpRaisesPropertyChanged()
         {
             GetStatuses();
-            vm.SelectedTweet = vm.Tweets[1];
+            this._vm.SelectedTweet = this._vm.Tweets[1];
 
-            var tester = new PropertyChangedTester<QueryResultsViewModel>(vm);
+            var tester = new PropertyChangedTester<QueryResultsViewModel>(this._vm);
             ExecuteMoveUp();
 
             tester.PropertyChanged(v => v.SelectedTweet);
@@ -192,6 +189,19 @@ namespace LinqTwit.QueryModule.Tests
         public void DoesNotRefreshWhenRefreshEventFiredIfNotAuthorized()
         {
             TestRefresh(false, 0);
+        }
+
+        [Test]
+        public void RaisesSelectedTweetChangedEvent()
+        {
+            GetStatuses();
+
+            var evt = CreateEvent<SelectedTweetChangedEvent>();
+
+            _vm.SelectedTweet = _vm.Tweets[1];
+
+            evt.Verify(e => e.Publish(It.Is<Status>(s => s.Text == _vm.Tweets[1].Text)));
+
         }
 
         private void TestRefresh(bool authorizationState, int count)

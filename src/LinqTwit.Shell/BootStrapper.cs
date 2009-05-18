@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Threading;
 using CompositeWPFContrib.Composite.StructureMapExtensions;
 using LinqTwit.Commands;
+using LinqTwit.Common;
 using LinqTwit.Infrastructure;
 using LinqTwit.Infrastructure.ApplicationServices;
 using LinqTwit.Twitter;
@@ -81,6 +82,7 @@ namespace LinqTwit.Shell
 
                                         x.AddRegistry<CommandsRegistry>();
                                         x.AddRegistry<InfrastructureRegistry>();
+                                        x.AddRegistry<CommonRegistry>();
                                     });
 
         }

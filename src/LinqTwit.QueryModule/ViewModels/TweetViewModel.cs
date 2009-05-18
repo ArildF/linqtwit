@@ -10,33 +10,40 @@ namespace LinqTwit.QueryModule.ViewModels
 {
     public class TweetViewModel : ViewModelBase
     {
-        private readonly Status status;
+        private readonly Status _status;
 
         public TweetViewModel(Status status)
         {
-            this.status = status;
+            this._status = status;
         }
 
         public DateTime Created
         {
-            get { return this.status.CreatedAt; }
+            get { return this._status.CreatedAt; }
         }
 
         public string Text
         {
-            get { return this.status.Text; }
+            get { return this._status.Text; }
         }
 
         public string FullName
         {
-            get { return this.status.User.Name; }
+            get { return this._status.User.Name; }
         }
 
         public string ScreenName
         {
-            get { return this.status.User.ScreenName; }
+            get { return this._status.User.ScreenName; }
         }
 
-        public string ProfileImageUrl { get{ return this.status.User.ProfileImageUrl;}}
+        public string ProfileImageUrl { get{ return this._status.User.ProfileImageUrl;}}
+
+        public Status Status
+        {
+            get {
+                return this._status;
+            }
+        }
     }
 }

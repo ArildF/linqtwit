@@ -9,6 +9,6 @@ namespace LinqTwit.Infrastructure
     {
         public const string Exit = "Exit";
         public const string Refresh = "Refresh";
-
+        public const string CopyTweeturl = "CopyTweetUrl";
     }
 }

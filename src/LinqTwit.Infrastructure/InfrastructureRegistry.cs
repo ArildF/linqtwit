@@ -18,6 +18,12 @@ namespace LinqTwit.Infrastructure
                         executor.AddRedundantSuffix("Command");
 
                     });
+
+            Scan(s =>
+                {
+                    s.TheCallingAssembly();
+                    s.WithDefaultConventions();
+                });
         }
     }
 }

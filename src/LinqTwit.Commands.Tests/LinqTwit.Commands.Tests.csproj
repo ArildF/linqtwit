@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CopyTweetUrlCommandTest.cs" />
     <Compile Include="ExitCommandTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefreshCommandTest.cs" />
@@ -76,6 +77,10 @@
     <ProjectReference Include="..\LinqTwit.Commands\LinqTwit.Commands.csproj">
       <Project>{A87C3457-0B73-4888-82DF-F7D62EB2E12E}</Project>
       <Name>LinqTwit.Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Common\LinqTwit.Common.csproj">
+      <Project>{59977C6D-0D80-4089-844C-D10AAD212302}</Project>
+      <Name>LinqTwit.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
       <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
@@ -88,6 +93,10 @@
     <ProjectReference Include="..\LinqTwit.TestUtilities\LinqTwit.TestUtilities.csproj">
       <Project>{41A7EAEA-A93B-47BD-BC73-EB3E23F36A61}</Project>
       <Name>LinqTwit.TestUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Twitter\LinqTwit.Twitter.csproj">
+      <Project>{E2D0487D-4D2D-4263-B51D-E1F62969C743}</Project>
+      <Name>LinqTwit.Twitter</Name>
     </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Utilities\LinqTwit.Utilities.csproj">
       <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>

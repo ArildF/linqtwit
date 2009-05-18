@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using LinqTwit.Common;
 using LinqTwit.Infrastructure;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Events;
@@ -16,7 +17,7 @@ namespace LinqTwit.QueryModule.ViewModels
 {
     public class QueryResultsViewModel : ViewModelBase, IQueryResultsViewModel
     {
-        private readonly IEventAggregator aggregator;
+        private readonly IEventAggregator _aggregator;
         private readonly ILinqApi api;
         private TweetViewModel selectedTweet;
         private readonly IAsyncManager asyncManager;
@@ -26,7 +27,7 @@ namespace LinqTwit.QueryModule.ViewModels
         public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, 
             IAsyncManager asyncManager, ContextMenuRoot menu)
         {
-            this.aggregator = aggregator;
+            this._aggregator = aggregator;
             this.asyncManager = asyncManager;
             this.api = api;
             View = view;
@@ -35,13 +36,14 @@ namespace LinqTwit.QueryModule.ViewModels
 
             this.Tweets = new ObservableCollection<TweetViewModel>();
 
-            this.aggregator.GetEvent<QuerySubmittedEvent>().Subscribe(
+            this._aggregator.GetEvent<QuerySubmittedEvent>().Subscribe(
                 QuerySubmitted);
-            this.aggregator.GetEvent<AuthorizationStateChangedEvent>().Subscribe
+            this._aggregator.GetEvent<AuthorizationStateChangedEvent>().Subscribe
                 (
                 AuthorizationStateChanged);
 
-            this.aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh, 
+
+            this._aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh, 
                 ThreadOption.UIThread, true,
                 _ => this.authorized);
 
@@ -156,6 +158,9 @@ namespace LinqTwit.QueryModule.ViewModels
                 {
                     selectedTweet = value;
                     this.OnPropertyChanged(p => p.SelectedTweet);
+
+                    this._aggregator.GetEvent<SelectedTweetChangedEvent>()
+                        .Publish(value != null ? value.Status : null);
                 }
             }
         }

@@ -69,6 +69,7 @@
     <Compile Include="AsyncManager.cs" />
     <Compile Include="Behaviors\DialogRegionBehavior.cs" />
     <Compile Include="Behaviors\DialogRegionBehaviors.cs" />
+    <Compile Include="ClipboardService.cs" />
     <Compile Include="Commands\CommandExecutor.cs" />
     <Compile Include="Commands\CommandInvokedEvent.cs" />
     <Compile Include="Commands\ICommandExecutor.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="IApplicationController.cs" />
     <Compile Include="IAsyncManager.cs" />
     <Compile Include="CommandBase.cs" />
+    <Compile Include="IClipboardService.cs" />
     <Compile Include="ICredentialsStore.cs" />
     <Compile Include="IDispatcherFacade.cs" />
     <Compile Include="InfrastructureRegistry.cs" />

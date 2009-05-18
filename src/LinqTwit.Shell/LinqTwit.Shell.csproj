@@ -147,6 +147,10 @@
       <Project>{A87C3457-0B73-4888-82DF-F7D62EB2E12E}</Project>
       <Name>LinqTwit.Commands</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Common\LinqTwit.Common.csproj">
+      <Project>{59977C6D-0D80-4089-844C-D10AAD212302}</Project>
+      <Name>LinqTwit.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LinqTwit.Infrastructure\LinqTwit.Infrastructure.csproj">
       <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
       <Name>LinqTwit.Infrastructure</Name>

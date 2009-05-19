@@ -20,7 +20,7 @@ namespace LinqTwit.Shell.Tests
 
         protected override void OnSetup()
         {
-            _event = CreateEvent<ExitApplicationEvent>();
+            _event = CreateEvent<ExitApplicationEvent, VetoArgs>();
 
             _presenter = _factory.Create<IShellPresenter>();
 

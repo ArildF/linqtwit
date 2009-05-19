@@ -18,7 +18,7 @@ namespace LinqTwit.Common.Tests
 
         protected override void OnSetup()
         {
-            _event = CreateEvent<SelectedTweetChangedEvent>();
+            _event = CreateEvent<SelectedTweetChangedEvent, Status>();
 
             _selection = new Selection(_aggregator.Object);
         }

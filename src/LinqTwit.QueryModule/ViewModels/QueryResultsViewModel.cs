@@ -43,9 +43,10 @@ namespace LinqTwit.QueryModule.ViewModels
                 AuthorizationStateChanged);
 
 
-            this._aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh, 
-                ThreadOption.UIThread, true,
-                _ => this.authorized);
+            this._aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh//,  
+                ,ThreadOption.UIThread, true,
+                _ => this.authorized
+                );
 
             GlobalCommands.UpCommand.RegisterCommand(new DelegateCommand<object>(MoveUp));
             GlobalCommands.DownCommand.RegisterCommand(new DelegateCommand<object>(MoveDown));
@@ -118,10 +119,19 @@ namespace LinqTwit.QueryModule.ViewModels
 
         private void SetStatuses(IEnumerable<Status> statuses)
         {
+            var previousSelected = this.SelectedTweet;
+
             this.Tweets.Clear();
             statuses.Select(s => new TweetViewModel(s)).ForEach(this.Tweets.Add);
-            this.SelectedTweet = this.Tweets.Count > 0 ? this.Tweets[0] : null;
-            SelectedIndex = this.Tweets.Count > 0 ? 0 : -1;
+
+            var newSelected = this.Tweets.Count > 0 ? this.Tweets[0] : null;
+            if (previousSelected != null)
+            {
+                newSelected =
+                    this.Tweets.FirstOrDefault(
+                        t => t.Status.Id == previousSelected.Status.Id);
+            }
+            this.SelectedTweet = newSelected;
         }
 
         private int SelectedIndex

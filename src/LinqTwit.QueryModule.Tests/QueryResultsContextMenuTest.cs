@@ -15,8 +15,6 @@ namespace LinqTwit.QueryModule.Tests
     [TestFixture]
     public class ContextMenuRootTest
     {
-        private ContextMenuRoot _contextMenuRoot;
-
         private readonly MockFactory _factory =
             new MockFactory(MockBehavior.Loose)
                 {DefaultValue = DefaultValue.Mock};

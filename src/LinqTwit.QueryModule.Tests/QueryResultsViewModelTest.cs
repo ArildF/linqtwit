@@ -25,10 +25,10 @@ namespace LinqTwit.QueryModule.Tests
         private QueryResultsViewModel _vm;
 
         private Mock<IQueryResultsView> view;
-        private Mock<ILinqApi> api;
+        private Mock<ILinqApi> _api;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
-        private Mock<AuthorizationStateChangedEvent> authorizationEvent;
-        private Mock<RefreshEvent> refreshEvent;
+        private Mock<AuthorizationStateChangedEvent> _authorizationEvent;
+        private Mock<RefreshEvent> _refreshEvent;
         private IAsyncManager asyncManager;
 
         private ContextMenuRoot _menuRoot;
@@ -50,19 +50,18 @@ namespace LinqTwit.QueryModule.Tests
 
             
             view = this._factory.Create<IQueryResultsView>();
-            api = this._factory.Create<ILinqApi>();
-            this._aggregator = this._factory.Create<IEventAggregator>();
+            this._api = this._factory.Create<ILinqApi>();
+            this._aggregator = _factory.Create<IEventAggregator>();
             querySubmittedEvent = new Mock<QuerySubmittedEvent>
                                       {CallBase = true};
-            authorizationEvent = this._factory.Create<AuthorizationStateChangedEvent>();
-            refreshEvent = this._factory.Create<RefreshEvent>();
+            this._authorizationEvent = this._factory.Create<AuthorizationStateChangedEvent>();
+            this._refreshEvent = CreateEvent<RefreshEvent, object>();
+
 
             this._aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
                 this.querySubmittedEvent.Object);
             this._aggregator.Setup(a => a.GetEvent<AuthorizationStateChangedEvent>()).
-                Returns(this.authorizationEvent.Object);
-            this._aggregator.Setup(a => a.GetEvent<RefreshEvent>()).Returns(
-                this.refreshEvent.Object);
+                Returns(this._authorizationEvent.Object);
 
             _menuRoot = new ContextMenuRoot();
 
@@ -70,7 +69,7 @@ namespace LinqTwit.QueryModule.Tests
             asyncManager = new AsyncManager(new MockDispatcherFacade());
 
 
-            this._vm = new QueryResultsViewModel(view.Object, this._aggregator.Object, api.Object, asyncManager, _menuRoot);
+            this._vm = new QueryResultsViewModel(view.Object, this._aggregator.Object, this._api.Object, asyncManager, _menuRoot);
         }
 
         [Test]
@@ -82,7 +81,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void QuerySubmittedGetsUserTimeline()
         {
-            api.Setup(a => a.UserTimeLine("rogue_code")).Returns(new[]
+            this._api.Setup(a => a.UserTimeLine("rogue_code")).Returns(new[]
                                                                      {
                                                                          new Status
                                                                              (),
@@ -98,10 +97,10 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void AuthenticationStateChangedGetsFriendTimeLine()
         {
-            api.Setup(a => a.FriendsTimeLine()).Returns(new[]
+            this._api.Setup(a => a.FriendsTimeLine()).Returns(new[]
                 {new Status(), new Status()});
 
-            this.authorizationEvent.Object.Publish(true);
+            this._authorizationEvent.Object.Publish(true);
 
             Assert.That(this._vm.Tweets.Count, Is.EqualTo(2));
         }
@@ -196,7 +195,7 @@ namespace LinqTwit.QueryModule.Tests
         {
             GetStatuses();
 
-            var evt = CreateEvent<SelectedTweetChangedEvent>();
+            var evt = CreateEvent<SelectedTweetChangedEvent, Status>();
 
             _vm.SelectedTweet = _vm.Tweets[1];
 
@@ -204,15 +203,50 @@ namespace LinqTwit.QueryModule.Tests
 
         }
 
+        [Test]
+        public void SelectedTweetIsRetainedAfterRefresh()
+        {
+            _api.Setup(a => a.FriendsTimeLine()).Returns(
+                CreateStatuses(1, 10).ToArray());
+
+            _authorizationEvent.Object.Publish(true);
+
+            _vm.SelectedTweet = _vm.Tweets[5];
+
+            _api.Setup(a => a.FriendsTimeLine()).Returns(
+                CreateStatuses(3, 13).ToArray);
+
+            var tester = new PropertyChangedTester<QueryResultsViewModel>(_vm);
+            _refreshEvent.Object.Publish(null);
+
+            Assert.That(tester.PropertyChanged(p => p.SelectedTweet), Is.True);
+            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("5"));
+        }
+
+
+
+        private static IEnumerable<Status> CreateStatuses(int from, int to)
+        {
+            for (int i = 0; i <= to; i++)
+            {
+                yield return new Status()
+                    {
+                        Id = i.ToString(),
+                        Text = "Some text"
+                    };
+            }
+        }
+        
         private void TestRefresh(bool authorizationState, int count)
         {
             SetupFriendsTimelineCall();
 
-            this.authorizationEvent.Object.Publish(authorizationState);
+            this._authorizationEvent.Object.Publish(authorizationState);
 
-            this.refreshEvent.Object.Publish(null);
+            this._refreshEvent.Object.Publish(null);
 
-            this.api.Verify(a => a.FriendsTimeLine(), Times.Exactly(count));
+            // + 1 to account for the initial call to FriendsTimeLine
+            this._api.Verify(a => a.FriendsTimeLine(), Times.Exactly(count + (authorizationState ? 1 : 0)));
         }
 
         private static void ExecuteMovedown()
@@ -224,12 +258,12 @@ namespace LinqTwit.QueryModule.Tests
         {
             SetupFriendsTimelineCall();
 
-            this.authorizationEvent.Object.Publish(true);
+            this._authorizationEvent.Object.Publish(true);
         }
 
         private void SetupFriendsTimelineCall()
         {
-            this.api.Setup(a => a.FriendsTimeLine()).Returns(new[] { new Status(){Text = "tweet 1"}, new Status(){Text = "tweet 2"} });
+            this._api.Setup(a => a.FriendsTimeLine()).Returns(new[] { new Status(){Text = "tweet 1"}, new Status(){Text = "tweet 2"} });
         }
     }
 }

@@ -1,0 +1,10 @@
+﻿<Window x:Class="LinqTwit.Infrastructure.DialogWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" Background="Transparent">
+    <Border BorderThickness="5" BorderBrush="Silver" CornerRadius="5" >
+        <DockPanel>
+            <ContentControl x:Name="content"/>
+        </DockPanel>
+    </Border>
+</Window>

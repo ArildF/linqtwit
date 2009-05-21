@@ -1,0 +1,48 @@
+﻿<Window x:Class="LinqTwit.Shell.ShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="clr-namespace:Microsoft.Practices.Composite.Presentation.Regions;assembly=Prism"
+    xmlns:behaviors="clr-namespace:LinqTwit.Infrastructure.Behaviors;assembly=LinqTwit.Infrastructure"
+    xmlns:Infrastructure="clr-namespace:LinqTwit.Infrastructure;assembly=LinqTwit.Infrastructure"
+    Title="ShellView" Height="530" Width="431"
+    behaviors:DialogRegionBehaviors.DialogWindowStyle="{StaticResource DialogWindowStyle}"
+        behaviors:DialogRegionBehaviors.DialogRegionName="DialogRegion" 
+        ShowInTaskbar="True"
+        WindowStyle="None"
+        Opacity="0.98"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        
+        AllowsTransparency="True"
+        >
+    <Window.InputBindings>
+      <!--  
+        <KeyBinding Key="Up" Command="Infrastructure:GlobalCommands.UpCommand"/>
+     
+        <KeyBinding Key="Down" Command="Infrastructure:GlobalCommands.DownCommand"/>-->
+        <KeyBinding Command="Infrastructure:GlobalCommands.CommandLineCommand" Key="Tab"/> 
+    </Window.InputBindings>
+    
+    <Infrastructure:InputBehavior.CustomKeyBindings>
+        <Infrastructure:CustomKeyBindingsCollection>
+            <Infrastructure:CustomKeyBinding Text=":" Command="Infrastructure:GlobalCommands.CommandLineCommand"/>
+            <Infrastructure:CustomKeyBinding Text="k" Command="Infrastructure:GlobalCommands.DownCommand"/>
+            <Infrastructure:CustomKeyBinding Text="j"  Command="Infrastructure:GlobalCommands.UpCommand"/>
+
+        </Infrastructure:CustomKeyBindingsCollection>        
+    </Infrastructure:InputBehavior.CustomKeyBindings>
+    <Border BorderThickness="3" BorderBrush="SteelBlue" CornerRadius="5" Background="Black" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Grid.Column="0" Grid.Row="1" cal:RegionManager.RegionName="QueryEntry" Background="AliceBlue"/>
+            <ContentControl Grid.Column="0" Grid.Row="0" cal:RegionManager.RegionName="QueryResults" Background="Red"/>
+
+        </Grid>
+    </Border>
+</Window>

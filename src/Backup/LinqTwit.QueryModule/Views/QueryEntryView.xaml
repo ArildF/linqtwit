@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="LinqTwit.QueryModule.Views.QueryEntryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Infrastructure="clr-namespace:LinqTwit.Infrastructure;assembly=LinqTwit.Infrastructure" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+             Background="Transparent">
+    
+    <UserControl.Resources>
+        <Infrastructure:DataResource x:Key="DeactivateCommand" BindingTarget="{Binding DeactivateCommand}"/>
+        
+   
+        
+        <ControlTemplate x:Key="QueryEntryTemplate">
+            
+
+            <Grid x:Name="root" RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform>
+                    <ScaleTransform ScaleY="0"/>
+                </Grid.RenderTransform>
+                <DockPanel>
+                    <Button DockPanel.Dock="Bottom" Command="{Binding Path=SubmitQueryCommand}">
+                        _Submit
+                    </Button>
+                    <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" 
+                     Text="{Binding Path=QueryText,  UpdateSourceTrigger=PropertyChanged}"
+                     Infrastructure:FocusBehavior.BindableFocus="{Binding ActiveForInput, Mode=TwoWay}"
+                     IsEnabled="{Binding ActiveForInput, Mode=OneWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                     Background="AliceBlue" Foreground="Black"/>
+                </DockPanel>
+            </Grid>
+            
+            <ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding ActiveForInput}" Value="false">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" Storyboard.TargetName="root" 
+                                                 To="0" Duration="0:0:0.05"
+                                                 AccelerationRatio="0.33"
+                                                 DecelerationRatio="0.66"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" Storyboard.TargetName="root"
+                                                 To="1" Duration="0:0:0.05"
+                                                 AccelerationRatio="0.33"
+                                                 DecelerationRatio="0.66"
+                                                 />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+
+                </DataTrigger>
+
+            </ControlTemplate.Triggers>
+
+        </ControlTemplate>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="Escape">
+            <KeyBinding.Command>
+                <Infrastructure:DataResourceBinding DataResource="{StaticResource DeactivateCommand}"/>
+            </KeyBinding.Command>
+        </KeyBinding>
+        
+    </UserControl.InputBindings>
+    
+    <ContentControl Template="{StaticResource QueryEntryTemplate}" DataContext="{Binding}"/>
+
+</UserControl>

@@ -69,7 +69,7 @@ namespace LinqTwit.TestUtilities
                      {Filter = filter, Handler = action}));
             mock.Setup(m => m.Publish(It.IsAny<TPayload>())).Callback<TPayload>(
                 pl =>
-                listeners.Where(l => l.Filter(pl)).ForEach(l => l.Handler(pl)));
+                listeners.Where(l => l.Filter == null || l.Filter(pl)).ForEach(l => l.Handler(pl)));
 
             return mock;
         }

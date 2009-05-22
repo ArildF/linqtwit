@@ -110,15 +110,12 @@ namespace LinqTwit.Twitter.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(TwitterAuthorizationException))]
         public void WrongCredentialsThrowsAuthorizationException()
         {
             var client = new TwitterRestClient("twitterEndpoint");
 
             client.SetCredentials("rogue_code", "wrong passwrord");
-            var statuses = 
-                client.FriendsTimeLine();
-
+            Assert.Throws<TwitterAuthorizationException>(() => client.FriendsTimeLine());
         }
 
         [Test]

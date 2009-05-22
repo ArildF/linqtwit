@@ -31,11 +31,10 @@ namespace LinqTwit.QueryModule.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertBackNotSupported()
         {
-            object val = cut.ConvertBack("", typeof (string), null,
-                            CultureInfo.InvariantCulture);
+            Assert.Throws<NotSupportedException>(() => cut.ConvertBack("", typeof (string), null,
+                            CultureInfo.InvariantCulture));
 
         }
     }

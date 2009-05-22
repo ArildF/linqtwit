@@ -64,6 +64,7 @@ namespace LinqTwit.QueryModule.Tests
             vm.ActiveForInput = true;
 
             tester.VerifyAllPublicProperties();
+
         }
 
         [Test]

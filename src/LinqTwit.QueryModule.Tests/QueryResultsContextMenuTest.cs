@@ -7,7 +7,6 @@ using LinqTwit.Infrastructure;
 using LinqTwit.QueryModule.ViewModels;
 using NUnit.Framework;
 using Moq;
-using NUnit.Framework.SyntaxHelpers;
 using StructureMap;
 
 namespace LinqTwit.QueryModule.Tests

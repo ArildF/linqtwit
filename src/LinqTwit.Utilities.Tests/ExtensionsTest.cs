@@ -2,7 +2,6 @@ using System;
 using System.Linq.Expressions;
 using NUnit.Framework;
 using Moq;
-using NUnit.Framework.SyntaxHelpers;
 using LinqTwit.Utilities;
 
 namespace LinqTwit.Utilities.Tests

@@ -7,8 +7,6 @@ using LinqTwit.Infrastructure.Commands;
 using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using Moq;
-using NUnit.Framework.SyntaxHelpers;
-using StructureMap;
 
 namespace LinqTwit.Infrastructure.Tests.Commands
 {

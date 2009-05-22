@@ -7,7 +7,6 @@ using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Regions;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using TestUtilities;
 
 namespace LinqTwit.QueryModule.Tests

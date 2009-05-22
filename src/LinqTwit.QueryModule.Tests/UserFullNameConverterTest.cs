@@ -6,7 +6,6 @@ using System.Text;
 using LinqTwit.QueryModule.ValueConverters;
 using NUnit.Framework;
 using Moq;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace LinqTwit.QueryModule.Tests
 {

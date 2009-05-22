@@ -8,7 +8,6 @@ using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Presentation.Events;
 using NUnit.Framework;
 using Moq;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace LinqTwit.Commands.Tests
 {

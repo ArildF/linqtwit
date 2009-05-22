@@ -6,7 +6,6 @@ using System.Threading;
 using System.Windows.Threading;
 using NUnit.Framework;
 using Moq;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace LinqTwit.Infrastructure.Tests
 {

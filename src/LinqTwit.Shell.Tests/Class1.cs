@@ -6,7 +6,6 @@ using LinqTwit.Infrastructure;
 using LinqTwit.TestUtilities;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace LinqTwit.Shell.Tests
 {

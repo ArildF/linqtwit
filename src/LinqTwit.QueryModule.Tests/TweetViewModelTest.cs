@@ -9,7 +9,6 @@ using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.Twitter;
 using NUnit.Framework;
 using Moq;
-using NUnit.Framework.SyntaxHelpers;
 using TestUtilities;
 
 namespace LinqTwit.QueryModule.Tests

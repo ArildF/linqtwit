@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows;
 using LinqTwit.TestUtilities;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace LinqTwit.Infrastructure.Tests
 {

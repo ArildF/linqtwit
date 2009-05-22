@@ -8,7 +8,6 @@ using LinqTwit.TestUtilities;
 using LinqTwit.Twitter;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace LinqTwit.Commands.Tests
 {

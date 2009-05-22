@@ -17,10 +17,10 @@
                     <ScaleTransform ScaleY="0"/>
                 </Grid.RenderTransform>
                 <DockPanel>
-                    <Button DockPanel.Dock="Bottom" Command="{Binding Path=SubmitQueryCommand}">
+                    <Button DockPanel.Dock="Bottom" Command="{Binding Path=SubmitQueryCommand}" IsDefault="True">
                         _Submit
                     </Button>
-                    <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" 
+                    <TextBox VerticalScrollBarVisibility="Auto" 
                      Text="{Binding Path=QueryText,  UpdateSourceTrigger=PropertyChanged}"
                      Infrastructure:FocusBehavior.BindableFocus="{Binding ActiveForInput, Mode=TwoWay}"
                      IsEnabled="{Binding ActiveForInput, Mode=OneWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"

@@ -53,5 +53,10 @@ namespace LinqTwit.Utilities
         {
             DebugUtils.DebugEvents(o, formatString, eventsRegex);
         }
+
+        public static Type GetInterface(this Type type, Type interfaceType)
+        {
+            return type.GetInterface(interfaceType.FullName);
+        }
     }
 }

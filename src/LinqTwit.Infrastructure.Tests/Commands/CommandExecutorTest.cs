@@ -19,8 +19,11 @@ namespace LinqTwit.Infrastructure.Tests.Commands
                 {DefaultValue = DefaultValue.Mock, CallBase = true};
 
         private Mock<IServiceLocator> _locator;
+        private Mock<IArgumentParser> _parser;
         private IEnumerable<ICommand> _commands;
         private MooCommand _command;
+
+        private string _mooCommandFullName = typeof (MooCommand).FullName;
 
         private CommandExecutor CommandExecutor
         {
@@ -28,7 +31,7 @@ namespace LinqTwit.Infrastructure.Tests.Commands
             {
                 if (_commandExecutor == null)
                 {
-                    _commandExecutor = new CommandExecutor(_locator.Object);
+                    _commandExecutor = new CommandExecutor(_locator.Object, _parser.Object);
                 }
                 return this._commandExecutor;
             }
@@ -39,8 +42,10 @@ namespace LinqTwit.Infrastructure.Tests.Commands
         public void SetUp()
         {
             _locator = _factory.Create<IServiceLocator>();
-             _command = new MooCommand();
-             _commands = new[] {this._command};
+            _parser = _factory.Create<IArgumentParser>();
+
+            _command = new MooCommand();
+            _commands = new[] { this._command };
 
             _commandExecutor = null;
 
@@ -50,7 +55,7 @@ namespace LinqTwit.Infrastructure.Tests.Commands
         [Test]
         public void Execute()
         {
-            TestIsExecuted(typeof (MooCommand).FullName);
+            TestIsExecuted(_mooCommandFullName);
         }
 
         [Test]
@@ -86,6 +91,30 @@ namespace LinqTwit.Infrastructure.Tests.Commands
             TestIsExecuted("Moo");
         }
 
+        [Test]
+        public void SupportsArguments()
+        {
+            TestIsExecuted(_mooCommandFullName + " this is a lot of args");
+        }
+
+        [Test]
+        public void PassesArgumentsToCommand()
+        {
+            var cmd = new StringCommand();
+            _commands = new ICommand[] {cmd};
+
+            var name = cmd.GetType().FullName;
+
+            _parser.Setup(
+                p => p.ResolveArguments(cmd, "these are arguments")).
+                Returns("these are arguments");
+
+            CommandExecutor.Execute(name + " these are arguments");
+
+            Assert.That(cmd.Parameter, Is.EqualTo("these are arguments"));
+
+        }
+
 
 
         private void TestIsExecuted(string commandString)
@@ -96,6 +125,16 @@ namespace LinqTwit.Infrastructure.Tests.Commands
         }
 
         
+    }
+
+    class StringCommand : CommandBase<string>
+    {
+        public string Parameter;
+
+        public override void Execute(string parameter)
+        {
+            this.Parameter = parameter;
+        }
     }
 
     class MooCommand : ICommand

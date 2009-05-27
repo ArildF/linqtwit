@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Security;
-using System.Text;
 
 namespace LinqTwit.Twitter
 {
@@ -32,6 +29,11 @@ namespace LinqTwit.Twitter
         {
             this.ClientCredentials.UserName.UserName = user;
             this.ClientCredentials.UserName.Password = pass;
+        }
+
+        public Status Update(string status)
+        {
+            return this.Channel.Update(status);
         }
 
 

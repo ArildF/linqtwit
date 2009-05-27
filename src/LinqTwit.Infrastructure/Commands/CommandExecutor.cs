@@ -10,13 +10,15 @@ namespace LinqTwit.Infrastructure.Commands
     public class CommandExecutor : ICommandExecutor
     {
         private readonly IServiceLocator _locator;
+        private readonly IArgumentParser _parser;
         private readonly Dictionary<string, ICommand> _commands;
         private readonly IList<string> _prefixes = new List<string>();
         private readonly IList<string> _suffixes = new List<string>();
 
-        public CommandExecutor(IServiceLocator locator)
+        public CommandExecutor(IServiceLocator locator, IArgumentParser parser)
         {
             this._locator = locator;
+            _parser = parser;
 
             this._commands = this._locator.GetAllInstances<ICommand>().ToDictionary(
                 c => c.GetType().FullName.ToLowerInvariant());
@@ -25,26 +27,49 @@ namespace LinqTwit.Infrastructure.Commands
 
         public void Execute(string commandString)
         {
-            var command = FindCommand(commandString);
-            if (command != null && command.CanExecute(null))
+            var tuple = SplitToCommandAndArguments(commandString);
+
+            var command = FindCommand(tuple.First);
+            if (command != null)
             {
-                command.Execute(null);
+                object argument = _parser.ResolveArguments(command, tuple.Second);
+                if (command.CanExecute(argument))
+                {
+                    command.Execute(argument);
+                }
             }
 
+        }
+
+        private static Tuple<string, string> SplitToCommandAndArguments(string commandString)
+        {
+            int firstSpace = commandString.IndexOf(' ');
+
+            if (firstSpace >= 0)
+            {
+                var command = commandString.Substring(0, firstSpace);
+                var args = commandString.Substring(command.Length,
+                                                   commandString.Length -
+                                                   command.Length);
+
+                return Tuple.Create(command.Trim(), args.Trim());
+            }
+
+            return Tuple.Create(commandString.Trim(), (string)null);
         }
 
         private ICommand FindCommand(string commandString)
         {
             ICommand val = null;
-            return (FindCommandStringVariants(commandString).Select(str => new
-                {
-                    str,
-                    c = new
-                        {
-                            Found = this._commands.TryGetValue(str, out val),
-                            Command = val
-                        }
-                }).Where(@t => @t.c.Found).Select(@t => @t.c.Command)).FirstOrDefault();
+            return (from variant in FindCommandStringVariants(commandString)
+                   let c =
+                       new
+                           {
+                               Found = this._commands.TryGetValue(variant, out val),
+                               Command = val
+                           }
+                   where c.Found
+                   select c.Command).FirstOrDefault(); 
 
         }
 

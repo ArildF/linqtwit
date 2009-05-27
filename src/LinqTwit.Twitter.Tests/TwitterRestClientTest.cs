@@ -131,6 +131,18 @@ namespace LinqTwit.Twitter.Tests
 
         }
 
+        [Test]
+        public void Update()
+        {
+            //var c = new TwitterRestClient("twitterEndpoint");
+            WithChannel(c =>
+                {
+                    Status s = c.Update("Foo bar");
+                    Assert.That(s.Text, Is.EqualTo("Foo bar"));
+
+                });
+        }
+
         private string userString =
             @"<user>
 <description>Software engineer/architect developing .NET software for NAF-Data(http://naf-data.no/english.htm)</description>

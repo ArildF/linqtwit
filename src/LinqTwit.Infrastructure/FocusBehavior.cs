@@ -19,6 +19,13 @@ namespace LinqTwit.Infrastructure
                 typeof (FocusBehavior),
                 new PropertyMetadata(new PropertyChangedCallback(BindableFocusChanged)));
 
+        public static readonly DependencyProperty FocusFirstElementOnLoadedProperty = 
+            DependencyProperty.RegisterAttached(
+                "FocusFirstElementOnLoaded",
+                typeof(bool),
+                typeof(FocusBehavior), 
+                new FrameworkPropertyMetadata(false, FocusFirstElementOnLoadedPropertyChanged));
+
         public static void SetBindableFocus(UIElement obj,
                                 bool value)
         {
@@ -31,6 +38,54 @@ namespace LinqTwit.Infrastructure
             HookEvents(obj);
             return (bool) obj.GetValue(BindableFocusProperty);
         }
+
+        public static void SetFocusFirstElementOnLoaded(DependencyObject obj, bool value)
+        {
+            obj.SetValue(FocusFirstElementOnLoadedProperty, value);
+        }
+
+        public static bool GetFocusFirstElementOnLoaded(DependencyObject obj)
+        {
+            return (bool) obj.GetValue(FocusFirstElementOnLoadedProperty);
+        }
+
+        /// <summary>
+        /// Handles changes on the <see cref="FocusFirstElementOnLoadedProperty"/> dependency property. As
+        /// WPF internally uses the dependency property system and bypasses the
+        /// <see cref="FocusFirstElement"/> property wrapper, updates should be handled here.
+        /// </summary>
+        /// <param name="d">The currently processed owner of the property.</param>
+        /// <param name="e">Provides information about the updated property.</param>
+        private static void FocusFirstElementOnLoadedPropertyChanged(DependencyObject d,
+                                             DependencyPropertyChangedEventArgs
+                                                 e)
+        {
+            bool newValue = (bool) e.NewValue;
+
+            FrameworkElement element = d as FrameworkElement;
+
+            if (element != null)
+            {
+                element.Loaded -= FocusFirstElementOnLoaded;
+                if (newValue)
+                {
+                    element.Loaded += FocusFirstElementOnLoaded;
+                }
+            }
+
+            
+        }
+
+        private static void FocusFirstElementOnLoaded(object sender, RoutedEventArgs args)
+        {
+            UIElement element = sender as UIElement;
+            if (element != null)
+            {
+                bool retval = element.MoveFocus(
+                    new TraversalRequest(FocusNavigationDirection.First));
+            }
+        }
+
 
         private static void BindableFocusChanged(DependencyObject d,
                                      DependencyPropertyChangedEventArgs e)

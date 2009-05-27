@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Threading;
+using LinqTwit.TestUtilities;
 using NUnit.Framework;
 using Moq;
 

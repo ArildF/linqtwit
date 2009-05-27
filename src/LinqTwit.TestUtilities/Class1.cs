@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LinqTwit.Infrastructure;
 using LinqTwit.Utilities;
 using Microsoft.Practices.Composite.Events;
 using Microsoft.Practices.Composite.Presentation.Events;
@@ -17,13 +18,15 @@ namespace LinqTwit.TestUtilities
             new MockFactory(MockBehavior.Loose) 
             { DefaultValue = DefaultValue.Mock, CallBase = true};
 
-        protected Mock<IEventAggregator> _aggregator; 
+        protected Mock<IEventAggregator> _aggregator;
+        protected IAsyncManager _asyncManager;
 
 
         [SetUp]
         public virtual void Setup()
         {
             _aggregator = _factory.Create<IEventAggregator>();
+            _asyncManager = new AsyncManager(new MockDispatcherFacade());
 
             OnSetup();
         }

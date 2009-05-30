@@ -76,6 +76,7 @@
     <Compile Include="AsyncManager.cs" />
     <Compile Include="Behaviors\DialogRegionBehavior.cs" />
     <Compile Include="Behaviors\DialogRegionBehaviors.cs" />
+    <Compile Include="Behaviors\RichTextBoxBehavior.cs" />
     <Compile Include="ClipboardService.cs" />
     <Compile Include="Commands\ArgumentParser.cs" />
     <Compile Include="Commands\CommandExecutor.cs" />

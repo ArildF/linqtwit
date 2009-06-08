@@ -26,8 +26,8 @@
     <Infrastructure:InputBehavior.CustomKeyBindings>
         <Infrastructure:CustomKeyBindingsCollection>
             <Infrastructure:CustomKeyBinding Text=":" Command="Infrastructure:GlobalCommands.CommandLineCommand"/>
-            <Infrastructure:CustomKeyBinding Text="k" Command="Infrastructure:GlobalCommands.DownCommand"/>
-            <Infrastructure:CustomKeyBinding Text="j"  Command="Infrastructure:GlobalCommands.UpCommand"/>
+            <Infrastructure:CustomKeyBinding Text="j" Command="Infrastructure:GlobalCommands.DownCommand"/>
+            <Infrastructure:CustomKeyBinding Text="k"  Command="Infrastructure:GlobalCommands.UpCommand"/>
 
         </Infrastructure:CustomKeyBindingsCollection>        
     </Infrastructure:InputBehavior.CustomKeyBindings>

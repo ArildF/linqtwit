@@ -211,6 +211,7 @@ namespace LinqTwit.QueryModule.Tests
             _authorizationEvent.Object.Publish(true);
 
             _vm.SelectedTweet = _vm.Tweets[5];
+            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("6"));
 
             _api.Setup(a => a.FriendsTimeLine()).Returns(
                 CreateStatuses(3, 13).ToArray);
@@ -219,14 +220,93 @@ namespace LinqTwit.QueryModule.Tests
             _refreshEvent.Object.Publish(null);
 
             Assert.That(tester.PropertyChanged(p => p.SelectedTweet), Is.True);
-            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("5"));
+            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("6"));
+        }
+
+        [Test]
+        public void Editable()
+        {
+            GetStatuses();
+
+            _vm.SelectedTweet = _vm.Tweets[1];
+
+            Assert.That(_vm.EditCommand.CanExecute(null), Is.True);
+
+            _vm.SelectedTweet = null;
+            Assert.That(_vm.EditCommand.CanExecute(null), Is.False);
+        }
+
+        [Test]
+        public void Edit()
+        {
+            GetStatuses();
+
+            _vm.SelectedTweet = _vm.Tweets[1];
+
+            _vm.EditCommand.Execute(null);
+
+            Assert.That(_vm.Tweets[1].Editable, Is.True);
+        }
+
+        [Test]
+        public void CancelEditCanExecute()
+        {
+            GetStatuses();
+
+            _vm.SelectedTweet = _vm.Tweets[1];
+            _vm.SelectedTweet.Editable = false;
+
+            Assert.That(_vm.CancelEditCommand.CanExecute(null), Is.False);
+
+            _vm.SelectedTweet.Editable = true;
+            Assert.That(_vm.CancelEditCommand.CanExecute(null), Is.True);
+
+            _vm.SelectedTweet = null;
+            Assert.That(_vm.CancelEditCommand.CanExecute(null), Is.False);
+        }
+
+        [Test]
+        public void CancelEdit()
+        {
+            GetStatuses();
+            _vm.SelectedTweet = _vm.Tweets[1];
+
+            _vm.SelectedTweet.Editable = true;
+
+            _vm.CancelEditCommand.Execute(null);
+
+            Assert.That(_vm.SelectedTweet.Editable, Is.False);
+        }
+
+        [Test]
+        public void EditCancelledWhenTweetUnselected()
+        {
+            GetStatuses();
+            _vm.SelectedTweet = _vm.Tweets[1];
+            _vm.SelectedTweet.Editable = true;
+
+            _vm.SelectedTweet = _vm.Tweets[0];
+            Assert.That(_vm.Tweets[1].Editable, Is.False);
+        }
+
+        [Test]
+        public void DoesNotRefreshWhenSelectedTweetEditable()
+        {
+            GetStatuses();
+            _vm.SelectedTweet = _vm.Tweets[1];
+            _vm.SelectedTweet.Editable = true;
+
+            _refreshEvent.Object.Publish(null);
+
+            // 1 for the initial call in GetStatuses()
+            _api.Verify(a => a.FriendsTimeLine(), Times.Exactly(1));
         }
 
 
 
         private static IEnumerable<Status> CreateStatuses(int from, int to)
         {
-            for (int i = 0; i <= to; i++)
+            for (int i = from; i <= to; i++)
             {
                 yield return new Status()
                     {

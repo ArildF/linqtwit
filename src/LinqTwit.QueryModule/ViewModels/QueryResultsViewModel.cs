@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using System.Windows.Input;
 using LinqTwit.Common;
 using LinqTwit.Infrastructure;
 using LinqTwit.Twitter;
@@ -23,7 +24,9 @@ namespace LinqTwit.QueryModule.ViewModels
         private readonly IAsyncManager asyncManager;
         private bool authorized;
         private IList<MenuViewModel> _contextMenu;
-        
+        private ICommand _editCommand;
+        private ICommand _cancelEditCommand;
+
         public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, 
             IAsyncManager asyncManager, ContextMenuRoot menu)
         {
@@ -45,13 +48,42 @@ namespace LinqTwit.QueryModule.ViewModels
 
             this._aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh//,  
                 ,ThreadOption.UIThread, true,
-                _ => this.authorized
+                _ => this.authorized && !this.Editing
                 );
 
             GlobalCommands.UpCommand.RegisterCommand(new DelegateCommand<object>(MoveUp));
             GlobalCommands.DownCommand.RegisterCommand(new DelegateCommand<object>(MoveDown));
 
             _contextMenu = menu;
+
+            _editCommand = new DelegateCommand<object>(EditSelectedTweet,
+                                                       o =>
+                                                       this.SelectedTweet !=
+                                                       null);
+
+            _cancelEditCommand = new DelegateCommand<object>(CancelEdit,
+                o => this.SelectedTweet != null && this.SelectedTweet.Editable);
+        }
+
+        protected bool Editing
+        {
+            get {return this.SelectedTweet != null && this.SelectedTweet.Editable; }
+        }
+
+        private void CancelEdit(object obj)
+        {
+            if (this.SelectedTweet != null && this.SelectedTweet.Editable)
+            {
+                this.SelectedTweet.Editable = false;
+            }
+        }
+
+        private void EditSelectedTweet(object obj)
+        {
+            if (this.SelectedTweet != null)
+            {
+                this.SelectedTweet.Editable = true;
+            }
         }
 
         public IList<MenuViewModel> ContextMenu
@@ -166,12 +198,29 @@ namespace LinqTwit.QueryModule.ViewModels
             {
                 if (selectedTweet != value)
                 {
+                    CancelEdit(null);
+
                     selectedTweet = value;
                     this.OnPropertyChanged(p => p.SelectedTweet);
 
                     this._aggregator.GetEvent<SelectedTweetChangedEvent>()
                         .Publish(value != null ? value.Status : null);
                 }
+            }
+        }
+
+        public ICommand EditCommand
+        {
+            get
+            {
+                return _editCommand;
+            }
+        }
+
+        public ICommand CancelEditCommand
+        {
+            get {
+                return _cancelEditCommand;
             }
         }
     }

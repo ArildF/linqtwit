@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using LinqTwit.Infrastructure;
 using LinqTwit.Twitter;
+using LinqTwit.Utilities;
 
 namespace LinqTwit.QueryModule.ViewModels
 {
     public class TweetViewModel : ViewModelBase
     {
         private readonly Status _status;
+        private bool _editable;
 
         public TweetViewModel(Status status)
         {
@@ -43,6 +45,16 @@ namespace LinqTwit.QueryModule.ViewModels
         {
             get {
                 return this._status;
+            }
+        }
+
+        public bool Editable
+        {
+            get { return _editable; }
+            set
+            { 
+                _editable = value;
+                this.OnPropertyChanged(t => t.Editable);
             }
         }
     }

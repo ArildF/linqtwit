@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -23,10 +24,27 @@ namespace LinqTwit.Infrastructure
                 if (this.element != null)
                 {
                     this.element.PreviewTextInput -= ElementPreviewTextInput;
+                    this.element.PreviewKeyDown -= ElementOnPreviewKeyDown;
                 }
                 this.element = value;
                 this.element.PreviewTextInput += ElementPreviewTextInput;
+                this.element.PreviewKeyDown += ElementOnPreviewKeyDown;
             }
+        }
+
+        private void ElementOnPreviewKeyDown(object sender, KeyEventArgs args)
+        {
+            HandleKeyDown(args);
+
+        }
+
+        private void HandleKeyDown(KeyEventArgs args)
+        {
+            args.Handled =
+                (from binding in this
+                 let handled = binding.Handle(args.Key)
+                 where handled
+                 select handled).FirstOrDefault();
         }
 
 

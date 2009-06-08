@@ -24,7 +24,7 @@ namespace LinqTwit.Twitter
         Statuses FriendsTimeLine();
 
         [OperationContract]
-        [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare,
+        [WebInvoke(
             ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/update.xml?status={status}")]
         Status Update(string status);
     }

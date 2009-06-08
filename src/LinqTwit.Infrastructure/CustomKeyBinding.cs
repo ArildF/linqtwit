@@ -13,6 +13,9 @@ namespace LinqTwit.Infrastructure
             FrameworkPropertyMetadata mdText = new FrameworkPropertyMetadata("", TextPropertyChanged);
             TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(CustomKeyBinding), mdText);
 
+            FrameworkPropertyMetadata mdKey = new FrameworkPropertyMetadata(Key.None, KeyPropertyChanged);
+            KeyProperty = DependencyProperty.Register("Key", typeof(Key), typeof(CustomKeyBinding), mdKey);
+
             FrameworkPropertyMetadata metadata = new FrameworkPropertyMetadata(null, CommandPropertyChanged);
             CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(CustomKeyBinding), metadata);           
         }
@@ -34,14 +37,18 @@ namespace LinqTwit.Infrastructure
             set { SetValue(TextProperty, value); }
         }
 
+        public Key Key
+        {
+            get { return (Key)GetValue(KeyProperty); }
+            set { SetValue(KeyProperty, value); }
+        }
+
         /// <summary>
         /// Description
         /// </summary>
         public static readonly DependencyProperty CommandProperty;
 
-//TODO: copy to static constructor
-//register dependency property
-                                           
+        public static readonly DependencyProperty KeyProperty;
 
 
         /// <summary>
@@ -79,18 +86,34 @@ namespace LinqTwit.Infrastructure
             string newValue = (string) e.NewValue;
         }
 
+        private static void KeyPropertyChanged(DependencyObject d,
+                                     DependencyPropertyChangedEventArgs
+                                         e)
+        {
+            CustomKeyBinding owner = (CustomKeyBinding)d;
+            Key newValue = (Key)e.NewValue;
+        }
+
 
 
         public bool Handle(string text)
         {
-            if (!text.Equals(this.Text) || this.Command == null || 
-                !this.Command.CanExecute(null))
+            return text.Equals(this.Text) && this.DoHandle();
+        }
+
+        public bool Handle(Key key)
+        {
+            return key == this.Key && DoHandle();
+        }
+
+        private bool DoHandle()
+        {
+            if (this.Command == null || !this.Command.CanExecute(null))
             {
                 return false;
             }
 
             this.Command.Execute(null);
-
             return true;
         }
     }

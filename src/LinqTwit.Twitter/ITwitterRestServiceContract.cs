@@ -19,13 +19,18 @@ namespace LinqTwit.Twitter
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/user_timeline/{id}.xml")]
         Statuses UserTimeLine(string id);
 
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/friends_timeline.xml")]
-        Statuses FriendsTimeLine();
+        //[OperationContract]
+        //[WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/friends_timeline.xml")]
+        //Statuses FriendsTimeLine();
 
         [OperationContract]
         [WebInvoke(
             ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/update.xml?status={status}")]
         Status Update(string status);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, 
+            UriTemplate = "/statuses/friends_timeline.xml?since_id={sinceId}&count={count}&max_id={maxId}&page={page}")]
+        Statuses FriendsTimeLine(string sinceId, string count, string maxId, string page);
     }
 }

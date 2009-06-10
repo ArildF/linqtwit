@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Security;
+using System.ServiceModel.Web;
 
 namespace LinqTwit.Twitter
 {
@@ -36,10 +37,24 @@ namespace LinqTwit.Twitter
             return this.Channel.Update(status);
         }
 
+        public Statuses FriendsTimeLine(string sinceId, string count, string maxId, string page)
+        {
+            return Invoke(() => this.Channel.FriendsTimeLine(sinceId, count, maxId, page));
+        }
+
 
         public Statuses FriendsTimeLine()
         {
-            return Invoke(() => this.Channel.FriendsTimeLine());
+            return Invoke(() => this.Channel.FriendsTimeLine(null, null, null, null));
+        }
+
+        public Statuses FriendsTimeLine(FriendsTimeLineArgs args)
+        {
+            return Invoke(() => this.Channel.FriendsTimeLine(
+                args.SinceId != null ? args.SinceId.ToString() : null,
+                args.Count != null ? args.Count.ToString() : null,
+                args.MaxId != null ? args.MaxId.ToString() : null,
+                args.Page != null ? args.Page.ToString() : null));
         }
 
         private static T Invoke<T>(Func<T> func)

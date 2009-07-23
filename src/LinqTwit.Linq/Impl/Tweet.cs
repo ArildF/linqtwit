@@ -12,9 +12,9 @@ namespace LinqTwit.Linq.Impl
             this.status = status;
         }
 
-        public string Id
+        public long Id
         {
-            get { return status.Id; }
+            get { return long.Parse(status.Id); }
         }
     }
 }

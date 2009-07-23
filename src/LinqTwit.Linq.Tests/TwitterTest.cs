@@ -57,10 +57,10 @@ namespace LinqTwit.Linq.Tests
             api.Setup(a => a.GetStatus("123456")).Returns(status);
 
             var tweets = from tweet in _twitter.Tweets
-                        where tweet.Id == "123456"
+                        where tweet.Id == 123456
                         select tweet;
 
-            Assert.That(tweets.ToList()[0].Id, Is.EqualTo("123456"));
+            Assert.That(tweets.First().Id, Is.EqualTo(123456));
         }
     }
 }

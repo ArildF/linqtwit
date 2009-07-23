@@ -80,9 +80,14 @@ namespace LinqTwit.TestUtilities
 
             public void Invoke()
             {
-                this.Result = @delegate.DynamicInvoke();
-
-                this.Event.Set();
+                try
+                {
+                    this.Result = @delegate.DynamicInvoke();
+                }
+                finally
+                {
+                    this.Event.Set();
+                }
             }
 
             public void Wait()

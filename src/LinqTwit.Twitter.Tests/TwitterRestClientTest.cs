@@ -138,15 +138,18 @@ namespace LinqTwit.Twitter.Tests
                 });
         }
 
+        
         [Test]
-        public void FriendsTimeLineWithArgsCount()
+        public void FriendsTimeLineWithArgsCount([Values(1, 5, 10, 20, 40, 80, 160, 200)]int count)
         {
             WithClient(c =>
                 {
                     var statuses =
                         c.FriendsTimeLine(new FriendsTimeLineArgs
-                            {Count = 30});
-                    Assert.That(statuses.Count, Is.EqualTo(30));
+                            {Count = count});
+
+                    // twitter seems to regard the count parameter as advisory only...
+                    Assert.That(statuses.Count, Is.InRange((count - 5), count));
                 });
         }
 

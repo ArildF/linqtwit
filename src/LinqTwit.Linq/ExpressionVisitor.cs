@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace LinqTwit.Linq
 {
@@ -21,30 +23,71 @@ namespace LinqTwit.Linq
                 case ExpressionType.Call:
                     return this.VisitCall((MethodCallExpression) expr);
                 case ExpressionType.Equal:
+                case ExpressionType.AndAlso:
+                case ExpressionType.LessThan:
+                case ExpressionType.LessThanOrEqual:
+                case ExpressionType.GreaterThanOrEqual:
                     return this.VisitBinaryExpression((BinaryExpression) expr);
+                case ExpressionType.Convert:
+                    return this.VisitUnaryExpression((UnaryExpression) expr);
+                case ExpressionType.MemberAccess:
+                    return this.VisitMemberAccess((MemberExpression) expr);
+                case ExpressionType.Parameter:
+                    return this.VisitParameter((ParameterExpression) expr);
                 default:
                     return expr;
             }
         }
 
+        protected virtual Expression VisitParameter(ParameterExpression expression)
+        {
+            return expression;
+        }
+
+        protected virtual Expression VisitMemberAccess(MemberExpression expression)
+        {
+            return expression;
+        }
+
+        private Expression VisitMethodCall(MethodCallExpression expression)
+        {
+            return expression;
+        }
+
+        protected virtual Expression VisitUnaryExpression(UnaryExpression expression)
+        {
+            return expression;
+        }
+
         protected virtual Expression VisitBinaryExpression(BinaryExpression expression)
         {
+            switch(expression.NodeType)
+            {
+                case ExpressionType.And:
+                case ExpressionType.AndAlso:
+                case ExpressionType.Or:
+                case ExpressionType.OrElse:
+                case ExpressionType.Equal:
+                    return Expression.MakeBinary(
+                        expression.NodeType,
+                        Visit(expression.Left),
+                        Visit(expression.Right));
+            }
             return expression;
         }
 
         protected virtual Expression VisitCall(MethodCallExpression expr)
         {
-            VisitList(expr.Arguments);
+            var args = VisitList(expr.Arguments);
 
-            return expr;
+            var method = Visit(expr.Object);
+
+            return Expression.Call(method, expr.Method, args.ToArray());
         }
 
-        private void VisitList(IEnumerable<Expression> expressions)
+        private IEnumerable<Expression> VisitList(IEnumerable<Expression> expressions)
         {
-            foreach (var expression in expressions)
-            {
-                Visit(expression);
-            }
+            return expressions.Select(e => Visit(e));
         }
 
         protected virtual Expression VisitLambda(LambdaExpression lambda)

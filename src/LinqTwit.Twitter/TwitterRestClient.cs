@@ -21,7 +21,7 @@ namespace LinqTwit.Twitter
             return UserTimeLine(user).ToArray();
         }
 
-        Status[] ILinqApi.FriendsTimeLine()
+        Status[] ILinqApi.FriendsTimeLine(FriendsTimeLineArgs args)
         {
             return FriendsTimeLine().ToArray();
         }

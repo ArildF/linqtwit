@@ -72,7 +72,7 @@ namespace LinqTwit.QueryModule.Controllers
                 {
                     try
                     {
-                        timeline = api.FriendsTimeLine();
+                        timeline = api.FriendsTimeLine(new FriendsTimeLineArgs());
                     }
                     catch (TwitterAuthorizationException)
                     {

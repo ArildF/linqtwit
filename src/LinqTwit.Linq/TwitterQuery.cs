@@ -5,23 +5,19 @@ using LinqTwit.Twitter;
 
 namespace LinqTwit.Linq
 {
-    public class TwitterQuery
+    public class TwitterQuery : IQuery
     {
-        private readonly Expression expression;
-        private readonly bool isEnumerable;
-        private readonly ILinqApi linqApi;
+        private readonly ILinqApi _linqApi;
 
-        public TwitterQuery(Expression expression, bool isEnumerable, ILinqApi linqApi)
+        public TwitterQuery( ILinqApi linqApi)
         {
-            this.expression = expression;
-            this.linqApi = linqApi;
-            this.isEnumerable = isEnumerable;
+            this._linqApi = linqApi;
         }
 
-        public object Execute()
+        public object Execute(Expression expression, bool isEnumerable)
         {
             var whereVisitor = new WhereVisitor();
-            var methodCallExpression = whereVisitor.FindWhere(this.expression);
+            var methodCallExpression = whereVisitor.FindWhere(expression);
 
             LambdaExpression lambdaExpression =
                 (LambdaExpression)
@@ -30,20 +26,31 @@ namespace LinqTwit.Linq
             var idFinder = new IdExpressionVisitor();
             if(idFinder.FindIdExpression(lambdaExpression))
             {
-                string id = idFinder.TweetId;
-                Status status = linqApi.GetStatus(id);
+                string id = IdFromExpression(idFinder.Expressions.First());
+
+                Status status = _linqApi.GetStatus(id);
 
                 if (isEnumerable)
                 {
-                    return new[] {status}.Select(s => new Tweet(s)).Cast<ITweet>();
+                    return new[] { status }.Select(s => new Tweet(s)).Cast<ITweet>();
                 }
-                return status;
+                return new Tweet(status);
             }
 
             return null;
 
 
 
+        }
+
+        private string IdFromExpression(BinaryExpression expression)
+        {
+            if (expression.NodeType != ExpressionType.Equal)
+            {
+                throw new InvalidQueryException("");
+            }
+
+            return expression.Right.ToString();
         }
     }
 }

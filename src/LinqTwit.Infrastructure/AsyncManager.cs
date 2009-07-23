@@ -44,8 +44,14 @@ namespace LinqTwit.Infrastructure
                     Action action = item;
                     ThreadPool.QueueUserWorkItem(_ =>
                         {
-                            action();
-                            actionDone.Set();
+                            try
+                            {
+                                action();
+                            }
+                            finally
+                            {
+                                actionDone.Set();
+                            }
                         }, null);
 
                     while(true)

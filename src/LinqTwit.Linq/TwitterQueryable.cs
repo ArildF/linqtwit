@@ -14,7 +14,7 @@ namespace LinqTwit.Linq
 
         public TwitterQueryable(ILinqApi linqApi)
         {
-            Provider = new TwitterQueryProvider(linqApi);
+            Provider = new TwitterQueryProvider(linqApi, () => new TwitterQuery(linqApi));
             Expression = Expression.Constant(this);
 
         }

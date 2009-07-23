@@ -11,10 +11,12 @@ namespace LinqTwit.Linq
     public class TwitterQueryProvider : IQueryProvider
     {
         private readonly ILinqApi linqApi;
+        private readonly Func<IQuery> _createQuery;
 
-        public TwitterQueryProvider(ILinqApi linqApi)
+        public TwitterQueryProvider(ILinqApi linqApi, Func<IQuery> createQuery)
         {
             this.linqApi = linqApi;
+            _createQuery = createQuery;
         }
 
         public IQueryable CreateQuery(Expression expression)
@@ -34,10 +36,11 @@ namespace LinqTwit.Linq
 
         public TResult Execute<TResult>(Expression expression)
         {
-            bool IsEnumerable = (typeof(TResult).Name == "IEnumerable`1");
+            bool isEnumerable = (typeof(TResult).Name == "IEnumerable`1");
 
-            TwitterQuery query = new TwitterQuery(expression, IsEnumerable, this.linqApi);
-            return (TResult)query.Execute();
+            IQuery query = _createQuery();
+
+            return (TResult)query.Execute(expression, isEnumerable);
         }
     }
 }

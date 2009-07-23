@@ -132,7 +132,7 @@ namespace LinqTwit.QueryModule.ViewModels
         private IEnumerable<Action> GetFriendsTimeLineAsync()
         {
             Status[] statuses = null;
-            yield return () => statuses = this.api.FriendsTimeLine();
+            yield return () => statuses = this.api.FriendsTimeLine(new FriendsTimeLineArgs());
             this.SetStatuses(statuses);
         }
 

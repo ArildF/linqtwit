@@ -9,7 +9,7 @@ namespace LinqTwit.Utilities
 {
     public static class Extensions
     {
-        public static bool IsProperty<T>(this MemberInfo info, Expression<Func<T, object>> expr)
+        public static bool IsProperty<T, TRet>(this MemberInfo info, Expression<Func<T, TRet>> expr)
         {
             string propName = expr.PropertyName();
             return propName != null && info.MemberType == MemberTypes.Property && info.Name == propName;
@@ -24,6 +24,17 @@ namespace LinqTwit.Utilities
             }
             return null;
         }
+
+        public static MethodInfo MethodOf<T, TRet>(
+            this Expression<Func<T, TRet>> expr)
+        {
+            if (expr.Body.NodeType == ExpressionType.Call)
+            {
+                return ((MethodCallExpression) expr.Body).Method;
+            }
+            return null;
+        }
+
 
         public static void OnPropertyChanged<TObject, TRet>(this TObject obj,
             Expression<Func<TObject, TRet>> expr) where TObject : IRaisePropertyChanged

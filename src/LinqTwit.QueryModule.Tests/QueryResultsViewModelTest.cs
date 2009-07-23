@@ -31,6 +31,7 @@ namespace LinqTwit.QueryModule.Tests
         private IAsyncManager asyncManager;
 
         private ContextMenuRoot _menuRoot;
+        private MockDispatcherFacade _dispatcherFacade;
 
 
         protected override void  OnSetup()
@@ -65,11 +66,13 @@ namespace LinqTwit.QueryModule.Tests
             _menuRoot = new ContextMenuRoot();
 
 
-            asyncManager = new AsyncManager(new MockDispatcherFacade());
+            _dispatcherFacade = new MockDispatcherFacade();
+            asyncManager = new AsyncManager(this._dispatcherFacade);
 
 
             this._vm = new QueryResultsViewModel(view.Object, this._aggregator.Object, this._api.Object, asyncManager, _menuRoot);
         }
+
 
         [Test]
         public void ContextMenu()
@@ -96,7 +99,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void AuthenticationStateChangedGetsFriendTimeLine()
         {
-            this._api.Setup(a => a.FriendsTimeLine()).Returns(new[]
+            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(new[]
                 {new Status(), new Status()});
 
             this._authorizationEvent.Object.Publish(true);
@@ -205,7 +208,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void SelectedTweetIsRetainedAfterRefresh()
         {
-            _api.Setup(a => a.FriendsTimeLine()).Returns(
+            _api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(
                 CreateStatuses(1, 10).ToArray());
 
             _authorizationEvent.Object.Publish(true);
@@ -213,8 +216,8 @@ namespace LinqTwit.QueryModule.Tests
             _vm.SelectedTweet = _vm.Tweets[5];
             Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("6"));
 
-            _api.Setup(a => a.FriendsTimeLine()).Returns(
-                CreateStatuses(3, 13).ToArray);
+            _api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(
+                CreateStatuses(3, 13).ToArray());
 
             var tester = new PropertyChangedTester<QueryResultsViewModel>(_vm);
             _refreshEvent.Object.Publish(null);
@@ -299,7 +302,7 @@ namespace LinqTwit.QueryModule.Tests
             _refreshEvent.Object.Publish(null);
 
             // 1 for the initial call in GetStatuses()
-            _api.Verify(a => a.FriendsTimeLine(), Times.Exactly(1));
+            _api.Verify(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>()), Times.Exactly(1));
         }
 
 
@@ -325,7 +328,8 @@ namespace LinqTwit.QueryModule.Tests
             this._refreshEvent.Object.Publish(null);
 
             // + 1 to account for the initial call to FriendsTimeLine
-            this._api.Verify(a => a.FriendsTimeLine(), Times.Exactly(count + (authorizationState ? 1 : 0)));
+            this._api.Verify(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>()), 
+                Times.Exactly(count + (authorizationState ? 1 : 0)));
         }
 
         private static void ExecuteMovedown()
@@ -342,7 +346,7 @@ namespace LinqTwit.QueryModule.Tests
 
         private void SetupFriendsTimelineCall()
         {
-            this._api.Setup(a => a.FriendsTimeLine()).Returns(new[] { new Status(){Text = "tweet 1"}, new Status(){Text = "tweet 2"} });
+            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(new[] { new Status() { Text = "tweet 1" }, new Status() { Text = "tweet 2" } });
         }
     }
 }

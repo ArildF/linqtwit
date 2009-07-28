@@ -56,6 +56,13 @@ namespace LinqTwit.Linq.Tests
             Assert.That(args.Count, Is.EqualTo(10));
         }
 
+        [Test]
+        public void Page()
+        {
+            var args = GetArgs((from t in _source select t).Page(2));
+            Assert.That(args.Page, Is.EqualTo(2));
+        }
+
         private FriendsTimeLineArgs GetArgs(IQueryable<ITweet> queryable)
         {
             FriendsTimeLineArgs args = null;

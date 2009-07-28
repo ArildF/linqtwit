@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpressionVisitor.cs" />
+    <Compile Include="TweetExtensions.cs" />
     <Compile Include="FriendsTimelineQuery.cs" />
     <Compile Include="IdExpressionVisitor.cs" />
     <Compile Include="InvalidQueryException.cs" />

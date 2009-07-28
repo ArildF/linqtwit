@@ -25,8 +25,28 @@ namespace LinqTwit.Linq
 
             HandleTakeArgs(expression, args);
 
+            HandlePageArgs(expression, args);
 
             return _linqApi.FriendsTimeLine(args).Select(t => new Tweet(t)).Cast<ITweet>(); 
+        }
+
+        private void HandlePageArgs(Expression expression, FriendsTimeLineArgs args)
+        {
+            MethodInfo info = MethodInfoForPage();
+            MethodCallFinderVisitor visitor = new MethodCallFinderVisitor(info);
+
+            if (visitor.FindMethod(expression))
+            {
+                args.Page = Convert.ToInt32(visitor.Args.First());
+            }
+        }
+
+        private static MethodInfo MethodInfoForPage()
+        {
+            IQueryable<ITweet> queryable;
+            return
+                Extensions.MethodOf<IQueryable<ITweet>, IQueryable<ITweet>>(
+                    q => q.Page(42));
         }
 
         private static void HandleTakeArgs(Expression expression, FriendsTimeLineArgs args)
@@ -34,10 +54,9 @@ namespace LinqTwit.Linq
             MethodInfo info = MethodInfoForTake();
             MethodCallFinderVisitor visitor = new MethodCallFinderVisitor(info);
 
-            if (visitor.FindMethod(expression) && visitor.Args.Count() == 1)
+            if (visitor.FindMethod(expression))
             {
                 args.Count = Convert.ToInt32(visitor.Args.First());
-
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using LinqTwit.Linq.Impl;
 using LinqTwit.Twitter;
 using LinqTwit.Utilities;
@@ -19,12 +20,41 @@ namespace LinqTwit.Linq
 
         public object Execute(Expression expression, bool isEnumerable)
         {
+            FriendsTimeLineArgs args = new FriendsTimeLineArgs();
+            HandleWhereArgs(expression, args);
+
+            HandleTakeArgs(expression, args);
+
+
+            return _linqApi.FriendsTimeLine(args).Select(t => new Tweet(t)).Cast<ITweet>(); 
+        }
+
+        private static void HandleTakeArgs(Expression expression, FriendsTimeLineArgs args)
+        {
+            MethodInfo info = MethodInfoForTake();
+            MethodCallFinderVisitor visitor = new MethodCallFinderVisitor(info);
+
+            if (visitor.FindMethod(expression) && visitor.Args.Count() == 1)
+            {
+                args.Count = Convert.ToInt32(visitor.Args.First());
+
+            }
+        }
+
+        private static MethodInfo MethodInfoForTake()
+        {
+            IQueryable<ITweet> queryable;
+            return Extensions.MethodOf<IQueryable<ITweet>, IQueryable<ITweet>>(q => q.Take(10));
+        }
+
+        private void HandleWhereArgs(Expression expression, FriendsTimeLineArgs args)
+        {
             var whereVisitor = new WhereVisitor();
 
             MethodCallExpression whereExpression = whereVisitor.FindWhere(expression);
             if (whereExpression == null)
             {
-                return null;
+                return;
             }
 
             LambdaExpression lambdaExpression =
@@ -34,16 +64,13 @@ namespace LinqTwit.Linq
             var idVisitor = new IdExpressionVisitor();
             if (!idVisitor.FindIdExpression(lambdaExpression))
             {
-                return null;
+                return;
             }
-            FriendsTimeLineArgs args = new FriendsTimeLineArgs();
 
             foreach (BinaryExpression binaryExpression in idVisitor.Expressions)
             {
                 BuildArgs(binaryExpression, args);
             }
-
-            return _linqApi.FriendsTimeLine(args).Select(t => new Tweet(t)).Cast<ITweet>(); 
         }
 
         private static void BuildArgs(BinaryExpression expression, FriendsTimeLineArgs args)

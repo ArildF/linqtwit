@@ -17,7 +17,7 @@ namespace LinqTwit.Linq.Tests
         public void SetUp()
         {
             _api = _factory.Create<ILinqApi>();
-            _provider = new TwitterQueryProvider(_api.Object, () => new TwitterQuery(_api.Object));
+            _provider = new TwitterQueryProvider(() => new TwitterQuery(this._api.Object));
         }
 
         [Test]

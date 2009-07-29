@@ -10,18 +10,15 @@ namespace LinqTwit.Linq
 {
     public class TwitterQueryable<T> : IQueryable<T>
     {
-        private readonly ILinqApi linqApi;
-
         public TwitterQueryable(ILinqApi linqApi)
         {
-            Provider = new TwitterQueryProvider(linqApi, () => new TwitterQuery(linqApi));
+            Provider = new TwitterQueryProvider(() => new TwitterQuery(linqApi));
             Expression = Expression.Constant(this);
 
         }
 
-        public TwitterQueryable(ILinqApi linqApi, TwitterQueryProvider provider, Expression expression)
+        public TwitterQueryable(TwitterQueryProvider provider, Expression expression)
         {
-            this.linqApi = linqApi;
             this.Expression = expression;
             this.Provider = provider;
         }

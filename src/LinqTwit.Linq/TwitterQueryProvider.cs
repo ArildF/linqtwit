@@ -10,12 +10,10 @@ namespace LinqTwit.Linq
 {
     public class TwitterQueryProvider : IQueryProvider
     {
-        private readonly ILinqApi linqApi;
         private readonly Func<IQuery> _createQuery;
 
-        public TwitterQueryProvider(ILinqApi linqApi, Func<IQuery> createQuery)
+        public TwitterQueryProvider(Func<IQuery> createQuery)
         {
-            this.linqApi = linqApi;
             _createQuery = createQuery;
         }
 
@@ -26,7 +24,7 @@ namespace LinqTwit.Linq
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            return new TwitterQueryable<TElement>(linqApi, this, expression);
+            return new TwitterQueryable<TElement>(this, expression);
         }
 
         public object Execute(Expression expression)

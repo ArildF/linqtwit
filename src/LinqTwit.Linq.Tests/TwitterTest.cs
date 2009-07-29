@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using LinqTwit.Twitter;
 using Moq;
 using NUnit.Framework;
@@ -12,15 +9,15 @@ namespace LinqTwit.Linq.Tests
     public class TwitterTest
     {
         private Twitter _twitter;
-        private Mock<ILinqApi> api;
-        private readonly MockFactory factory = new MockFactory(MockBehavior.Loose){DefaultValue = DefaultValue.Mock};
+        private Mock<ILinqApi> _api;
+        private readonly MockFactory _factory = new MockFactory(MockBehavior.Loose){DefaultValue = DefaultValue.Mock};
 
         [SetUp]
         public void SetUp()
         {
-            api = factory.Create<ILinqApi>();
+            _api = this._factory.Create<ILinqApi>();
 
-            _twitter = new Twitter(api.Object);
+            _twitter = new Twitter(_api.Object);
         }
 
         [Test]
@@ -32,13 +29,13 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void Users()
         {
-            Assert.That(_twitter.Users, Is.InstanceOfType(typeof(IQueryable<IUser>  )));
+            Assert.That(_twitter.Users, Is.InstanceOf(typeof(IQueryable<IUser>)));
         }
 
         [Test]
         public void Tweets()
         {
-            Assert.That(_twitter.Tweets, Is.InstanceOfType(typeof(IQueryable<ITweet>)));
+            Assert.That(_twitter.Tweets, Is.InstanceOf(typeof(IQueryable<ITweet>)));
         }
 
         [Test]
@@ -54,7 +51,7 @@ namespace LinqTwit.Linq.Tests
         public void QueryTweetById()
         {
             var status = new Status {Id = "123456"};
-            api.Setup(a => a.GetStatus("123456")).Returns(status);
+            _api.Setup(a => a.GetStatus("123456")).Returns(status);
 
             var tweets = from tweet in _twitter.Tweets
                         where tweet.Id == 123456

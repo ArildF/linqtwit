@@ -1,22 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using NUnit.Framework;
-
-using Expr = System.Linq.Expressions.Expression<System.Func<LinqTwit.Linq.ITweet, bool>>;
 
 namespace LinqTwit.Linq.Tests
 {
     [TestFixture]
     public class IdExpressionVisitorTest
     {
-        private IdExpressionVisitor visitor;
+        private IdExpressionVisitor _visitor;
 
         [SetUp]
         public void SetUp()
         {
-            visitor = new IdExpressionVisitor();
+            _visitor = new IdExpressionVisitor();
         }
 
         [Test]
@@ -24,7 +21,7 @@ namespace LinqTwit.Linq.Tests
         {
             Visit(tweet => tweet.Id == 1234);
 
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
         [Test]
@@ -32,28 +29,29 @@ namespace LinqTwit.Linq.Tests
         {
             Visit(tweet => tweet.Id == 1234 && tweet.Id <= 12345);
 
-            Assert.That(visitor.Expressions.Count, Is.EqualTo(2));
-            Assert.That(visitor.Expressions[0].NodeType, Is.EqualTo(ExpressionType.Equal));
-            Assert.That(visitor.Expressions[1].NodeType, Is.EqualTo(ExpressionType.LessThanOrEqual));
+            Assert.That(_visitor.Expressions.Count, Is.EqualTo(2));
+            Assert.That(_visitor.Expressions[0].NodeType, Is.EqualTo(ExpressionType.Equal));
+            Assert.That(_visitor.Expressions[1].NodeType, Is.EqualTo(ExpressionType.LessThanOrEqual));
         }
 
 
         [Test]
         public void LocalVariable()
         {
-            int local = 1234;
+            const int local = 1234;
             Visit(tweet => tweet.Id == local);
 
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
-        private int _field = 1234;
+        private const int Field = 1234;
+        
         [Test]
-        public void Field()
+        public void ReferenceField()
         {
-            Visit(tweet => tweet.Id == _field);
+            Visit(tweet => tweet.Id == Field);
 
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
         private int AProperty { get; set; }
@@ -63,7 +61,7 @@ namespace LinqTwit.Linq.Tests
         {
             AProperty = 1234;
             Visit(tweet => tweet.Id == AProperty);
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
         private class Foo
@@ -75,10 +73,12 @@ namespace LinqTwit.Linq.Tests
         public void Method()
         {
             Visit(tweet => tweet.Id == AMethod());
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
+// ReSharper disable MemberCanBeMadeStatic.Local
         private int AMethod()
+// ReSharper restore MemberCanBeMadeStatic.Local
         {
             return 1234;
         }
@@ -87,10 +87,12 @@ namespace LinqTwit.Linq.Tests
         public void MethodWithParams()
         {
             Visit(tweet => tweet.Id == AMethodWithParams(1000, 234));
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
+// ReSharper disable MemberCanBeMadeStatic.Local
         private int AMethodWithParams(int a, int b)
+// ReSharper restore MemberCanBeMadeStatic.Local
         {
             return a + b;
         }
@@ -102,17 +104,19 @@ namespace LinqTwit.Linq.Tests
 
             Visit(tweet => tweet.Id == foo.Bar);
 
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
         [Test]
         public void Operators([ValueSource("OperatorExpressions")]Expression<Func<ITweet, bool>> expression)
         {
             Visit(expression);
-            Assert.That(visitor.Expressions[0].Right.As<long>(), Is.EqualTo(12345));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(12345));
         }
 
+// ReSharper disable UnusedMember.Local
         private IEnumerable<Expression<Func<ITweet, bool>>> OperatorExpressions()
+// ReSharper restore UnusedMember.Local
         {
             yield return tweet => tweet.Id >= 12345;
             yield return tweet => tweet.Id <= 12345;
@@ -120,7 +124,7 @@ namespace LinqTwit.Linq.Tests
 
         private void Visit(Expression<Func<ITweet, bool>> func)
         {
-            Assert.That(visitor.FindIdExpression(func), Is.True);
+            Assert.That(this._visitor.FindIdExpression(func), Is.True);
         }
     }
 

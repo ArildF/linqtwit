@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using LinqTwit.Twitter;
 using NUnit.Framework;
 using Moq;
@@ -19,7 +15,6 @@ namespace LinqTwit.Linq.Tests
             new MockFactory(MockBehavior.Loose)
                 {DefaultValue = DefaultValue.Mock};
 
-        private IEnumerable<int> _enumerable = new int[] {1, 2, 3, 4};
         private Mock<ILinqApi> _api;
         private IQueryable<ITweet> _queryable;
 
@@ -33,7 +28,7 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void TestFoo()
         {
-            MethodInfo info = LinqTwit.Utilities.Extensions.MethodOf<IQueryable<ITweet>, IQueryable<ITweet>>(
+            MethodInfo info = Utilities.Extensions.MethodOf<IQueryable<ITweet>, IQueryable<ITweet>>(
                 q => q.Take(10));
 
             _visitor =

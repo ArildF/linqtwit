@@ -9,15 +9,15 @@ namespace LinqTwit.Linq.Tests
     [TestFixture]
     public class TwitterQueryProviderTest
     {
-        private TwitterQueryProvider provider;
-        private Mock<ILinqApi> api;
-        private readonly MockFactory factory = new MockFactory(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
+        private TwitterQueryProvider _provider;
+        private Mock<ILinqApi> _api;
+        private readonly MockFactory _factory = new MockFactory(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
 
         [SetUp]
         public void SetUp()
         {
-            api = factory.Create<ILinqApi>();
-            provider = new TwitterQueryProvider(api.Object, () => new TwitterQuery(api.Object));
+            _api = _factory.Create<ILinqApi>();
+            _provider = new TwitterQueryProvider(_api.Object, () => new TwitterQuery(_api.Object));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void CreateQuery()
         {
-            Assert.That(provider.CreateQuery<IUser>(Expression.Constant(String.Empty)), Is.Not.Null);
+            Assert.That(_provider.CreateQuery<IUser>(Expression.Constant(String.Empty)), Is.Not.Null);
         }
     }
 }

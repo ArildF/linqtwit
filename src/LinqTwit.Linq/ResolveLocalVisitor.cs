@@ -33,22 +33,23 @@ namespace LinqTwit.Linq
         {
             var expr = Visit(expression.Expression);
 
-            if (expr.NodeType != ExpressionType.Constant)
+            if (expr != null && expr.NodeType != ExpressionType.Constant)
             {
                 return expression;
             }
 
             ConstantExpression obj = (ConstantExpression)expr;
+            object thisObj = obj != null ? obj.Value : null;
 
             if (expression.Member.MemberType == MemberTypes.Field)
             {
                 FieldInfo pi = (FieldInfo)expression.Member;
-                return Expression.Constant(pi.GetValue(obj.Value));
+                return Expression.Constant(pi.GetValue(thisObj));
             }
             if (expression.Member.MemberType == MemberTypes.Property)
             {
                 PropertyInfo pi = (PropertyInfo)expression.Member;
-                return Expression.Constant(pi.GetValue(obj.Value, null));
+                return Expression.Constant(pi.GetValue(thisObj, null));
             }
 
 
@@ -67,19 +68,18 @@ namespace LinqTwit.Linq
                     .Aggregate((a1, a2) => a1 + ", " + a2));
             }
 
-            if (expr.Object.NodeType != ExpressionType.Constant)
+            var obj = (ConstantExpression)expr.Object;
+
+            if (obj != null && expr.Object.NodeType != ExpressionType.Constant)
             {
                 throw new NotFiniteNumberException("Unresolved object: " + expr.Object);
             }
-
-            var obj = (ConstantExpression)expr.Object;
+            
             var args = expr.Arguments
                 .Cast<ConstantExpression>()
                 .Select(e => e.Value);
 
-            return Expression.Constant(expr.Method.Invoke(obj.Value, args.ToArray()));
-
-
+            return Expression.Constant(expr.Method.Invoke((obj != null ? obj.Value : null), args.ToArray()));
         }
 
     }

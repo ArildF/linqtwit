@@ -44,12 +44,22 @@ namespace LinqTwit.Linq.Tests
             Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
-        private const int Field = 1234;
-        
+        private int Field = 1234;
+
         [Test]
         public void ReferenceField()
         {
             Visit(tweet => tweet.Id == Field);
+
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+        }
+
+        private static int StaticField = 1234;
+
+        [Test]
+        public void ReferenceStaticField()
+        {
+            Visit(tweet => tweet.Id == StaticField);
 
             Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
@@ -61,6 +71,16 @@ namespace LinqTwit.Linq.Tests
         {
             AProperty = 1234;
             Visit(tweet => tweet.Id == AProperty);
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+        }
+
+        private static int AStaticProperty { get; set; }
+
+        [Test]
+        public void StaticProperty()
+        {
+            AStaticProperty = 1234;
+            Visit(tweet => tweet.Id == AStaticProperty);
             Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
         }
 
@@ -93,6 +113,18 @@ namespace LinqTwit.Linq.Tests
 // ReSharper disable MemberCanBeMadeStatic.Local
         private int AMethodWithParams(int a, int b)
 // ReSharper restore MemberCanBeMadeStatic.Local
+        {
+            return a + b;
+        }
+
+        [Test]
+        public void StaticMethodWithParams()
+        {
+            Visit(tweet => tweet.Id == AStaticMethodWithParams(1000, 234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+        }
+
+        private static int AStaticMethodWithParams(int a, int b)
         {
             return a + b;
         }

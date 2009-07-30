@@ -46,46 +46,46 @@ namespace LinqTwit.Shell
             TwitterRestClient client = new TwitterRestClient("twitterEndpoint");
 
             Container.Configure(x =>
-                                    {
-                                        x.ForRequestedType<IShellView>()
-                                            .CacheBy(InstanceScope.Singleton)
-                                            .TheDefaultIsConcreteType
-                                            <ShellView>();
+            {
+                x.ForRequestedType<IShellView>()
+                    .CacheBy(InstanceScope.Singleton)
+                    .TheDefaultIsConcreteType
+                    <ShellView>();
 
-                                        x.ForRequestedType<IShellPresenter>().
-                                            TheDefaultIsConcreteType
-                                            <ShellPresenter>();
+                x.ForRequestedType<IShellPresenter>().
+                    TheDefaultIsConcreteType
+                    <ShellPresenter>();
 
-                                    
-                                        x.ForRequestedType
-                                            <IApplicationController>().
-                                            TheDefaultIsConcreteType
-                                            <ApplicationController>();
-
-
-                                        x.ForRequestedType<ILinqApi>().
-                                            TheDefault.IsThis(client);
-
-                                        x.ForRequestedType<ICredentialsStore>().
-                                            TheDefaultIsConcreteType
-                                            <CredentialsStore>();
-
-                                        x.ForRequestedType
-                                            <IDispatcherFacade>().
-                                            TheDefaultIsConcreteType<DispatcherFacade>();
-
-                                        x.ForRequestedType<Dispatcher>().TheDefault.Is.ConstructedBy(() => Dispatcher.CurrentDispatcher);
+            
+                x.ForRequestedType
+                    <IApplicationController>().
+                    TheDefaultIsConcreteType
+                    <ApplicationController>();
 
 
-                                        x.ForRequestedType<IAsyncManager>().
-                                            TheDefaultIsConcreteType
-                                            <AsyncManager>();
+                x.ForRequestedType<ILinqApi>().
+                    TheDefault.IsThis(client);
 
-                                        x.AddRegistry<CommandsRegistry>();
-                                        x.AddRegistry<InfrastructureRegistry>();
-                                        x.AddRegistry<CommonRegistry>();
-                                        x.AddRegistry<CoreRegistry>();
-                                    });
+                x.ForRequestedType<ICredentialsStore>().
+                    TheDefaultIsConcreteType
+                    <CredentialsStore>();
+
+                x.ForRequestedType
+                    <IDispatcherFacade>().
+                    TheDefaultIsConcreteType<DispatcherFacade>();
+
+                x.ForRequestedType<Dispatcher>().TheDefault.Is.ConstructedBy(() => Dispatcher.CurrentDispatcher);
+
+
+                x.ForRequestedType<IAsyncManager>().
+                    TheDefaultIsConcreteType
+                    <AsyncManager>();
+
+                x.AddRegistry<CommandsRegistry>();
+                x.AddRegistry<InfrastructureRegistry>();
+                x.AddRegistry<CommonRegistry>();
+                x.AddRegistry<CoreRegistry>();
+            });
 
         }
     }

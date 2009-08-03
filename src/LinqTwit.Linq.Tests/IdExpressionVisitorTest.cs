@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using LinqTwit.Twitter;
 using NUnit.Framework;
 
 namespace LinqTwit.Linq.Tests
@@ -140,21 +141,21 @@ namespace LinqTwit.Linq.Tests
         }
 
         [Test]
-        public void Operators([ValueSource("OperatorExpressions")]Expression<Func<ITweet, bool>> expression)
+        public void Operators([ValueSource("OperatorExpressions")]Expression<Func<Status, bool>> expression)
         {
             Visit(expression);
             Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(12345));
         }
 
 // ReSharper disable UnusedMember.Local
-        private IEnumerable<Expression<Func<ITweet, bool>>> OperatorExpressions()
+        private IEnumerable<Expression<Func<Status, bool>>> OperatorExpressions()
 // ReSharper restore UnusedMember.Local
         {
             yield return tweet => tweet.Id >= 12345;
             yield return tweet => tweet.Id <= 12345;
         }
 
-        private void Visit(Expression<Func<ITweet, bool>> func)
+        private void Visit(Expression<Func<Status, bool>> func)
         {
             Assert.That(this._visitor.FindIdExpression(func), Is.True);
         }

@@ -58,11 +58,9 @@
     <Compile Include="IdExpressionVisitor.cs" />
     <Compile Include="InvalidQueryException.cs" />
     <Compile Include="IQuery.cs" />
-    <Compile Include="ITweet.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="MethodCallFinderVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Impl\Tweet.cs" />
     <Compile Include="ResolveLocalVisitor.cs" />
     <Compile Include="Twitter.cs" />
     <Compile Include="TwitterQuery.cs" />
@@ -79,6 +77,9 @@
       <Project>{AD3BD729-AA94-426A-9488-640A902BE9ED}</Project>
       <Name>LinqTwit.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Impl\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

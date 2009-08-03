@@ -35,7 +35,7 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void Tweets()
         {
-            Assert.That(_twitter.Tweets, Is.InstanceOf(typeof(IQueryable<ITweet>)));
+            Assert.That(_twitter.Tweets, Is.InstanceOf(typeof(IQueryable<Status>)));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void QueryTweetById()
         {
-            var status = new Status {Id = "123456"};
+            var status = new Status {Id = 123456};
             _api.Setup(a => a.GetStatus("123456")).Returns(status);
 
             var tweets = from tweet in _twitter.Tweets

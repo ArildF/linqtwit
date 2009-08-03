@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using LinqTwit.Linq.Impl;
 using LinqTwit.Twitter;
 using LinqTwit.Utilities;
 
@@ -27,7 +26,7 @@ namespace LinqTwit.Linq
 
             HandlePageArgs(expression, args);
 
-            return _linqApi.FriendsTimeLine(args).Select(t => new Tweet(t)).Cast<ITweet>(); 
+            return _linqApi.FriendsTimeLine(args); 
         }
 
         private void HandlePageArgs(Expression expression, FriendsTimeLineArgs args)
@@ -43,9 +42,9 @@ namespace LinqTwit.Linq
 
         private static MethodInfo MethodInfoForPage()
         {
-            IQueryable<ITweet> queryable;
+            IQueryable<Status> queryable = null;
             return
-                Extensions.MethodOf<IQueryable<ITweet>, IQueryable<ITweet>>(
+                queryable.MethodOf(
                     q => q.Page(42));
         }
 
@@ -62,8 +61,8 @@ namespace LinqTwit.Linq
 
         private static MethodInfo MethodInfoForTake()
         {
-            IQueryable<ITweet> queryable;
-            return Extensions.MethodOf<IQueryable<ITweet>, IQueryable<ITweet>>(q => q.Take(10));
+            IQueryable<Status> queryable = null;
+            return queryable.MethodOf(q => q.Take(10));
         }
 
         private void HandleWhereArgs(Expression expression, FriendsTimeLineArgs args)
@@ -100,7 +99,7 @@ namespace LinqTwit.Linq
             }
 
             MemberExpression me = (MemberExpression) expression.Left;
-            if (!me.Member.IsProperty<ITweet, long>(t => t.Id))
+            if (!me.Member.IsProperty<Status, long>(t => t.Id))
             {
                 throw new NotSupportedException(String.Format("Expression {0} not supported", me));
             }

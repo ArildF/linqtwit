@@ -18,7 +18,7 @@ namespace LinqTwit.Linq.Tests
 
         private Mock<ILinqApi> _api;
 
-        private IQueryable<ITweet> _source;
+        private IQueryable<Status> _source;
 
         [SetUp]
         public void SetUp()
@@ -27,7 +27,7 @@ namespace LinqTwit.Linq.Tests
 
             this._query = new FriendsTimelineQuery(_api.Object);
 
-            _source = new TwitterQueryable<ITweet>(_api.Object);
+            _source = new TwitterQueryable<Status>(_api.Object);
 
         }
 
@@ -61,7 +61,7 @@ namespace LinqTwit.Linq.Tests
             Assert.That(args.Page, Is.EqualTo(2));
         }
 
-        private FriendsTimeLineArgs GetArgs(IQueryable<ITweet> queryable)
+        private FriendsTimeLineArgs GetArgs(IQueryable<Status> queryable)
         {
             FriendsTimeLineArgs args = null;
             this._api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).
@@ -69,7 +69,7 @@ namespace LinqTwit.Linq.Tests
 
             Expression expr = queryable.Expression  ;
 
-            var results = (IEnumerable<ITweet>)this._query.Execute(expr, true);
+            var results = (IEnumerable<Status>)this._query.Execute(expr, true);
 
             results.ToArray();
             return args;

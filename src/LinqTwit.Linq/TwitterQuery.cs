@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Linq.Expressions;
-using LinqTwit.Linq.Impl;
 using LinqTwit.Twitter;
 
 namespace LinqTwit.Linq
@@ -32,9 +31,9 @@ namespace LinqTwit.Linq
 
                 if (isEnumerable)
                 {
-                    return new[] { status }.Select(s => new Tweet(s)).Cast<ITweet>();
+                    return new[] {status};
                 }
-                return new Tweet(status);
+                return status;
             }
 
             return null;

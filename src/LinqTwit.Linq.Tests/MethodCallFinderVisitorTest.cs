@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Reflection;
 using LinqTwit.Twitter;
+using LinqTwit.Utilities;
 using NUnit.Framework;
 using Moq;
 
@@ -16,7 +17,7 @@ namespace LinqTwit.Linq.Tests
                 {DefaultValue = DefaultValue.Mock};
 
         private Mock<ILinqApi> _api;
-        private IQueryable<ITweet> _queryable;
+        private IQueryable<Status> _queryable;
 
         [SetUp]
         public void SetUp()
@@ -28,7 +29,8 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void TestFoo()
         {
-            MethodInfo info = Utilities.Extensions.MethodOf<IQueryable<ITweet>, IQueryable<ITweet>>(
+            const IQueryable<Status> queryable = null;
+            MethodInfo info = queryable.MethodOf(
                 q => q.Take(10));
 
             _visitor =

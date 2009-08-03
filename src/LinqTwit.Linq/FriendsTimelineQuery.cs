@@ -19,7 +19,7 @@ namespace LinqTwit.Linq
 
         public object Execute(Expression expression, bool isEnumerable)
         {
-            FriendsTimeLineArgs args = new FriendsTimeLineArgs();
+            TimeLineArgs args = new TimeLineArgs();
             HandleWhereArgs(expression, args);
 
             HandleTakeArgs(expression, args);
@@ -29,7 +29,7 @@ namespace LinqTwit.Linq
             return _linqApi.FriendsTimeLine(args); 
         }
 
-        private void HandlePageArgs(Expression expression, FriendsTimeLineArgs args)
+        private void HandlePageArgs(Expression expression, TimeLineArgs args)
         {
             MethodInfo info = MethodInfoForPage();
             MethodCallFinderVisitor visitor = new MethodCallFinderVisitor(info);
@@ -48,7 +48,7 @@ namespace LinqTwit.Linq
                     q => q.Page(42));
         }
 
-        private static void HandleTakeArgs(Expression expression, FriendsTimeLineArgs args)
+        private static void HandleTakeArgs(Expression expression, TimeLineArgs args)
         {
             MethodInfo info = MethodInfoForTake();
             MethodCallFinderVisitor visitor = new MethodCallFinderVisitor(info);
@@ -65,7 +65,7 @@ namespace LinqTwit.Linq
             return queryable.MethodOf(q => q.Take(10));
         }
 
-        private void HandleWhereArgs(Expression expression, FriendsTimeLineArgs args)
+        private void HandleWhereArgs(Expression expression, TimeLineArgs args)
         {
             var whereVisitor = new WhereVisitor();
 
@@ -91,7 +91,7 @@ namespace LinqTwit.Linq
             }
         }
 
-        private static void BuildArgs(BinaryExpression expression, FriendsTimeLineArgs args)
+        private static void BuildArgs(BinaryExpression expression, TimeLineArgs args)
         {
             if (expression.Left.NodeType != ExpressionType.MemberAccess)
             {

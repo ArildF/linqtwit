@@ -145,7 +145,7 @@ namespace LinqTwit.Twitter.Tests
             WithClient(c =>
                 {
                     var statuses =
-                        c.FriendsTimeLine(new FriendsTimeLineArgs
+                        c.FriendsTimeLine(new TimeLineArgs
                             {Count = count});
 
                     // twitter seems to regard the count parameter as advisory only...
@@ -159,7 +159,7 @@ namespace LinqTwit.Twitter.Tests
             WithClient(c =>
                 {
                     var statuses =
-                        c.FriendsTimeLine(new FriendsTimeLineArgs
+                        c.FriendsTimeLine(new TimeLineArgs
                             {MaxId = long.Parse(CurrentStatusId)});
                     var maxId =
                         statuses.Select(s => s.Id).Max();
@@ -173,7 +173,7 @@ namespace LinqTwit.Twitter.Tests
         {
             WithClient(c =>
                 {
-                    var args = new FriendsTimeLineArgs
+                    var args = new TimeLineArgs
                         {MaxId = long.Parse(CurrentStatusId)};
                     var statuses =
                         c.FriendsTimeLine(args);

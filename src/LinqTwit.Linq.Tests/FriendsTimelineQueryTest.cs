@@ -61,11 +61,11 @@ namespace LinqTwit.Linq.Tests
             Assert.That(args.Page, Is.EqualTo(2));
         }
 
-        private FriendsTimeLineArgs GetArgs(IQueryable<Status> queryable)
+        private TimeLineArgs GetArgs(IQueryable<Status> queryable)
         {
-            FriendsTimeLineArgs args = null;
-            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).
-                Callback<FriendsTimeLineArgs>(a => args = a).Returns(new Status[]{});
+            TimeLineArgs args = null;
+            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).
+                Callback<TimeLineArgs>(a => args = a).Returns(new Status[]{});
 
             Expression expr = queryable.Expression  ;
 

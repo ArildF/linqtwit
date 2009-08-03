@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LinqTwit.Twitter
 {
-    public class FriendsTimeLineArgs
+    public class TimeLineArgs
     {
         public long? SinceId { get; set; }
 

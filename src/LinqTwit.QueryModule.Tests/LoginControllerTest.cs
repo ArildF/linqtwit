@@ -131,7 +131,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void ViewNotDeactivatedWhenCredentialsBad()
         {
-            api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Throws(
+            api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Throws(
                 new TwitterAuthorizationException());
 
             loginController.ProvideCredentialsCommand.Execute(null);

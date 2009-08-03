@@ -4,7 +4,7 @@ namespace LinqTwit.Twitter
     {
         Status GetStatus(string id);
         Status[] UserTimeLine(string user);
-        Status[] FriendsTimeLine(FriendsTimeLineArgs args);
+        Status[] FriendsTimeLine(TimeLineArgs args);
 
 
         void SetCredentials(string user, string pass);

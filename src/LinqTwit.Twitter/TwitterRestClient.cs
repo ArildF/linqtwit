@@ -21,7 +21,7 @@ namespace LinqTwit.Twitter
             return UserTimeLine(user).ToArray();
         }
 
-        Status[] ILinqApi.FriendsTimeLine(FriendsTimeLineArgs args)
+        Status[] ILinqApi.FriendsTimeLine(TimeLineArgs args)
         {
             return FriendsTimeLine().ToArray();
         }
@@ -48,7 +48,7 @@ namespace LinqTwit.Twitter
             return Invoke(() => this.Channel.FriendsTimeLine(null, null, null, null));
         }
 
-        public Statuses FriendsTimeLine(FriendsTimeLineArgs args)
+        public Statuses FriendsTimeLine(TimeLineArgs args)
         {
             return Invoke(() => this.Channel.FriendsTimeLine(
                 args.SinceId != null ? args.SinceId.ToString() : null,

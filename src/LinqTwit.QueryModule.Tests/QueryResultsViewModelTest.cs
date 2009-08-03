@@ -99,7 +99,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void AuthenticationStateChangedGetsFriendTimeLine()
         {
-            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(new[]
+            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(new[]
                 {new Status(), new Status()});
 
             this._authorizationEvent.Object.Publish(true);
@@ -208,7 +208,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void SelectedTweetIsRetainedAfterRefresh()
         {
-            _api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(
+            _api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(
                 CreateStatuses(1, 10).ToArray());
 
             _authorizationEvent.Object.Publish(true);
@@ -216,7 +216,7 @@ namespace LinqTwit.QueryModule.Tests
             _vm.SelectedTweet = _vm.Tweets[5];
             Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("6"));
 
-            _api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(
+            _api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(
                 CreateStatuses(3, 13).ToArray());
 
             var tester = new PropertyChangedTester<QueryResultsViewModel>(_vm);
@@ -302,7 +302,7 @@ namespace LinqTwit.QueryModule.Tests
             _refreshEvent.Object.Publish(null);
 
             // 1 for the initial call in GetStatuses()
-            _api.Verify(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>()), Times.Exactly(1));
+            _api.Verify(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>()), Times.Exactly(1));
         }
 
 
@@ -328,7 +328,7 @@ namespace LinqTwit.QueryModule.Tests
             this._refreshEvent.Object.Publish(null);
 
             // + 1 to account for the initial call to FriendsTimeLine
-            this._api.Verify(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>()), 
+            this._api.Verify(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>()), 
                 Times.Exactly(count + (authorizationState ? 1 : 0)));
         }
 
@@ -346,7 +346,7 @@ namespace LinqTwit.QueryModule.Tests
 
         private void SetupFriendsTimelineCall()
         {
-            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<FriendsTimeLineArgs>())).Returns(new[] { new Status() { Text = "tweet 1" }, new Status() { Text = "tweet 2" } });
+            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(new[] { new Status() { Text = "tweet 1" }, new Status() { Text = "tweet 2" } });
         }
     }
 }

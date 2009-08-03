@@ -8,7 +8,7 @@ namespace LinqTwit.Twitter
     public class Status
     {
         [DataMember(Name = "id", Order=2)]
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         [DataMember(Name="text", Order=3)]
         public string Text { get; set; }

@@ -35,7 +35,7 @@ namespace LinqTwit.Twitter.Tests
                     var statuses = c.FriendsTimeLine();
 
                     CurrentStatusId =
-                        statuses.Select(s => long.Parse(s.Id)).Max().ToString();
+                        statuses.Select(s => s.Id).Max().ToString();
 
                 });
         }
@@ -162,7 +162,7 @@ namespace LinqTwit.Twitter.Tests
                         c.FriendsTimeLine(new FriendsTimeLineArgs
                             {MaxId = long.Parse(CurrentStatusId)});
                     var maxId =
-                        statuses.Select(s => long.Parse(s.Id)).Max();
+                        statuses.Select(s => s.Id).Max();
 
                     Assert.That(maxId, Is.LessThanOrEqualTo(long.Parse(CurrentStatusId)));
                 });
@@ -178,11 +178,11 @@ namespace LinqTwit.Twitter.Tests
                     var statuses =
                         c.FriendsTimeLine(args);
 
-                    var min = statuses.Select(s => long.Parse(s.Id)).Min();
+                    var min = statuses.Select(s => s.Id).Min();
 
                     args.Page = 2;
                     var secondPage = c.FriendsTimeLine(args);
-                    var max = secondPage.Select(s => long.Parse(s.Id)).Max();
+                    var max = secondPage.Select(s => s.Id).Max();
 
                     Assert.That(max, Is.LessThan(min));
                 });

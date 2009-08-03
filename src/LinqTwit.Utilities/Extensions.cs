@@ -25,8 +25,8 @@ namespace LinqTwit.Utilities
             return null;
         }
 
-        public static MethodInfo MethodOf<T, TRet>(
-            this Expression<Func<T, TRet>> expr)
+        public static MethodInfo MethodOf<T, TRet>(this T _,
+            Expression<Func<T, TRet>> expr)
         {
             if (expr.Body.NodeType == ExpressionType.Call)
             {

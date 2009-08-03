@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using NUnit.Framework;
 using Moq;
 using LinqTwit.Utilities;
@@ -40,6 +42,14 @@ namespace LinqTwit.Utilities.Tests
             c.DebugEvents("Yohoo", ".*");
 
             c.RaiseEvent();
+        }
+
+        [Test]
+        public void MethodOf()
+        {
+            IQueryable<string> queryable = null;
+            MethodInfo info = queryable.MethodOf(q => q.Take(10));
+            Assert.That(info.Name, Is.EqualTo("Take"));
         }
 
         class ClassWithEvent

@@ -14,11 +14,6 @@ namespace LinqTwit.Twitter
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/show/{id}.xml")]
         Status GetStatus(string id);
 
-
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/user_timeline/{id}.xml")]
-        Statuses UserTimeLine(string id);
-
         //[OperationContract]
         //[WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/statuses/friends_timeline.xml")]
         //Statuses FriendsTimeLine();
@@ -32,5 +27,10 @@ namespace LinqTwit.Twitter
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, 
             UriTemplate = "/statuses/friends_timeline.xml?since_id={sinceId}&count={count}&max_id={maxId}&page={page}")]
         Statuses FriendsTimeLine(string sinceId, string count, string maxId, string page);
+
+        [OperationContract]
+        [WebGet(BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml,
+            UriTemplate = "/statuses/user_timeline/{user}.xml?since_id={sinceId}&count={count}&max_id={maxId}&page={page}")]
+        Statuses UserTimeLine(string user, string sinceId, string count, string maxId, string page);
     }
 }

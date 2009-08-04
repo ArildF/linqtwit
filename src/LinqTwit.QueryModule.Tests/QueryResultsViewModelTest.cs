@@ -83,7 +83,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void QuerySubmittedGetsUserTimeline()
         {
-            this._api.Setup(a => a.UserTimeLine("rogue_code")).Returns(new[]
+            this._api.Setup(a => a.UserTimeLine("rogue_code", It.IsAny<TimeLineArgs>())).Returns(new[]
                                                                      {
                                                                          new Status
                                                                              (),
@@ -313,7 +313,7 @@ namespace LinqTwit.QueryModule.Tests
             {
                 yield return new Status()
                     {
-                        Id = i.ToString(),
+                        Id = i,
                         Text = "Some text"
                     };
             }

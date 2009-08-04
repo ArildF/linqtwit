@@ -61,7 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FriendsTimeLineArgs.cs" />
+    <Compile Include="TimeLineArgs.cs" />
     <Compile Include="ILinqApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITwitterRestServiceContract.cs" />

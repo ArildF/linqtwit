@@ -56,7 +56,7 @@ namespace LinqTwit.Commands.Tests
                         {
                             Name = "ewwser",
                         },
-                    Id = "123456"
+                    Id = 123456
                 };
 
             _selection.Setup(s => s.SelectedTweet).Returns(status);

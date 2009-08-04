@@ -3,7 +3,7 @@ namespace LinqTwit.Twitter
     public interface ILinqApi
     {
         Status GetStatus(string id);
-        Status[] UserTimeLine(string user);
+        Status[] UserTimeLine(string user, TimeLineArgs args);
         Status[] FriendsTimeLine(TimeLineArgs args);
 
 

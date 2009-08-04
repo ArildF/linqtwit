@@ -90,7 +90,7 @@ namespace LinqTwit.Twitter.Tests
             WithChannel(channel =>
                             {
                                 Statuses statuses =
-                                    channel.UserTimeLine("rogue_code");
+                                    channel.UserTimeLine("rogue_code", null, null, null, null);
                                 Assert.That(statuses.Count, Is.Not.EqualTo(0));
                             });
 
@@ -140,26 +140,26 @@ namespace LinqTwit.Twitter.Tests
 
         
         [Test]
-        public void FriendsTimeLineWithArgsCount([Values(1, 5, 10, 20, 40, 80, 160, 200)]int count)
+        public void TimeLineWithArgsCount([Values(1, 5, 10, 20, 40, 80, 160, 200)]int count, 
+            [ValueSource("TimeLineFuncs")]Func<TwitterRestClient, TimeLineArgs, Statuses> func)
         {
             WithClient(c =>
                 {
                     var statuses =
-                        c.FriendsTimeLine(new TimeLineArgs
-                            {Count = count});
+                        func(c, new TimeLineArgs{Count = count});
 
                     // twitter seems to regard the count parameter as advisory only...
-                    Assert.That(statuses.Count, Is.InRange((count - 5), count));
+                    Assert.That(statuses.Count, Is.InRange((count - (int)(count * 0.5)), count));
                 });
         }
 
         [Test]
-        public void FriendsTimeLineWithArgsMaxId()
+        public void TimeLineWithArgsMaxId([ValueSource("TimeLineFuncs")]Func<TwitterRestClient, TimeLineArgs, Statuses> func)
         {
             WithClient(c =>
                 {
                     var statuses =
-                        c.FriendsTimeLine(new TimeLineArgs
+                        func(c, new TimeLineArgs
                             {MaxId = long.Parse(CurrentStatusId)});
                     var maxId =
                         statuses.Select(s => s.Id).Max();
@@ -169,23 +169,29 @@ namespace LinqTwit.Twitter.Tests
         }
 
         [Test]
-        public void FriendsTimeLineWithArgsPage()
+        public void TimeLineWithArgsPage(
+            [ValueSource("TimeLineFuncs")]Func<TwitterRestClient, TimeLineArgs, Statuses> func)
         {
             WithClient(c =>
                 {
                     var args = new TimeLineArgs
                         {MaxId = long.Parse(CurrentStatusId)};
-                    var statuses =
-                        c.FriendsTimeLine(args);
+                    var statuses = func(c, args);
 
                     var min = statuses.Select(s => s.Id).Min();
 
                     args.Page = 2;
-                    var secondPage = c.FriendsTimeLine(args);
+                    var secondPage = func(c, args);
                     var max = secondPage.Select(s => s.Id).Max();
 
                     Assert.That(max, Is.LessThan(min));
                 });
+        }
+
+        private IEnumerable<Func<TwitterRestClient, TimeLineArgs, Statuses>> TimeLineFuncs()
+        {
+            yield return (client, args) => client.FriendsTimeLine(args);
+            yield return (client, args) => client.UserTimeLine("rogue_code", args);
         }
 
         private void WithClient(Action<TwitterRestClient> action)

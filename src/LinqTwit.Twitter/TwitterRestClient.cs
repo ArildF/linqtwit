@@ -16,9 +16,9 @@ namespace LinqTwit.Twitter
             return this.Channel.GetStatus(id);
         }
 
-        Status[] ILinqApi.UserTimeLine(string user)
+        Status[] ILinqApi.UserTimeLine(string user, TimeLineArgs args)
         {
-            return UserTimeLine(user).ToArray();
+            return UserTimeLine(user, args).ToArray();
         }
 
         Status[] ILinqApi.FriendsTimeLine(TimeLineArgs args)
@@ -40,6 +40,11 @@ namespace LinqTwit.Twitter
         public Statuses FriendsTimeLine(string sinceId, string count, string maxId, string page)
         {
             return Invoke(() => this.Channel.FriendsTimeLine(sinceId, count, maxId, page));
+        }
+
+        public Statuses UserTimeLine(string user, string sinceId, string count, string maxId, string page)
+        {
+            return Invoke(() => this.Channel.UserTimeLine(user, sinceId, count, maxId, page));
         }
 
 
@@ -72,7 +77,25 @@ namespace LinqTwit.Twitter
 
         public Statuses UserTimeLine(string user)
         {
-            return this.Channel.UserTimeLine(user);
+            return this.UserTimeLine(user, new TimeLineArgs());
+        }
+
+        public Statuses UserTimeLine(string user, TimeLineArgs args)
+        {
+            return Invoke(() => this.Channel.UserTimeLine(
+                                    user,
+                                    args.SinceId != null
+                                        ? args.SinceId.ToString()
+                                        : null,
+                                    args.Count != null
+                                        ? args.Count.ToString()
+                                        : null,
+                                    args.MaxId != null
+                                        ? args.MaxId.ToString()
+                                        : null,
+                                    args.Page != null
+                                        ? args.Page.ToString()
+                                        : null));
         }
     }
 }

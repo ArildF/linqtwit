@@ -29,7 +29,7 @@ namespace LinqTwit.Commands
         {
             var status = _selection.SelectedTweet;
             var url = _urlFormat.Replace("%user%", status.User.Name);
-            url = url.Replace("%id%", status.Id);
+            url = url.Replace("%id%", status.Id.ToString());
 
             _clipboardService.SetUrl(url);
         }

@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
 using System.ServiceModel.Web;
-using System.Text;
 using NUnit.Framework;
 
 namespace LinqTwit.Twitter.Tests
@@ -13,10 +10,10 @@ namespace LinqTwit.Twitter.Tests
     [TestFixture]
     public class TwitterRestClientTest
     {
-        private string KnownStatusId = "1376755488";
-        private string CurrentStatusId;
-        private string username;
-        private string password;
+        private const string KnownStatusId = "1376755488";
+        private string _currentStatusId;
+        private string _username;
+        private string _password;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -26,15 +23,15 @@ namespace LinqTwit.Twitter.Tests
             if (File.Exists(credentialsFile))
             {
                 var lines = File.ReadAllLines(credentialsFile);
-                this.username = lines[0];
-                this.password = lines[1];
+                this._username = lines[0];
+                this._password = lines[1];
             }
 
             WithClient(c =>
                 {
                     var statuses = c.FriendsTimeLine();
 
-                    CurrentStatusId =
+                    this._currentStatusId =
                         statuses.Select(s => s.Id).Max().ToString();
 
                 });
@@ -112,7 +109,7 @@ namespace LinqTwit.Twitter.Tests
         {
             var client = new TwitterRestClient("twitterEndpoint");
 
-            client.SetCredentials(this.username, this.password);
+            client.SetCredentials(this._username, this._password);
             Statuses statuses =
                                     client.FriendsTimeLine();
             Assert.That(statuses.Count, Is.Not.EqualTo(0));
@@ -160,11 +157,11 @@ namespace LinqTwit.Twitter.Tests
                 {
                     var statuses =
                         func(c, new TimeLineArgs
-                            {MaxId = long.Parse(CurrentStatusId)});
+                            {MaxId = long.Parse(this._currentStatusId)});
                     var maxId =
                         statuses.Select(s => s.Id).Max();
 
-                    Assert.That(maxId, Is.LessThanOrEqualTo(long.Parse(CurrentStatusId)));
+                    Assert.That(maxId, Is.LessThanOrEqualTo(long.Parse(this._currentStatusId)));
                 });
         }
 
@@ -175,7 +172,7 @@ namespace LinqTwit.Twitter.Tests
             WithClient(c =>
                 {
                     var args = new TimeLineArgs
-                        {MaxId = long.Parse(CurrentStatusId)};
+                        {MaxId = long.Parse(this._currentStatusId)};
                     var statuses = func(c, args);
 
                     var min = statuses.Select(s => s.Id).Min();
@@ -188,7 +185,9 @@ namespace LinqTwit.Twitter.Tests
                 });
         }
 
+// ReSharper disable UnusedMember.Local
         private IEnumerable<Func<TwitterRestClient, TimeLineArgs, Statuses>> TimeLineFuncs()
+// ReSharper restore UnusedMember.Local
         {
             yield return (client, args) => client.FriendsTimeLine(args);
             yield return (client, args) => client.UserTimeLine("rogue_code", args);
@@ -197,19 +196,19 @@ namespace LinqTwit.Twitter.Tests
         private void WithClient(Action<TwitterRestClient> action)
         {
             TwitterRestClient client = new TwitterRestClient("twitterEndpoint");
-            client.ClientCredentials.UserName.UserName = username;
-            client.ClientCredentials.UserName.Password = password;
+            client.ClientCredentials.UserName.UserName = this._username;
+            client.ClientCredentials.UserName.Password = this._password;
 
             action(client);
         }
 
         private void WithChannel(Action<ITwitterRestServiceContract> action)
         {
-            using (WebChannelFactory<ITwitterRestServiceContract> factory = new WebChannelFactory<ITwitterRestServiceContract>("twitterEndpoint"))
+            using (new WebChannelFactory<ITwitterRestServiceContract>("twitterEndpoint"))
             {
                 TwitterRestClient client = new TwitterRestClient("twitterEndpoint");
-                client.ClientCredentials.UserName.UserName = username;
-                client.ClientCredentials.UserName.Password = password;
+                client.ClientCredentials.UserName.UserName = this._username;
+                client.ClientCredentials.UserName.Password = this._password;
 
                 action(client);
             }

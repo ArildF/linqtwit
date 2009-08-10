@@ -20,13 +20,17 @@ namespace LinqTwit.TestUtilities
 
         protected Mock<IEventAggregator> _aggregator;
         protected IAsyncManager _asyncManager;
+        private AutoMockContainer _autoContainer;
 
 
         [SetUp]
         public virtual void Setup()
         {
-            _aggregator = _factory.Create<IEventAggregator>();
-            _asyncManager = new AsyncManager(new MockDispatcherFacade());
+            _autoContainer = new AutoMockContainer(this._factory);
+
+            _aggregator = _autoContainer.GetMock<IEventAggregator>();
+			
+            _autoContainer.Register<IAsyncManager>(new AsyncManager(new MockDispatcherFacade()));
 
             OnSetup();
         }
@@ -76,5 +80,15 @@ namespace LinqTwit.TestUtilities
 
             return mock;
         }
+
+    	protected T Create<T>() where T : class
+    	{
+    	    return _autoContainer.Create<T>();
+    	}
+
+    	protected Mock<T> GetMock<T>() where T : class
+    	{
+    	    return _autoContainer.GetMock<T>();
+    	}
     }
 }

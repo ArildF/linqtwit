@@ -23,5 +23,14 @@ namespace LinqTwit.QueryModule.Views
         {
             InitializeComponent();
         }
+
+		public string Yambalaya
+		{
+			get
+			{
+				return "Hai!";
+			}
+		}
+
     }
 }

@@ -7,6 +7,7 @@ namespace LinqTwit.Infrastructure
 {
     public static class RegionNames
     {
+        public const string QueryResultsRegion = "QueryResults";
         public const string QueryEntryRegion = "QueryEntry" ;
         public const string DialogRegion = "DialogRegion";
 

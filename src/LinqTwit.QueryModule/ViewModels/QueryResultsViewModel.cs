@@ -22,7 +22,6 @@ namespace LinqTwit.QueryModule.ViewModels
         private readonly ILinqApi api;
         private TweetViewModel selectedTweet;
         private readonly IAsyncManager asyncManager;
-        private bool authorized;
         private IList<MenuViewModel> _contextMenu;
         private ICommand _editCommand;
         private ICommand _cancelEditCommand;
@@ -41,14 +40,11 @@ namespace LinqTwit.QueryModule.ViewModels
 
             this._aggregator.GetEvent<QuerySubmittedEvent>().Subscribe(
                 QuerySubmitted);
-            this._aggregator.GetEvent<AuthorizationStateChangedEvent>().Subscribe
-                (
-                AuthorizationStateChanged);
 
 
             this._aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh//,  
                 ,ThreadOption.UIThread, true,
-                _ => this.authorized && !this.Editing
+                _ => !this.Editing
                 );
 
             GlobalCommands.UpCommand.RegisterCommand(new DelegateCommand<object>(MoveUp));
@@ -112,16 +108,6 @@ namespace LinqTwit.QueryModule.ViewModels
                                      ? (this.SelectedIndex - 1)
                                      : 0;
 
-        }
-
-        private void AuthorizationStateChanged(bool newState)
-        {
-            if (newState)
-            {
-                GetFriendsTimeLine();
-            }
-
-            authorized = newState;
         }
 
         private void GetFriendsTimeLine()

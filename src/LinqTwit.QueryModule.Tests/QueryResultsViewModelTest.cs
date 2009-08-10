@@ -26,7 +26,6 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<IQueryResultsView> view;
         private Mock<ILinqApi> _api;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
-        private Mock<AuthorizationStateChangedEvent> _authorizationEvent;
         private Mock<RefreshEvent> _refreshEvent;
         private IAsyncManager asyncManager;
 
@@ -54,14 +53,11 @@ namespace LinqTwit.QueryModule.Tests
             this._aggregator = _factory.Create<IEventAggregator>();
             querySubmittedEvent = new Mock<QuerySubmittedEvent>
                                       {CallBase = true};
-            this._authorizationEvent = this._factory.Create<AuthorizationStateChangedEvent>();
             this._refreshEvent = CreateEvent<RefreshEvent, object>();
 
 
             this._aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
                 this.querySubmittedEvent.Object);
-            this._aggregator.Setup(a => a.GetEvent<AuthorizationStateChangedEvent>()).
-                Returns(this._authorizationEvent.Object);
 
             _menuRoot = new ContextMenuRoot();
 
@@ -102,7 +98,7 @@ namespace LinqTwit.QueryModule.Tests
             this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(new[]
                 {new Status(), new Status()});
 
-            this._authorizationEvent.Object.Publish(true);
+            _refreshEvent.Object.Publish(null);
 
             Assert.That(this._vm.Tweets.Count, Is.EqualTo(2));
         }
@@ -186,12 +182,7 @@ namespace LinqTwit.QueryModule.Tests
             TestRefresh(true, 1);
         }
 
-        [Test]
-        public void DoesNotRefreshWhenRefreshEventFiredIfNotAuthorized()
-        {
-            TestRefresh(false, 0);
-        }
-
+     
         [Test]
         public void RaisesSelectedTweetChangedEvent()
         {
@@ -202,7 +193,6 @@ namespace LinqTwit.QueryModule.Tests
             _vm.SelectedTweet = _vm.Tweets[1];
 
             evt.Verify(e => e.Publish(It.Is<Status>(s => s.Text == _vm.Tweets[1].Text)));
-
         }
 
         [Test]
@@ -211,10 +201,10 @@ namespace LinqTwit.QueryModule.Tests
             _api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(
                 CreateStatuses(1, 10).ToArray());
 
-            _authorizationEvent.Object.Publish(true);
+            _refreshEvent.Object.Publish(true);
 
             _vm.SelectedTweet = _vm.Tweets[5];
-            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("6"));
+            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo(6));
 
             _api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(
                 CreateStatuses(3, 13).ToArray());
@@ -223,7 +213,7 @@ namespace LinqTwit.QueryModule.Tests
             _refreshEvent.Object.Publish(null);
 
             Assert.That(tester.PropertyChanged(p => p.SelectedTweet), Is.True);
-            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo("6"));
+            Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo(6));
         }
 
         [Test]
@@ -323,13 +313,11 @@ namespace LinqTwit.QueryModule.Tests
         {
             SetupFriendsTimelineCall();
 
-            this._authorizationEvent.Object.Publish(authorizationState);
-
-            this._refreshEvent.Object.Publish(null);
+            _refreshEvent.Object.Publish(null);
 
             // + 1 to account for the initial call to FriendsTimeLine
             this._api.Verify(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>()), 
-                Times.Exactly(count + (authorizationState ? 1 : 0)));
+                Times.Exactly(count));
         }
 
         private static void ExecuteMovedown()
@@ -341,7 +329,7 @@ namespace LinqTwit.QueryModule.Tests
         {
             SetupFriendsTimelineCall();
 
-            this._authorizationEvent.Object.Publish(true);
+            _refreshEvent.Object.Publish(true);
         }
 
         private void SetupFriendsTimelineCall()

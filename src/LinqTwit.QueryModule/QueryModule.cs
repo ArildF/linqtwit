@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using LinqTwit.Infrastructure;
 using LinqTwit.QueryModule.Controllers;
+using LinqTwit.QueryModule.Factories;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.QueryModule.Views;
 using Microsoft.Practices.Composite.Events;
@@ -17,6 +18,7 @@ namespace LinqTwit.QueryModule
     {
         private readonly IContainer container;
         private readonly IRegionManager regionManager;
+        private ITweetScreenController _controller;
 
 
         public QueryModule(IContainer locator, IRegionManager regionManager)
@@ -30,12 +32,10 @@ namespace LinqTwit.QueryModule
             this.RegisterViewsAndServices();
 
             var entry = this.container.GetInstance<IQueryEntryViewModel>();
-            var results = this.container.GetInstance<IQueryResultsViewModel>();
 
             var ignored = this.container.GetInstance<ILoginController>();
 
-            this.regionManager.Regions["QueryResults"].Add(results.View);
-            this.regionManager.Regions["QueryEntry"].Add(entry.View);
+            this.regionManager.Regions[RegionNames.QueryEntryRegion].Add(entry.View);
 
             var dispatcherFacade =
                 this.container.GetInstance<IDispatcherFacade>();
@@ -43,6 +43,8 @@ namespace LinqTwit.QueryModule
 
             dispatcherFacade.CreateRecurringEvent(TimeSpan.FromMinutes(1), 
                 () => eventAggregator.GetEvent<RefreshEvent>().Publish(null));
+
+            _controller = container.GetInstance<ITweetScreenController>();
         }
 
         private void RegisterViewsAndServices()
@@ -60,6 +62,10 @@ namespace LinqTwit.QueryModule
                             x.TheCallingAssembly();
                             x.WithDefaultConventions();
                         });
+
+                    c.InstanceOf<ITweetScreenController>().
+                        Is.OfConcreteType<TweetScreenController>()
+                        .CtorDependency<IRegion>().Is(regionManager.Regions[RegionNames.QueryResultsRegion]);
                 });
         }
 

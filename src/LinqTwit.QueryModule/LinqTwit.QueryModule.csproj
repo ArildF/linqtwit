@@ -76,13 +76,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\TweetScreenController.cs" />
     <Compile Include="events.cs" />
+    <Compile Include="Factories\TweetScreenFactory.cs" />
     <Compile Include="ILoginController.cs" />
     <Compile Include="ILoginView.cs" />
     <Compile Include="IQueryEntryView.cs" />
     <Compile Include="IQueryEntryViewModel.cs" />
     <Compile Include="IQueryResultsView.cs" />
     <Compile Include="IQueryResultsViewModel.cs" />
+    <Compile Include="ITweetScreenController.cs" />
+    <Compile Include="ITweetScreenFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryModule.cs" />
     <Compile Include="ValueConverters\TweetConverter.cs" />

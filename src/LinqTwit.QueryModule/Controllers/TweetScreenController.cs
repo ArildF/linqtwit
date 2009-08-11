@@ -27,7 +27,7 @@ namespace LinqTwit.QueryModule.Controllers
         {
             if (authorized)
             {
-                IQueryResultsViewModel model = _factory.Create("Default");
+                IQueryResultsViewModel model = _factory.Create("Main timeline");
                 _region.Add(model.View);
                 _region.Activate(model.View);
 

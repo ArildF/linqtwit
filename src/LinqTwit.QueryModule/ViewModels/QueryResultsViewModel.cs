@@ -26,12 +26,13 @@ namespace LinqTwit.QueryModule.ViewModels
         private ICommand _editCommand;
         private ICommand _cancelEditCommand;
 
-        public QueryResultsViewModel(IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, 
+        public QueryResultsViewModel(string caption, IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, 
             IAsyncManager asyncManager, ContextMenuRoot menu)
         {
             this._aggregator = aggregator;
             this.asyncManager = asyncManager;
             this.api = api;
+            Caption = caption;
             View = view;
 
             View.DataContext = this;
@@ -214,5 +215,7 @@ namespace LinqTwit.QueryModule.ViewModels
                 return _cancelEditCommand;
             }
         }
+
+        public string Caption { get; private set; }
     }
 }

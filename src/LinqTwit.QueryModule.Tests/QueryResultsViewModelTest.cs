@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -25,6 +26,7 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<RefreshEvent> _refreshEvent;
 
         private ContextMenuRoot _menuRoot;
+        private string DefaultCaption = "Default";
 
 
         protected override void  OnSetup()
@@ -56,6 +58,8 @@ namespace LinqTwit.QueryModule.Tests
             _menuRoot = new ContextMenuRoot();
 
             Register(_menuRoot);
+
+            Register(DefaultCaption);
 
             _vm = Create<QueryResultsViewModel>();
         }
@@ -284,6 +288,16 @@ namespace LinqTwit.QueryModule.Tests
 
             // 1 for the initial call in GetStatuses()
             _api.Verify(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public void Caption()
+        {
+            Register("Default");
+
+            _vm = Create<QueryResultsViewModel>();
+
+            Assert.That(_vm.Caption, Is.EqualTo(DefaultCaption));
         }
 
 

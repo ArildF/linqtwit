@@ -17,7 +17,7 @@ namespace LinqTwit.QueryModule.Factories
 
         public IQueryResultsViewModel Create(string title)
         {
-            return _container.GetInstance<IQueryResultsViewModel>();
+            return _container.With("caption").EqualTo(title).GetInstance<IQueryResultsViewModel>();
         }
     }
 }

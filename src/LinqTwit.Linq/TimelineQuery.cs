@@ -8,11 +8,11 @@ using LinqTwit.Utilities;
 
 namespace LinqTwit.Linq
 {
-    class FriendsTimelineQuery : IQuery
+    class TimelineQuery : IQuery
     {
         private readonly ILinqApi _linqApi;
 
-        public FriendsTimelineQuery(ILinqApi linqApi)
+        public TimelineQuery(ILinqApi linqApi)
         {
             this._linqApi = linqApi;
         }

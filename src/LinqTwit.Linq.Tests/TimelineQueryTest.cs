@@ -8,9 +8,9 @@ using Moq;
 namespace LinqTwit.Linq.Tests
 {
     [TestFixture]
-    public class FriendsTimelineQueryTest
+    public class TimelineQueryTest
     {
-        private FriendsTimelineQuery _query;
+        private TimelineQuery _query;
 
         private readonly MockFactory _factory =
             new MockFactory(MockBehavior.Loose)
@@ -25,7 +25,7 @@ namespace LinqTwit.Linq.Tests
         {
             _api = _factory.Create<ILinqApi>();
 
-            this._query = new FriendsTimelineQuery(_api.Object);
+            this._query = new TimelineQuery(_api.Object);
 
             _source = new TwitterQueryable<Status>(_api.Object);
 

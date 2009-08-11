@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using LinqTwit.Common;
 using LinqTwit.Infrastructure;
-using LinqTwit.Infrastructure.Tests;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.TestUtilities;
 using LinqTwit.Twitter;
@@ -23,13 +20,11 @@ namespace LinqTwit.QueryModule.Tests
     {
         private QueryResultsViewModel _vm;
 
-        private Mock<IQueryResultsView> view;
         private Mock<ILinqApi> _api;
-        private Mock<QuerySubmittedEvent> querySubmittedEvent;
+        private Mock<QuerySubmittedEvent> _querySubmittedEvent;
         private Mock<RefreshEvent> _refreshEvent;
 
         private ContextMenuRoot _menuRoot;
-        private MockDispatcherFacade _dispatcherFacade;
 
 
         protected override void  OnSetup()
@@ -47,16 +42,16 @@ namespace LinqTwit.QueryModule.Tests
             }
 
             
-            view = this.GetMock<IQueryResultsView>();
+            this.GetMock<IQueryResultsView>();
             _api = this.GetMock<ILinqApi>();
             _aggregator = GetMock<IEventAggregator>();
-            querySubmittedEvent = new Mock<QuerySubmittedEvent>
+            _querySubmittedEvent = new Mock<QuerySubmittedEvent>
                                       {CallBase = true};
             _refreshEvent = CreateEvent<RefreshEvent, object>();
 
 
             _aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
-                this.querySubmittedEvent.Object);
+                this._querySubmittedEvent.Object);
 
             _menuRoot = new ContextMenuRoot();
 
@@ -83,7 +78,7 @@ namespace LinqTwit.QueryModule.Tests
                                                                              ()
                                                                      });
 
-            this.querySubmittedEvent.Object.Publish("rogue_code");
+            this._querySubmittedEvent.Object.Publish("rogue_code");
 
             Assert.That(this._vm.Tweets.Count, Is.EqualTo(2));
         }
@@ -175,7 +170,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void RefreshesWhenRefreshEventFired()
         {
-            TestRefresh(true, 1);
+            TestRefresh(1);
         }
 
      
@@ -297,15 +292,15 @@ namespace LinqTwit.QueryModule.Tests
         {
             for (int i = from; i <= to; i++)
             {
-                yield return new Status()
-                    {
+                yield return new Status
+                {
                         Id = i,
                         Text = "Some text"
-                    };
+                };
             }
         }
         
-        private void TestRefresh(bool authorizationState, int count)
+        private void TestRefresh(int count)
         {
             SetupFriendsTimelineCall();
 
@@ -330,7 +325,7 @@ namespace LinqTwit.QueryModule.Tests
 
         private void SetupFriendsTimelineCall()
         {
-            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(new[] { new Status() { Text = "tweet 1" }, new Status() { Text = "tweet 2" } });
+            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(new[] { new Status { Text = "tweet 1" }, new Status { Text = "tweet 2" } });
         }
     }
 }

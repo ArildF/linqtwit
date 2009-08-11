@@ -45,7 +45,9 @@ namespace LinqTwit.QueryModule.Tests
 
             _screenFactory.Verify(f => f.Create("Default"));
 
-            GetMock<IRegion>().Verify(rf => rf.Add(viewModel.Object.View));
+            Mock<IRegion> region = GetMock<IRegion>();
+            region.Verify(rf => rf.Add(viewModel.Object.View));
+            region.Verify(r => r.Activate(viewModel.Object.View));
         }
 
         [Test]
@@ -57,8 +59,15 @@ namespace LinqTwit.QueryModule.Tests
             _authorizationEvent.Object.Publish(true);
 
             Assert.That(refreshed, Is.True);
+        }
 
+        [Test]
+        public void ActivatesAfterCreate()
+        {
+            _authorizationEvent.Object.Publish(true);
 
+            IQueryResultsView view = GetMock<IQueryResultsViewModel>().Object.View;
+            
         }
     }
 }

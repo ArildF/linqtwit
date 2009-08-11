@@ -172,7 +172,12 @@ namespace LinqTwit.QueryModule.ViewModels
             private set;
         }
 
-        public ObservableCollection<TweetViewModel> Tweets { get; private set; }
+        private ObservableCollection<TweetViewModel> _tweets;
+        public ObservableCollection<TweetViewModel> Tweets
+        {
+            get { return _tweets; }
+            private set { _tweets = value; }
+        }
 
         public TweetViewModel SelectedTweet
         {

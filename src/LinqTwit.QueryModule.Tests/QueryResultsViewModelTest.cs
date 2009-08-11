@@ -27,7 +27,6 @@ namespace LinqTwit.QueryModule.Tests
         private Mock<ILinqApi> _api;
         private Mock<QuerySubmittedEvent> querySubmittedEvent;
         private Mock<RefreshEvent> _refreshEvent;
-        private IAsyncManager asyncManager;
 
         private ContextMenuRoot _menuRoot;
         private MockDispatcherFacade _dispatcherFacade;
@@ -48,25 +47,22 @@ namespace LinqTwit.QueryModule.Tests
             }
 
             
-            view = this._factory.Create<IQueryResultsView>();
-            this._api = this._factory.Create<ILinqApi>();
-            this._aggregator = _factory.Create<IEventAggregator>();
+            view = this.GetMock<IQueryResultsView>();
+            _api = this.GetMock<ILinqApi>();
+            _aggregator = GetMock<IEventAggregator>();
             querySubmittedEvent = new Mock<QuerySubmittedEvent>
                                       {CallBase = true};
-            this._refreshEvent = CreateEvent<RefreshEvent, object>();
+            _refreshEvent = CreateEvent<RefreshEvent, object>();
 
 
-            this._aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
+            _aggregator.Setup(a => a.GetEvent<QuerySubmittedEvent>()).Returns(
                 this.querySubmittedEvent.Object);
 
             _menuRoot = new ContextMenuRoot();
 
+            Register(_menuRoot);
 
-            _dispatcherFacade = new MockDispatcherFacade();
-            asyncManager = new AsyncManager(this._dispatcherFacade);
-
-
-            this._vm = new QueryResultsViewModel(view.Object, this._aggregator.Object, this._api.Object, asyncManager, _menuRoot);
+            _vm = Create<QueryResultsViewModel>();
         }
 
 

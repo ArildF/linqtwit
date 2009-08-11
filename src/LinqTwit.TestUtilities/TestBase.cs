@@ -29,8 +29,9 @@ namespace LinqTwit.TestUtilities
             _autoContainer = new AutoMockContainer(this._factory);
 
             _aggregator = _autoContainer.GetMock<IEventAggregator>();
-			
-            _autoContainer.Register<IAsyncManager>(new AsyncManager(new MockDispatcherFacade()));
+
+            _asyncManager = new AsyncManager(new MockDispatcherFacade());
+            _autoContainer.Register(_asyncManager);
 
             OnSetup();
         }
@@ -90,5 +91,10 @@ namespace LinqTwit.TestUtilities
     	{
     	    return _autoContainer.GetMock<T>();
     	}
+
+        protected void Register<T>(T instance)
+        {
+            _autoContainer.Register(instance);
+        }
     }
 }

@@ -27,7 +27,8 @@ namespace LinqTwit.Linq.Tests
 
             this._query = new TimelineQuery(_api.Object);
 
-            _source = new TwitterQueryable<Status>(_api.Object);
+            ILinqApi linqApi = _api.Object;
+            _source = new TwitterQueryable<Status>(new TwitterQueryProvider(() => new TwitterQuery(linqApi)));
 
         }
 

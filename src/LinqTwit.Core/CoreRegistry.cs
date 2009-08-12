@@ -6,6 +6,11 @@ namespace LinqTwit.Core
     {
         public CoreRegistry()
         {
+            Scan(c =>
+            {
+                c.TheCallingAssembly();
+                c.WithDefaultConventions();
+            });
         }
     }
 }

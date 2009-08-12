@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LinqTwit.Core;
 using StructureMap;
 
 namespace LinqTwit.QueryModule.Factories
@@ -15,9 +16,9 @@ namespace LinqTwit.QueryModule.Factories
             _container = container;
         }
 
-        public IQueryResultsViewModel Create(string title)
+        public IQueryResultsViewModel Create(string title, ITimeLineService service)
         {
-            return _container.With("caption").EqualTo(title).GetInstance<IQueryResultsViewModel>();
+            return _container.With("caption").EqualTo(title).With(service).GetInstance<IQueryResultsViewModel>();
         }
     }
 }

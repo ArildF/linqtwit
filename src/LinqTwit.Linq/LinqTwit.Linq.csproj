@@ -38,6 +38,10 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StructureMap, Version=2.5.1.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -53,6 +57,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpressionVisitor.cs" />
+    <Compile Include="ITwitter.cs" />
+    <Compile Include="LinqRegistry.cs" />
     <Compile Include="TweetExtensions.cs" />
     <Compile Include="TimelineQuery.cs" />
     <Compile Include="IdExpressionVisitor.cs" />

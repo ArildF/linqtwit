@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using LinqTwit.Common;
+using LinqTwit.Core;
 using LinqTwit.Infrastructure;
 using LinqTwit.QueryModule.ViewModels;
 using LinqTwit.TestUtilities;
@@ -21,12 +22,12 @@ namespace LinqTwit.QueryModule.Tests
     {
         private QueryResultsViewModel _vm;
 
-        private Mock<ILinqApi> _api;
         private Mock<QuerySubmittedEvent> _querySubmittedEvent;
         private Mock<RefreshEvent> _refreshEvent;
 
         private ContextMenuRoot _menuRoot;
-        private string DefaultCaption = "Default";
+        private const string DefaultCaption = "Default";
+        private Mock<ITimeLineService> _service;
 
 
         protected override void  OnSetup()
@@ -43,9 +44,11 @@ namespace LinqTwit.QueryModule.Tests
                 command.RegisteredCommands.ForEach(command.UnregisterCommand);
             }
 
+            _service = GetMock<ITimeLineService>();
+
             
             this.GetMock<IQueryResultsView>();
-            _api = this.GetMock<ILinqApi>();
+            this.GetMock<ILinqApi>();
             _aggregator = GetMock<IEventAggregator>();
             _querySubmittedEvent = new Mock<QuerySubmittedEvent>
                                       {CallBase = true};
@@ -72,25 +75,9 @@ namespace LinqTwit.QueryModule.Tests
         }
 
         [Test]
-        public void QuerySubmittedGetsUserTimeline()
+        public void RefreshGetsFriendTimeLine()
         {
-            this._api.Setup(a => a.UserTimeLine("rogue_code", It.IsAny<TimeLineArgs>())).Returns(new[]
-                                                                     {
-                                                                         new Status
-                                                                             (),
-                                                                         new Status
-                                                                             ()
-                                                                     });
-
-            this._querySubmittedEvent.Object.Publish("rogue_code");
-
-            Assert.That(this._vm.Tweets.Count, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void AuthenticationStateChangedGetsFriendTimeLine()
-        {
-            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(new[]
+            _service.Setup(a => a.GetLatest()).Returns(new[]
                 {new Status(), new Status()});
 
             _refreshEvent.Object.Publish(null);
@@ -193,7 +180,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void SelectedTweetIsRetainedAfterRefresh()
         {
-            _api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(
+            _service.Setup(a => a.GetLatest()).Returns(
                 CreateStatuses(1, 10).ToArray());
 
             _refreshEvent.Object.Publish(true);
@@ -201,7 +188,7 @@ namespace LinqTwit.QueryModule.Tests
             _vm.SelectedTweet = _vm.Tweets[5];
             Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo(6));
 
-            _api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(
+            _service.Setup(a => a.GetLatest()).Returns(
                 CreateStatuses(3, 13).ToArray());
 
             var tester = new PropertyChangedTester<QueryResultsViewModel>(_vm);
@@ -287,7 +274,7 @@ namespace LinqTwit.QueryModule.Tests
             _refreshEvent.Object.Publish(null);
 
             // 1 for the initial call in GetStatuses()
-            _api.Verify(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>()), Times.Exactly(1));
+            _service.Verify(a => a.GetLatest(), Times.Exactly(1));
         }
 
         [Test]
@@ -316,12 +303,12 @@ namespace LinqTwit.QueryModule.Tests
         
         private void TestRefresh(int count)
         {
-            SetupFriendsTimelineCall();
+            SetupGetLatestCall();
 
             _refreshEvent.Object.Publish(null);
 
             // + 1 to account for the initial call to FriendsTimeLine
-            this._api.Verify(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>()), 
+            _service.Verify(a => a.GetLatest(), 
                 Times.Exactly(count));
         }
 
@@ -332,14 +319,14 @@ namespace LinqTwit.QueryModule.Tests
 
         private void GetStatuses()
         {
-            SetupFriendsTimelineCall();
+            SetupGetLatestCall();
 
             _refreshEvent.Object.Publish(true);
         }
 
-        private void SetupFriendsTimelineCall()
+        private void SetupGetLatestCall()
         {
-            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).Returns(new[] { new Status { Text = "tweet 1" }, new Status { Text = "tweet 2" } });
+            _service.Setup(a => a.GetLatest()).Returns(new[] { new Status { Text = "tweet 1" }, new Status { Text = "tweet 2" } });
         }
     }
 }

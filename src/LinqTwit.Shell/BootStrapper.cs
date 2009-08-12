@@ -10,6 +10,7 @@ using LinqTwit.Common;
 using LinqTwit.Core;
 using LinqTwit.Infrastructure;
 using LinqTwit.Infrastructure.ApplicationServices;
+using LinqTwit.Linq;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Modularity;
 using Microsoft.Practices.Composite.Presentation.Commands;
@@ -85,6 +86,7 @@ namespace LinqTwit.Shell
                 x.AddRegistry<InfrastructureRegistry>();
                 x.AddRegistry<CommonRegistry>();
                 x.AddRegistry<CoreRegistry>();
+                x.AddRegistry<LinqRegistry>();
             });
 
         }

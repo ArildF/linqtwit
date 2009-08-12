@@ -23,7 +23,7 @@ namespace LinqTwit.Linq.Tests
         public void SetUp()
         {
             _api = _factory.Create<ILinqApi>();
-            _queryable = new Twitter(_api.Object).Tweets;
+            _queryable = new Twitter(_api.Object).FriendsTimeLine;
         }
 
         [Test]

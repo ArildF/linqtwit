@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Input;
 using LinqTwit.Common;
+using LinqTwit.Core;
 using LinqTwit.Infrastructure;
 using LinqTwit.Twitter;
 using Microsoft.Practices.Composite.Events;
@@ -19,29 +20,25 @@ namespace LinqTwit.QueryModule.ViewModels
     public class QueryResultsViewModel : ViewModelBase, IQueryResultsViewModel
     {
         private readonly IEventAggregator _aggregator;
-        private readonly ILinqApi api;
+        private readonly ITimeLineService _service;
         private TweetViewModel selectedTweet;
         private readonly IAsyncManager asyncManager;
         private IList<MenuViewModel> _contextMenu;
         private ICommand _editCommand;
         private ICommand _cancelEditCommand;
 
-        public QueryResultsViewModel(string caption, IQueryResultsView view, IEventAggregator aggregator, ILinqApi api, 
+        public QueryResultsViewModel(string caption, IQueryResultsView view, IEventAggregator aggregator, ITimeLineService service, 
             IAsyncManager asyncManager, ContextMenuRoot menu)
         {
             this._aggregator = aggregator;
+            _service = service;
             this.asyncManager = asyncManager;
-            this.api = api;
             Caption = caption;
             View = view;
 
             View.DataContext = this;
 
             this.Tweets = new ObservableCollection<TweetViewModel>();
-
-            this._aggregator.GetEvent<QuerySubmittedEvent>().Subscribe(
-                QuerySubmitted);
-
 
             this._aggregator.GetEvent<RefreshEvent>().Subscribe(Refresh//,  
                 ,ThreadOption.UIThread, true,
@@ -118,22 +115,9 @@ namespace LinqTwit.QueryModule.ViewModels
 
         private IEnumerable<Action> GetFriendsTimeLineAsync()
         {
-            Status[] statuses = null;
-            yield return () => statuses = this.api.FriendsTimeLine(new TimeLineArgs());
+            IEnumerable<Status> statuses = null;
+            yield return () => statuses = this._service.GetLatest();
             this.SetStatuses(statuses);
-        }
-
-        private void QuerySubmitted(string query)
-        {
-            asyncManager.RunAsync(GetUserTimeLine(query));
-
-        }
-
-        private IEnumerable<Action> GetUserTimeLine(string query)
-        {
-            Status[] statuses = null;
-            yield return () => statuses = this.api.UserTimeLine(query, new TimeLineArgs());
-            SetStatuses(statuses);
         }
 
         private void SetStatuses(IEnumerable<Status> statuses)

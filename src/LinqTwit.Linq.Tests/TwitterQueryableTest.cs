@@ -17,7 +17,8 @@ namespace LinqTwit.Linq.Tests
         {
             _api = _factory.Create<ILinqApi>();
 
-            _queryable = new TwitterQueryable<IUser>(_api.Object);
+            ILinqApi linqApi = _api.Object;
+            _queryable = new TwitterQueryable<IUser>(new TwitterQueryProvider(() => new TwitterQuery(linqApi)));
         }
 
         [Test]

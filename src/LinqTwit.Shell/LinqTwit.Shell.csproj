@@ -172,6 +172,10 @@
       <Project>{87F39058-B8F1-4B40-807D-ECD77037E012}</Project>
       <Name>LinqTwit.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LinqTwit.Linq\LinqTwit.Linq.csproj">
+      <Project>{6E738C49-89BB-4DC6-8B26-2899D191047B}</Project>
+      <Name>LinqTwit.Linq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LinqTwit.QueryModule\LinqTwit.QueryModule.csproj">
       <Project>{0430DCA8-9C0C-49B4-ADCB-DD52DE62A41C}</Project>
       <Name>LinqTwit.QueryModule</Name>

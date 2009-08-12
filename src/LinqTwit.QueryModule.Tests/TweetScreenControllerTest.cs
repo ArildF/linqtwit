@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LinqTwit.Core;
 using LinqTwit.Infrastructure;
 using LinqTwit.QueryModule.Controllers;
 using LinqTwit.TestUtilities;
@@ -39,11 +40,14 @@ namespace LinqTwit.QueryModule.Tests
         public void CreatesDefaultViewWhenLoggedIn()
         {
             var viewModel = GetMock<IQueryResultsViewModel>();
-            _screenFactory.Setup(f => f.Create("Default")).Returns(viewModel.Object);
+            var timeLine =
+                GetMock<ITimeLineFactory>().Object.CreateFriendsTimeLine();
+
+            _screenFactory.Setup(f => f.Create("Main timeline", timeLine)).Returns(viewModel.Object);
 
             _authorizationEvent.Object.Publish(true);
 
-            _screenFactory.Verify(f => f.Create("Default"));
+            _screenFactory.Verify(f => f.Create("Main timeline", timeLine));
 
             Mock<IRegion> region = GetMock<IRegion>();
             region.Verify(rf => rf.Add(viewModel.Object.View));

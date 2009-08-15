@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Windows.Data;
 using System.Windows.Input;
 using LinqTwit.Common;
 using LinqTwit.Core;
@@ -21,18 +18,18 @@ namespace LinqTwit.QueryModule.ViewModels
     {
         private readonly IEventAggregator _aggregator;
         private readonly ITimeLineService _service;
-        private TweetViewModel selectedTweet;
-        private readonly IAsyncManager asyncManager;
-        private IList<MenuViewModel> _contextMenu;
-        private ICommand _editCommand;
-        private ICommand _cancelEditCommand;
+        private TweetViewModel _selectedTweet;
+        private readonly IAsyncManager _asyncManager;
+        private readonly IList<MenuViewModel> _contextMenu;
+        private readonly ICommand _editCommand;
+        private readonly ICommand _cancelEditCommand;
 
         public QueryResultsViewModel(string caption, IQueryResultsView view, IEventAggregator aggregator, ITimeLineService service, 
             IAsyncManager asyncManager, ContextMenuRoot menu)
         {
             this._aggregator = aggregator;
             _service = service;
-            this.asyncManager = asyncManager;
+            this._asyncManager = asyncManager;
             Caption = caption;
             View = view;
 
@@ -106,7 +103,7 @@ namespace LinqTwit.QueryModule.ViewModels
 
         private void ExtendToOlder()
         {
-            asyncManager.RunAsync(ExtendToOlder(SelectedTweet));
+            _asyncManager.RunAsync(ExtendToOlder(SelectedTweet));
         }
 
         private IEnumerable<Action> ExtendToOlder(TweetViewModel tweet)
@@ -127,7 +124,7 @@ namespace LinqTwit.QueryModule.ViewModels
 
         private void GetFriendsTimeLine()
         {
-            this.asyncManager.RunAsync(GetFriendsTimeLineAsync());
+            this._asyncManager.RunAsync(GetFriendsTimeLineAsync());
         }
 
         private IEnumerable<Action> GetFriendsTimeLineAsync()
@@ -179,27 +176,21 @@ namespace LinqTwit.QueryModule.ViewModels
             private set;
         }
 
-        private ObservableCollection<TweetViewModel> _tweets;
-
-        public ObservableCollection<TweetViewModel> Tweets
-        {
-            get { return _tweets; }
-            private set { _tweets = value; }
-        }
+        public ObservableCollection<TweetViewModel> Tweets { get; private set; }
 
         public TweetViewModel SelectedTweet
         {
             get
             {
-                return this.selectedTweet;
+                return this._selectedTweet;
             }
             set
             {
-                if (selectedTweet != value)
+                if (_selectedTweet != value)
                 {
                     CancelEdit(null);
 
-                    selectedTweet = value;
+                    _selectedTweet = value;
                     this.OnPropertyChanged(p => p.SelectedTweet);
 
                     this._aggregator.GetEvent<SelectedTweetChangedEvent>()

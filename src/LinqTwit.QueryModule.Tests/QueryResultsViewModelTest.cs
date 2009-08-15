@@ -194,8 +194,9 @@ namespace LinqTwit.QueryModule.Tests
             var tester = new PropertyChangedTester<QueryResultsViewModel>(_vm);
             _refreshEvent.Object.Publish(null);
 
-            Assert.That(tester.PropertyChanged(p => p.SelectedTweet), Is.True);
             Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo(6));
+            Assert.That(tester.PropertyChanged(p => p.SelectedTweet), Is.True);
+
         }
 
         [Test]
@@ -287,6 +288,26 @@ namespace LinqTwit.QueryModule.Tests
             Assert.That(_vm.Caption, Is.EqualTo(DefaultCaption));
         }
 
+        [Test]
+        public void GetsOlderWhenMovingPastLastItem()
+        {
+            GetStatuses();
+
+            var last = _vm.Tweets.Last();
+
+            _vm.SelectedTweet = _vm.Tweets.Last();
+
+            var older = CreateStatuses(3, 4).ToArray();
+
+            _service.Setup(s => s.GetOlder(last.Status)).Returns(older);
+
+            ExecuteMovedown();
+
+            _service.Verify(s => s.GetOlder(last.Status));
+
+            Assert.That(_vm.SelectedTweet.Status, Is.SameAs(older.First()));
+        }
+
 
 
         private static IEnumerable<Status> CreateStatuses(int from, int to)
@@ -296,14 +317,14 @@ namespace LinqTwit.QueryModule.Tests
                 yield return new Status
                 {
                         Id = i,
-                        Text = "Some text"
+                        Text = "Some text for status " + i,
                 };
             }
         }
         
         private void TestRefresh(int count)
         {
-            SetupGetLatestCall();
+            SetupGetLatestCall(new[] { new Status { Text = "tweet 1" }, new Status { Text = "tweet 2" } });
 
             _refreshEvent.Object.Publish(null);
 
@@ -319,14 +340,14 @@ namespace LinqTwit.QueryModule.Tests
 
         private void GetStatuses()
         {
-            SetupGetLatestCall();
+            SetupGetLatestCall(CreateStatuses(1, 2));
 
             _refreshEvent.Object.Publish(true);
         }
 
-        private void SetupGetLatestCall()
+        private void SetupGetLatestCall(IEnumerable<Status> statuses)
         {
-            _service.Setup(a => a.GetLatest()).Returns(new[] { new Status { Text = "tweet 1" }, new Status { Text = "tweet 2" } });
+            _service.Setup(a => a.GetLatest()).Returns(statuses);
         }
     }
 }

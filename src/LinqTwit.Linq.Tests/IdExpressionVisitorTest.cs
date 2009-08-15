@@ -39,10 +39,10 @@ namespace LinqTwit.Linq.Tests
         [Test]
         public void LocalVariable()
         {
-            const int local = 1234;
+            int local = new Random().Next();
             Visit(tweet => tweet.Id == local);
 
-            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(local));
         }
 
         private int Field = 1234;
@@ -63,6 +63,28 @@ namespace LinqTwit.Linq.Tests
             Visit(tweet => tweet.Id == StaticField);
 
             Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(1234));
+        }
+
+        [Test]
+        public void GreaterThanPropertyOfLocal()
+        {
+            Status status = new Status {Id = 12345};
+
+            Visit(tweet => tweet.Id >= status.Id);
+
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(12345));
+
+        }
+
+        [Test]
+        public void EqualsPropertyOfLocal()
+        {
+            Status status = new Status { Id = 12345 };
+
+            Visit(tweet => tweet.Id == status.Id);
+
+            Assert.That(this._visitor.Expressions[0].Right.As<long>(), Is.EqualTo(12345));
+
         }
 
         private int AProperty { get; set; }

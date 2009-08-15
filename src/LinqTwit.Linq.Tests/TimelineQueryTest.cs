@@ -40,6 +40,16 @@ namespace LinqTwit.Linq.Tests
             Assert.That(args.SinceId, Is.EqualTo(12345));
         }
 
+        [Test]
+        public void SinceIdFromNonLocal()
+        {
+            Status oldStatus = new Status {Id = 12345};
+
+            var args = GetArgs(from t in this._source where t.Id >= oldStatus.Id select t);
+
+            Assert.That(args.SinceId, Is.EqualTo(12345));
+        }
+
         [Test] 
         public void MaxId()
         {

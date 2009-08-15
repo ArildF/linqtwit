@@ -61,19 +61,10 @@ namespace LinqTwit.Linq
 
         protected virtual Expression VisitBinaryExpression(BinaryExpression expression)
         {
-            switch(expression.NodeType)
-            {
-                case ExpressionType.And:
-                case ExpressionType.AndAlso:
-                case ExpressionType.Or:
-                case ExpressionType.OrElse:
-                case ExpressionType.Equal:
-                    return Expression.MakeBinary(
+           return Expression.MakeBinary(
                         expression.NodeType,
                         Visit(expression.Left),
                         Visit(expression.Right));
-            }
-            return expression;
         }
 
         protected virtual Expression VisitCall(MethodCallExpression expr)

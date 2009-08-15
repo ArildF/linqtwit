@@ -20,5 +20,17 @@ namespace LinqTwit.Core
         {
             return (from status in _queryable select status).ToArray();
         }
+
+        public IEnumerable<Status> GetOlder(Status status)
+        {
+            long olderThanId = status.Id;
+            var statuses = (from s in _queryable where s.Id <= olderThanId select s).ToArray();
+            if (statuses.First().Id == status.Id)
+            {
+                return statuses.Skip(1);
+            }
+
+            return statuses;
+        }
     }
 }

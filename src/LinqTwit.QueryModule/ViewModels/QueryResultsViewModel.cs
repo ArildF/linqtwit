@@ -95,9 +95,26 @@ namespace LinqTwit.QueryModule.ViewModels
 
         private void MoveDown(object obj)
         {
+            if (this.SelectedIndex == this.Tweets.Count - 1)
+            {
+                ExtendToOlder();
+            }
             this.SelectedIndex = this.SelectedIndex < (this.Tweets.Count - 1)
                                      ? this.SelectedIndex + 1
                                      : this.SelectedIndex;
+        }
+
+        private void ExtendToOlder()
+        {
+            asyncManager.RunAsync(ExtendToOlder(SelectedTweet));
+        }
+
+        private IEnumerable<Action> ExtendToOlder(TweetViewModel tweet)
+        {
+            IEnumerable<Status> olderStatuses = null;
+            yield return () => olderStatuses = _service.GetOlder(tweet.Status);
+
+            AppendStatuses(olderStatuses, tweet);
         }
 
         private void MoveUp(object obj)
@@ -125,6 +142,11 @@ namespace LinqTwit.QueryModule.ViewModels
             var previousSelected = this.SelectedTweet;
 
             this.Tweets.Clear();
+            AppendStatuses(statuses, previousSelected);
+        }
+
+        private void AppendStatuses(IEnumerable<Status> statuses, TweetViewModel previousSelected)
+        {
             statuses.Select(s => new TweetViewModel(s)).ForEach(this.Tweets.Add);
 
             var newSelected = this.Tweets.Count > 0 ? this.Tweets[0] : null;
@@ -158,6 +180,7 @@ namespace LinqTwit.QueryModule.ViewModels
         }
 
         private ObservableCollection<TweetViewModel> _tweets;
+
         public ObservableCollection<TweetViewModel> Tweets
         {
             get { return _tweets; }

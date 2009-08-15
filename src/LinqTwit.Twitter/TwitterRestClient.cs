@@ -23,7 +23,7 @@ namespace LinqTwit.Twitter
 
         Status[] ILinqApi.FriendsTimeLine(TimeLineArgs args)
         {
-            return FriendsTimeLine().ToArray();
+            return ((TwitterRestClient) this).FriendsTimeLine(args).ToArray();
         }
 
         public void SetCredentials(string user, string pass)

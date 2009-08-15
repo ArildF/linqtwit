@@ -186,16 +186,15 @@ namespace LinqTwit.QueryModule.ViewModels
             }
             set
             {
-                if (_selectedTweet != value)
-                {
-                    CancelEdit(null);
+                if (_selectedTweet == value) return;
 
-                    _selectedTweet = value;
-                    this.OnPropertyChanged(p => p.SelectedTweet);
+                CancelEdit(null);
 
-                    this._aggregator.GetEvent<SelectedTweetChangedEvent>()
-                        .Publish(value != null ? value.Status : null);
-                }
+                _selectedTweet = value;
+                this.OnPropertyChanged(p => p.SelectedTweet);
+
+                this._aggregator.GetEvent<SelectedTweetChangedEvent>()
+                    .Publish(value != null ? value.Status : null);
             }
         }
 

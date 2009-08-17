@@ -42,15 +42,23 @@
     <Border BorderThickness="3" BorderBrush="SteelBlue" CornerRadius="5" Background="Black" >
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="5*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ContentControl Grid.Column="0" Grid.Row="1" cal:RegionManager.RegionName="QueryEntry" Background="AliceBlue"/>
-            <TabControl Grid.Column="0" Grid.Row="0" cal:RegionManager.RegionName="QueryResults" 
+            <Border Grid.Row="0" Grid.Column="0" Background="SteelBlue" BorderBrush="Black" BorderThickness="1"
+                    behaviors:ControlBehaviors.DragsWindow="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                            AncestorType={x:Type Window}}}">
+                <TextBlock>LinqTwit</TextBlock>
+            </Border>
+            
+            <TabControl Grid.Column="0" Grid.Row="1" cal:RegionManager.RegionName="QueryResults" 
                         ItemContainerStyle="{StaticResource MainModuleTabHeader}">
+                <ContentControl Grid.Column="0" Grid.Row="2" cal:RegionManager.RegionName="QueryEntry" Background="AliceBlue"/>
+         
             </TabControl>
 
         </Grid>

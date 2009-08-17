@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="ApplicationServices\CredentialsStore.cs" />
     <Compile Include="AsyncManager.cs" />
+    <Compile Include="Behaviors\ControlBehaviors.cs" />
     <Compile Include="Behaviors\DialogRegionBehavior.cs" />
     <Compile Include="Behaviors\DialogRegionBehaviors.cs" />
     <Compile Include="Behaviors\RichTextBoxBehavior.cs" />

@@ -28,7 +28,6 @@ namespace LinqTwit.Shell
 
         private void Handler(object sender, CanExecuteRoutedEventArgs args)
         {
-            
         }
 
         public void ShowView()

@@ -4,15 +4,13 @@
     xmlns:cal="clr-namespace:Microsoft.Practices.Composite.Presentation.Regions;assembly=Prism"
     xmlns:behaviors="clr-namespace:LinqTwit.Infrastructure.Behaviors;assembly=LinqTwit.Infrastructure"
     xmlns:Infrastructure="clr-namespace:LinqTwit.Infrastructure;assembly=LinqTwit.Infrastructure"
-    Title="ShellView" Height="530" Width="431"
+    Title="ShellView" Height="650" Width="400"
     behaviors:DialogRegionBehaviors.DialogWindowStyle="{StaticResource DialogWindowStyle}"
         behaviors:DialogRegionBehaviors.DialogRegionName="DialogRegion" 
         ShowInTaskbar="True"
         WindowStyle="None"
         Opacity="0.98"
-        WindowStartupLocation="CenterScreen"
         Background="Transparent"
-        
         AllowsTransparency="True"
         >
     
@@ -43,7 +41,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="5*"/>
+                <RowDefinition Height="6*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>

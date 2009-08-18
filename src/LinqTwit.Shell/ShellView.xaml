@@ -57,9 +57,11 @@
             
             <TabControl Grid.Column="0" Grid.Row="1" cal:RegionManager.RegionName="QueryResults" 
                         ItemContainerStyle="{StaticResource MainModuleTabHeader}">
-                <ContentControl Grid.Column="0" Grid.Row="2" cal:RegionManager.RegionName="QueryEntry" Background="AliceBlue"/>
          
             </TabControl>
+
+            <ContentControl Grid.Column="0" Grid.Row="2" cal:RegionManager.RegionName="QueryEntry" Background="AliceBlue"/>
+
 
         </Grid>
     </Border>

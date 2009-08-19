@@ -7,5 +7,6 @@ namespace LinqTwit.Core
     {
         IEnumerable<Status> GetLatest();
         IEnumerable<Status> GetOlder(Status status);
+        IEnumerable<Status> GetNewer(Status status);
     }
 }

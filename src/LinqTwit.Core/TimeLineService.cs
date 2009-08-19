@@ -32,5 +32,20 @@ namespace LinqTwit.Core
 
             return statuses;
         }
+
+        public IEnumerable<Status> GetNewer(Status status)
+        {
+            long newerThanId = status.Id;
+            var statuses =
+                (from s in _queryable where s.Id >= newerThanId select s).
+                    ToArray();
+
+            if (statuses.Any() && statuses.Last().Id == status.Id)
+            {
+                return statuses.Take(statuses.Count() - 1);
+            }
+
+            return statuses;
+        }
     }
 }

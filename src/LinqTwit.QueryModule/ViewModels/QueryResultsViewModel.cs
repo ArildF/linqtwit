@@ -111,7 +111,7 @@ namespace LinqTwit.QueryModule.ViewModels
             IEnumerable<Status> olderStatuses = null;
             yield return () => olderStatuses = _service.GetOlder(tweet.Status);
 
-            AppendStatuses(olderStatuses, tweet);
+            WhileRetainingSelectedTweet(() => AppendStatuses(olderStatuses));
         }
 
         private void MoveUp(object obj)
@@ -130,21 +130,30 @@ namespace LinqTwit.QueryModule.ViewModels
         private IEnumerable<Action> GetFriendsTimeLineAsync()
         {
             IEnumerable<Status> statuses = null;
-            yield return () => statuses = this._service.GetLatest();
-            this.SetStatuses(statuses);
+            var firstTweet = this.Tweets.FirstOrDefault();
+
+            if (firstTweet == null)
+            {
+                yield return () => statuses = _service.GetLatest();
+
+                SetStatuses(statuses);
+
+                SelectedTweet = Tweets.FirstOrDefault();
+            }
+            else
+            {
+                yield return
+                    () => statuses = _service.GetNewer(firstTweet.Status);
+
+                WhileRetainingSelectedTweet(() => PrependStatuses(statuses));
+            }
         }
 
-        private void SetStatuses(IEnumerable<Status> statuses)
+        private void WhileRetainingSelectedTweet(Action action)
         {
             var previousSelected = this.SelectedTweet;
 
-            this.Tweets.Clear();
-            AppendStatuses(statuses, previousSelected);
-        }
-
-        private void AppendStatuses(IEnumerable<Status> statuses, TweetViewModel previousSelected)
-        {
-            statuses.Select(s => new TweetViewModel(s)).ForEach(this.Tweets.Add);
+            action();
 
             var newSelected = this.Tweets.Count > 0 ? this.Tweets[0] : null;
             if (previousSelected != null)
@@ -154,6 +163,24 @@ namespace LinqTwit.QueryModule.ViewModels
                         t => t.Status.Id == previousSelected.Status.Id);
             }
             this.SelectedTweet = newSelected;
+        }
+
+        private void PrependStatuses(IEnumerable<Status> statuses)
+        {
+            int i = 0;
+            statuses.ForEach(s => Tweets.Insert(i++, new TweetViewModel(s)));
+        }
+
+        private void SetStatuses(IEnumerable<Status> statuses)
+        {
+            this.Tweets.Clear();
+            AppendStatuses(statuses);
+        }
+
+        private void AppendStatuses(IEnumerable<Status> statuses)
+        {
+            statuses.Select(s => new TweetViewModel(s)).ForEach(this.Tweets.Add);
+            
         }
 
         private int SelectedIndex

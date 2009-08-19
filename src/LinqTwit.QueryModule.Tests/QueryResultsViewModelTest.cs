@@ -88,7 +88,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void SelectedTweet()
         {
-            GetStatuses();
+            GetStatuses(true);
 
             Assert.That(this._vm.SelectedTweet, Is.SameAs(this._vm.Tweets[0]));
         }
@@ -96,7 +96,7 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void CheckPropertyChanged()
         {
-            GetStatuses();
+            GetStatuses(true);
 
             PropertyChangedTester<QueryResultsViewModel> tester =
                 new PropertyChangedTester<QueryResultsViewModel>(this._vm);
@@ -115,8 +115,9 @@ namespace LinqTwit.QueryModule.Tests
             ExecuteMoveUp();
 
             Assert.That(this._vm.SelectedTweet, Is.SameAs(this._vm.Tweets[0]));
-
         }
+
+       
 
         private static void ExecuteMoveUp()
         {
@@ -188,7 +189,7 @@ namespace LinqTwit.QueryModule.Tests
             _vm.SelectedTweet = _vm.Tweets[5];
             Assert.That(_vm.SelectedTweet.Status.Id, Is.EqualTo(6));
 
-            _service.Setup(a => a.GetLatest()).Returns(
+            _service.Setup(a => a.GetNewer(_vm.Tweets[0].Status)).Returns(
                 CreateStatuses(3, 13).ToArray());
 
             var tester = new PropertyChangedTester<QueryResultsViewModel>(_vm);
@@ -275,7 +276,7 @@ namespace LinqTwit.QueryModule.Tests
             _refreshEvent.Object.Publish(null);
 
             // 1 for the initial call in GetStatuses()
-            _service.Verify(a => a.GetLatest(), Times.Exactly(1));
+            _service.Verify(a => a.GetNewer(It.IsAny<Status>()), Times.Never());
         }
 
         [Test]
@@ -308,6 +309,24 @@ namespace LinqTwit.QueryModule.Tests
             Assert.That(_vm.SelectedTweet.Status, Is.SameAs(older.First()));
         }
 
+        [Test]
+        public void GetsNewerWhenRefreshesAfterInitialRefresh()
+        {
+            GetStatuses(true);
+
+            var newStatuses = new[] {new Status{Text = "Frist!"}};
+
+            var currentFirstStatus = _vm.Tweets.First().Status;
+            _service.Setup(s => s.GetNewer(currentFirstStatus)).Returns
+                (newStatuses);
+
+            _refreshEvent.Object.Publish(null);
+
+            Assert.That(_vm.Tweets[0].Status, Is.SameAs(newStatuses[0]));
+
+            _service.Verify();
+        }
+
 
 
         private static IEnumerable<Status> CreateStatuses(int from, int to)
@@ -325,12 +344,22 @@ namespace LinqTwit.QueryModule.Tests
         private void TestRefresh(int count)
         {
             SetupGetLatestCall(new[] { new Status { Text = "tweet 1" }, new Status { Text = "tweet 2" } });
+            if (count > 0)
+            {
+                SetupGetLatestCall(false, new Status[] { new Status { Text = "tweet 3" }, new Status { Text = "tweet 4" } });
+            }
 
             _refreshEvent.Object.Publish(null);
 
-            // + 1 to account for the initial call to FriendsTimeLine
-            _service.Verify(a => a.GetLatest(), 
-                Times.Exactly(count));
+            if (count > 0)
+            {
+                _service.Verify(a => a.GetLatest(), 
+                                Times.Exactly(1));
+            }
+            if (count > 1)
+            {
+                _service.Verify(a => a.GetNewer(It.IsAny<Status>()), Times.Exactly(count -1));
+            }
         }
 
         private static void ExecuteMovedown()
@@ -340,14 +369,31 @@ namespace LinqTwit.QueryModule.Tests
 
         private void GetStatuses()
         {
-            SetupGetLatestCall(CreateStatuses(1, 2));
+            GetStatuses(true);
+        }
+
+        private void GetStatuses(bool initial)
+        {
+            SetupGetLatestCall(initial, CreateStatuses(1, 2));
 
             _refreshEvent.Object.Publish(true);
         }
 
+        private void SetupGetLatestCall(bool initial, IEnumerable<Status> statuses)
+        {
+            if (initial)
+            {
+                _service.Setup(a => a.GetLatest()).Returns(statuses);
+            }
+            else
+            {
+                _service.Setup(a => a.GetNewer(It.IsAny<Status>())).Returns(statuses);
+            }
+        }
+
         private void SetupGetLatestCall(IEnumerable<Status> statuses)
         {
-            _service.Setup(a => a.GetLatest()).Returns(statuses);
+            SetupGetLatestCall(true, statuses);
         }
     }
 }

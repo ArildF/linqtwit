@@ -31,15 +31,24 @@ namespace LinqTwit.QueryModule.Controllers
         {
             if (authorized)
             {
-                ITimeLineService timeLineService =
-                    _timeLineFactory.CreateFriendsTimeLine();
+                var mainView = CreateView(_timeLineFactory.CreateFriendsTimeLine(), "Main timeline" );
+                CreateView(_timeLineFactory.CreateMentionsTimeLine(), "Mentions");
 
-                IQueryResultsViewModel model = _factory.Create("Main timeline", timeLineService);
-                _region.Add(model.View);
-                _region.Activate(model.View);
+                _region.Activate(mainView);
 
                 _refreshEvent.Publish(null);
             }
+        }
+
+        private IQueryResultsView CreateView(ITimeLineService timeLineService, string viewName)
+        {
+            IQueryResultsViewModel vm = _factory.Create(viewName,
+                                                        timeLineService);
+
+            _region.Add(vm.View);
+
+            return vm.View;
+
         }
     }
 }

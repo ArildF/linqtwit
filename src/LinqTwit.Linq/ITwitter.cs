@@ -7,5 +7,6 @@ namespace LinqTwit.Linq
     {
         IQueryable<IUser> Users { get; }
         IQueryable<Status> FriendsTimeLine { get; }
+        IQueryable<Status> MentionsTimeLine { get; }
     }
 }

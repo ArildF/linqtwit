@@ -39,20 +39,8 @@ namespace LinqTwit.QueryModule.Tests
         [Test]
         public void CreatesDefaultViewWhenLoggedIn()
         {
-            var viewModel = GetMock<IQueryResultsViewModel>();
-            var timeLine =
-                GetMock<ITimeLineFactory>().Object.CreateFriendsTimeLine();
-
-            _screenFactory.Setup(f => f.Create("Main timeline", timeLine)).Returns(viewModel.Object);
-
-            _authorizationEvent.Object.Publish(true);
-
-            _screenFactory.Verify(f => f.Create("Main timeline", timeLine));
-
-            Mock<IRegion> region = GetMock<IRegion>();
-            region.Verify(rf => rf.Add(viewModel.Object.View));
-            region.Verify(r => r.Activate(viewModel.Object.View));
-        }
+            var vm = VerifyViewCreatedOnLoggedIn(GetMock<ITimeLineFactory>().Object.CreateFriendsTimeLine(), "Main timeline");
+            GetMock<IRegion>().Verify(r => r.Activate(vm.Object.View));}
 
         [Test]
         public void RefreshesAfterCreate()
@@ -71,6 +59,29 @@ namespace LinqTwit.QueryModule.Tests
             _authorizationEvent.Object.Publish(true);
 
             IQueryResultsView view = GetMock<IQueryResultsViewModel>().Object.View;
+            
+        }
+
+        [Test]
+        public void CreatesMentionsViewWhenLoggedIn()
+        {
+            VerifyViewCreatedOnLoggedIn(GetMock<ITimeLineFactory>().Object.CreateMentionsTimeLine(), "Mentions");
+        }
+
+        private Mock<IQueryResultsViewModel> VerifyViewCreatedOnLoggedIn(ITimeLineService timeLine, string title)
+        {
+            var viewModel = GetMock<IQueryResultsViewModel>();
+
+            _screenFactory.Setup(f => f.Create(title, timeLine)).Returns(viewModel.Object);
+
+            _authorizationEvent.Object.Publish(true);
+
+            _screenFactory.Verify(f => f.Create(title, timeLine));
+
+            Mock<IRegion> region = GetMock<IRegion>();
+            region.Verify(rf => rf.Add(viewModel.Object.View));
+
+            return viewModel;
             
         }
     }

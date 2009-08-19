@@ -185,6 +185,17 @@ namespace LinqTwit.Twitter.Tests
                 });
         }
 
+        [Test]
+        public void MentionsTimeLine()
+        {
+            WithClient(c =>
+            {
+                var args = new TimeLineArgs();
+                var statuses = c.MentionsTimeLine(args);
+
+                Assert.That(statuses, Is.Not.Null);
+            });
+        }
 // ReSharper disable UnusedMember.Local
         private IEnumerable<Func<TwitterRestClient, TimeLineArgs, Statuses>> TimeLineFuncs()
 // ReSharper restore UnusedMember.Local

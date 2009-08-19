@@ -47,6 +47,11 @@ namespace LinqTwit.Twitter
             return Invoke(() => this.Channel.UserTimeLine(user, sinceId, count, maxId, page));
         }
 
+        public Statuses MentionsTimeLine(string sinceId, string count, string maxId, string page)
+        {
+            return Invoke(() => this.Channel.MentionsTimeLine(sinceId, count, maxId, page));
+        }
+
 
         public Statuses FriendsTimeLine()
         {
@@ -55,11 +60,15 @@ namespace LinqTwit.Twitter
 
         public Statuses FriendsTimeLine(TimeLineArgs args)
         {
-            return Invoke(() => this.Channel.FriendsTimeLine(
-                args.SinceId != null ? args.SinceId.ToString() : null,
-                args.Count != null ? args.Count.ToString() : null,
-                args.MaxId != null ? args.MaxId.ToString() : null,
-                args.Page != null ? args.Page.ToString() : null));
+            return Invoke(() => CallFromArgs(args, this.Channel.FriendsTimeLine));
+        }
+
+        private static Statuses CallFromArgs(TimeLineArgs args, Func<string, string, string, string, Statuses> func)
+        {
+            return func(args.SinceId != null ? args.SinceId.ToString() : null,
+                        args.Count != null ? args.Count.ToString() : null,
+                        args.MaxId != null ? args.MaxId.ToString() : null,
+                        args.Page != null ? args.Page.ToString() : null);
         }
 
         private static T Invoke<T>(Func<T> func)
@@ -96,6 +105,11 @@ namespace LinqTwit.Twitter
                                     args.Page != null
                                         ? args.Page.ToString()
                                         : null));
+        }
+
+        public Status[] MentionsTimeLine(TimeLineArgs args)
+        {
+            return Invoke(() => CallFromArgs(args, MentionsTimeLine)).ToArray();
         }
     }
 }

@@ -9,5 +9,6 @@ namespace LinqTwit.Twitter
 
         void SetCredentials(string user, string pass);
         Status Update(string status);
+        Status[] MentionsTimeLine(TimeLineArgs arg);
     }
 }

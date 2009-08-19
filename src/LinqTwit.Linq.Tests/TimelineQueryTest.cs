@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -19,17 +20,25 @@ namespace LinqTwit.Linq.Tests
         private Mock<ILinqApi> _api;
 
         private IQueryable<Status> _source;
+        private Status[] _statusesToReturn;
+        private TimeLineArgs _args;
 
         [SetUp]
         public void SetUp()
         {
             _api = _factory.Create<ILinqApi>();
 
-            this._query = new TimelineQuery(_api.Object);
+            this._query = new TimelineQuery(RetrieveStatuses);
 
             ILinqApi linqApi = _api.Object;
             _source = new TwitterQueryable<Status>(new TwitterQueryProvider(() => new TwitterQuery(linqApi)));
 
+        }
+
+        private Status[] RetrieveStatuses(TimeLineArgs args)
+        {
+            _args = args;
+            return _statusesToReturn;
         }
 
         [Test]
@@ -74,16 +83,13 @@ namespace LinqTwit.Linq.Tests
 
         private TimeLineArgs GetArgs(IQueryable<Status> queryable)
         {
-            TimeLineArgs args = null;
-            this._api.Setup(a => a.FriendsTimeLine(It.IsAny<TimeLineArgs>())).
-                Callback<TimeLineArgs>(a => args = a).Returns(new Status[]{});
-
+            _statusesToReturn = new Status[]{};
             Expression expr = queryable.Expression  ;
 
             var results = (IEnumerable<Status>)this._query.Execute(expr, true);
 
             results.ToArray();
-            return args;
+            return _args;
         }
     }
 }

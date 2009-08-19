@@ -10,11 +10,11 @@ namespace LinqTwit.Linq
 {
     class TimelineQuery : IQuery
     {
-        private readonly ILinqApi _linqApi;
+        private readonly Func<TimeLineArgs, Status[]> _statusFunc;
 
-        public TimelineQuery(ILinqApi linqApi)
+        public TimelineQuery(Func<TimeLineArgs, Status[]> statusFunc)
         {
-            this._linqApi = linqApi;
+            this._statusFunc = statusFunc;
         }
 
         public object Execute(Expression expression, bool isEnumerable)
@@ -26,7 +26,7 @@ namespace LinqTwit.Linq
 
             HandlePageArgs(expression, args);
 
-            return _linqApi.FriendsTimeLine(args); 
+            return _statusFunc(args); 
         }
 
         private void HandlePageArgs(Expression expression, TimeLineArgs args)

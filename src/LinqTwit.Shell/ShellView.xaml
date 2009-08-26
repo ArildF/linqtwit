@@ -12,6 +12,7 @@
         Opacity="0.98"
         Background="Transparent"
         AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip"
         >
     
     <Window.Resources>

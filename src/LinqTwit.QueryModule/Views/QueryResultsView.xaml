@@ -74,7 +74,7 @@
                         </Border>
 
                         <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Path=Created}" 
-                                   HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="8"/>
+                                   HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="10"/>
                         <RichTextBox  Visibility="Collapsed" x:Name="Viewer"
                                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                                                   ScrollViewer.VerticalScrollBarVisibility="Disabled" 
@@ -87,7 +87,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Path=Text}" x:Name="Normal" 
                                    HorizontalAlignment="Left" TextWrapping="Wrap" Visibility="Visible"/>
                         <StackPanel HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" 
-                                    Orientation="Horizontal" FlowDirection="RightToLeft" TextBlock.FontSize="8">
+                                    Orientation="Horizontal" FlowDirection="RightToLeft" TextBlock.FontSize="10" Margin="3">
                             <TextBlock Text="{Binding Path=FullName, Converter={StaticResource userFullNameConverter}}"/>
                             <TextBlock Text="{Binding Path=ScreenName}"/>
                         </StackPanel>

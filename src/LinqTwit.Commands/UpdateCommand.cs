@@ -7,7 +7,7 @@ using LinqTwit.Twitter;
 
 namespace LinqTwit.Commands
 {
-    public class UpdateCommand : CommandBase<string>
+    public class UpdateCommand : CommandBase<UpdateArgs>
     {
         private readonly ILinqApi _api;
         private readonly IAsyncManager _manager;
@@ -18,14 +18,14 @@ namespace LinqTwit.Commands
             _manager = manager;
         }
 
-        public override void Execute(string status)
+        public override void Execute(UpdateArgs status)
         {
             _manager.RunAsync(DoExecute(status));
         }
 
-        private IEnumerable<Action> DoExecute(string status)
+        private IEnumerable<Action> DoExecute(UpdateArgs status)
         {
-            yield return () => _api.Update(status);
+            yield return () => _api.Update(status.Status);
         }
     }
 

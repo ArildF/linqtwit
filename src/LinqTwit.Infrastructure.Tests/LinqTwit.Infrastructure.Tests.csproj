@@ -81,6 +81,7 @@
     <Compile Include="ClipboardService.cs" />
     <Compile Include="Commands\ArgumentParserTest.cs" />
     <Compile Include="Commands\CommandExecutorTest.cs" />
+    <Compile Include="Commands\CommandUIServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

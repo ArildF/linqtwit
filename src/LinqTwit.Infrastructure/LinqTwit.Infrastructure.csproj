@@ -80,14 +80,23 @@
     <Compile Include="Behaviors\RichTextBoxBehavior.cs" />
     <Compile Include="ClipboardService.cs" />
     <Compile Include="Commands\ArgumentParser.cs" />
+    <Compile Include="Commands\CommandArgumentParserResolver.cs" />
     <Compile Include="Commands\CommandExecutor.cs" />
     <Compile Include="Commands\CommandInvokedEvent.cs" />
+    <Compile Include="Commands\CommandUIService.cs" />
     <Compile Include="Commands\IArgumentParser.cs" />
+    <Compile Include="Commands\ICommandArgumentParser.cs" />
+    <Compile Include="Commands\ICommandArgumentParserResolver.cs" />
     <Compile Include="Commands\ICommandExecutor.cs" />
+    <Compile Include="Commands\ICommandUIHandler.cs" />
+    <Compile Include="Commands\ICommandUIService.cs" />
+    <Compile Include="Commands\IUIHandlerResolver.cs" />
+    <Compile Include="Commands\UIHandlerResolver.cs" />
     <Compile Include="ContextMenuRoot.cs" />
     <Compile Include="CustomKeyBinding.cs" />
     <Compile Include="CustomKeyBindingsCollection.cs" />
     <Compile Include="DataResource.cs" />
+    <Compile Include="DialogService.cs" />
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>

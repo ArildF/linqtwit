@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using LinqTwit.Infrastructure;
+using LinqTwit.Infrastructure.Commands;
 using StructureMap.Configuration.DSL;
 
 namespace LinqTwit.Commands
@@ -24,6 +25,9 @@ namespace LinqTwit.Commands
             Scan(s =>
                 {
                     s.TheCallingAssembly();
+                    s.WithDefaultConventions();
+                    s.ConnectImplementationsToTypesClosing(typeof(ICommandUIHandler<>));
+                    s.ConnectImplementationsToTypesClosing(typeof(ICommandArgumentParser<>));
                     s.AddAllTypesOf<ICommand>();
                 });
 

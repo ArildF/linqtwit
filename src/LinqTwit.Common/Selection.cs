@@ -10,7 +10,6 @@ namespace LinqTwit.Common
         {
             aggregator.GetEvent<SelectedTweetChangedEvent>().Subscribe(
                 SelectedTweetChanged);
-
         }
 
         private void SelectedTweetChanged(Status obj)

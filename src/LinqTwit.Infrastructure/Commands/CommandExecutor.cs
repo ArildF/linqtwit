@@ -11,14 +11,16 @@ namespace LinqTwit.Infrastructure.Commands
     {
         private readonly IServiceLocator _locator;
         private readonly IArgumentParser _parser;
+        private readonly ICommandUIService _commandUIService;
         private readonly Dictionary<string, ICommand> _commands;
         private readonly IList<string> _prefixes = new List<string>();
         private readonly IList<string> _suffixes = new List<string>();
 
-        public CommandExecutor(IServiceLocator locator, IArgumentParser parser)
+        public CommandExecutor(IServiceLocator locator, IArgumentParser parser, ICommandUIService commandUIService)
         {
             this._locator = locator;
             _parser = parser;
+            _commandUIService = commandUIService;
 
             this._commands = this._locator.GetAllInstances<ICommand>().ToDictionary(
                 c => c.GetType().FullName.ToLowerInvariant());
@@ -33,12 +35,25 @@ namespace LinqTwit.Infrastructure.Commands
             if (command != null)
             {
                 object argument = _parser.ResolveArguments(command, tuple.Second);
+                bool handledByUI = TryHandleByUI(command, argument);
+
                 if (command.CanExecute(argument))
                 {
                     command.Execute(argument);
                 }
             }
 
+        }
+
+        private bool TryHandleByUI(ICommand command, object argument)
+        {
+            var methodInfo = _commandUIService.GetType().GetMethod("Handle")
+                .MakeGenericMethod(command.GetType(), argument.GetType());
+
+            object retval = methodInfo.Invoke(_commandUIService,
+                                              new[] {command, argument});
+
+            return false;
         }
 
         private static Tuple<string, string> SplitToCommandAndArguments(string commandString)

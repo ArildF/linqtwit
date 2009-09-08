@@ -9,20 +9,36 @@ namespace LinqTwit.Infrastructure.Commands
 {
     public class ArgumentParser : IArgumentParser
     {
+        private readonly ICommandArgumentParserResolver _resolver;
+
+        public ArgumentParser(ICommandArgumentParserResolver resolver)
+        {
+            _resolver = resolver;
+        }
+
         public object ResolveArguments(ICommand cmd, string commandLine)
         {
             return
                 TryResolveArguments(cmd, commandLine).FirstOrDefault(o => o != null);
         }
 
-        private static IEnumerable<object> TryResolveArguments(ICommand command, string line)
+        private IEnumerable<object> TryResolveArguments(ICommand command, string line)
         {
             if (line == null)
             {
                 yield return null;
             }
 
+            yield return TryResolveFromSpecificParser(command, line);
             yield return TryResolveAsString(command, line);
+
+        }
+
+        private object TryResolveFromSpecificParser(ICommand command, string line)
+        {
+            Type genericCommandType = FindGenericCommandType(command);
+
+            return _resolver.TryParse(genericCommandType, line);
         }
 
         private static object TryResolveAsString(ICommand command, string line)

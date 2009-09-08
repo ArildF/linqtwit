@@ -21,7 +21,7 @@ using IDispatcherFacade=LinqTwit.Infrastructure.IDispatcherFacade;
 
 namespace LinqTwit.Shell
 {
-    class BootStrapper : StructureMapBootstrapper
+    public class BootStrapper : StructureMapBootstrapper
     {
         protected override DependencyObject CreateShell()
         {

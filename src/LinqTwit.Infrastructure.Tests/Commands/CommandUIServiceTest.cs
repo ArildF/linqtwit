@@ -24,7 +24,7 @@ namespace LinqTwit.Infrastructure.Tests.Commands
             var resolver = _factory.Create<IUIHandlerResolver>();
 
             resolver.Setup(r => r.ResolveHandler(It.IsAny<ICommand>(), It.IsAny<object>())).Returns(
-                (ICommandUIHandler)null);
+                (ICommandUIHandler<ICommand>)null);
         }
 
         [Test]
@@ -43,13 +43,13 @@ namespace LinqTwit.Infrastructure.Tests.Commands
     [TestFixture]
     public class when_suitable_handler_found : TestBase
     {
-        private Mock<ICommandUIHandler> _handler;
+        private Mock<ICommandUIHandler<ICommand>> _handler;
 
         protected override void OnSetup()
         {
             var resolver = GetMock<IUIHandlerResolver>();
 
-            _handler = GetMock<ICommandUIHandler>();
+            _handler = GetMock<ICommandUIHandler<ICommand>>();
 
             resolver.Setup(r => r.ResolveHandler(It.IsAny<ICommand>(), It.IsAny<object>())).Returns(
                 _handler.Object);

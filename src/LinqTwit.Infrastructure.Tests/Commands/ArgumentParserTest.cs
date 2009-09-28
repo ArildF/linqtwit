@@ -11,17 +11,25 @@ namespace LinqTwit.Infrastructure.Tests.Commands
     {
         private ArgumentParser _parser;
         private Mock<ICommand> _cmd;
+        private Mock<ICommandArgumentParserResolver> _resolver;
 
         protected override void OnSetup()
         {
-            _cmd = _factory.Create<ICommand>();
-            _parser = new ArgumentParser();
+            _cmd = GetMock<ICommand>();
+            _resolver = GetMock<ICommandArgumentParserResolver>();
+
+            _parser = Create<ArgumentParser>();
+            
         }
 
         [Test]
         public void ReturnsNullOnNullCommandString()
         {
+            _resolver.Setup(r => r.TryParse(null, It.IsAny<string>())).Returns
+                <object>(null);
+
             var obj = _parser.ResolveArguments(_cmd.Object, null);
+            
             Assert.That(obj, Is.Null);
         }
 
@@ -29,11 +37,12 @@ namespace LinqTwit.Infrastructure.Tests.Commands
         public void ReturnsStringIfCommandIsGenericOnString()
         {
             var cmd = _factory.Create<ICommand<string>>();
+            _resolver.Setup(r => r.TryParse(typeof (string), It.IsAny<string>()))
+                .Returns<object>(null);
+
             var obj = _parser.ResolveArguments(cmd.Object, "this is a string");
 
             Assert.That(obj, Is.EqualTo("this is a string"));
-
-
         }
     }
 }

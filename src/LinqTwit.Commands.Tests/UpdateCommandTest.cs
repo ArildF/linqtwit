@@ -22,13 +22,13 @@ namespace LinqTwit.Commands.Tests
         [Test]
         public void CanExecute()
         {
-            Assert.That(_cmd.CanExecute(""), Is.True);
+            Assert.That(_cmd.CanExecute(new UpdateArgs("")), Is.True);
         }
 
         [Test]
         public void UpdatesOnExecuted()
         {
-            _cmd.Execute("This is a test update");
+            _cmd.Execute(new UpdateArgs("This is a test update"));
 
             _linqApi.Verify(a => a.Update("This is a test update"));
         }

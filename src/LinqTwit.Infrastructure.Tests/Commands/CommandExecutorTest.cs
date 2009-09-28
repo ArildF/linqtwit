@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using LinqTwit.Infrastructure.Commands;
+using LinqTwit.TestUtilities;
 using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using Moq;
@@ -11,7 +12,8 @@ using Moq;
 namespace LinqTwit.Infrastructure.Tests.Commands
 {
     [TestFixture]
-    public class CommandExecutorTest
+    public class CommandExecutorTest : TestBase
+
     {
         private CommandExecutor _commandExecutor;
         private readonly MockFactory _factory =
@@ -20,10 +22,11 @@ namespace LinqTwit.Infrastructure.Tests.Commands
 
         private Mock<IServiceLocator> _locator;
         private Mock<IArgumentParser> _parser;
+        private Mock<ICommandUIService> _service;
         private IEnumerable<ICommand> _commands;
         private MooCommand _command;
 
-        private string _mooCommandFullName = typeof (MooCommand).FullName;
+        private readonly string _mooCommandFullName = typeof (MooCommand).FullName;
 
         private CommandExecutor CommandExecutor
         {
@@ -31,9 +34,9 @@ namespace LinqTwit.Infrastructure.Tests.Commands
             {
                 if (_commandExecutor == null)
                 {
-                    _commandExecutor = new CommandExecutor(_locator.Object, _parser.Object);
+                    _commandExecutor = new CommandExecutor(_locator.Object, _parser.Object, _service.Object);
                 }
-                return this._commandExecutor;
+                return _commandExecutor;
             }
         }
 
@@ -43,6 +46,7 @@ namespace LinqTwit.Infrastructure.Tests.Commands
         {
             _locator = _factory.Create<IServiceLocator>();
             _parser = _factory.Create<IArgumentParser>();
+            _service = _factory.Create<ICommandUIService>();
 
             _command = new MooCommand();
             _commands = new[] { this._command };

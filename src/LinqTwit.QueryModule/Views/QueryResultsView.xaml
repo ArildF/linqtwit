@@ -21,7 +21,7 @@
         <Style x:Key="borderStyle">
             <Setter Property="Border.BorderBrush" Value="Black"/>
             <Setter Property="Border.BorderThickness" Value="1"/>
-            <Setter Property="Border.Background" Value="SteelBlue"/>
+            <Setter Property="Border.Background" Value="AliceBlue"/>
             <Setter Property="Border.CornerRadius" Value="5,5,5,5"/>
         </Style>
         <ValueConverters:UserFullNameConverter x:Key="userFullNameConverter"/>
@@ -52,6 +52,7 @@
                 </ContextMenu.ItemTemplate>
             </ContextMenu>
         </ListBox.ContextMenu>
+        
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Border Style="{StaticResource borderStyle}" Margin="3" Padding="3">
@@ -102,7 +103,7 @@
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
-                
+            
         </ListBox.ItemTemplate>
     </ListBox>
 

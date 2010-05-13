@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.ServiceModel.Web;
+using DevDefined.OAuth.Consumer;
+using DevDefined.OAuth.Framework;
 using NUnit.Framework;
 
 namespace LinqTwit.Twitter.Tests
@@ -12,19 +15,20 @@ namespace LinqTwit.Twitter.Tests
     {
         private const string KnownStatusId = "1376755488";
         private string _currentStatusId;
-        private string _username;
-        private string _password;
+        private IToken _token;
+        private OAuthCredentials _credentials;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
             var credentialsFile =
-                Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\credentials.txt");
+                Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\creds");
             if (File.Exists(credentialsFile))
             {
-                var lines = File.ReadAllLines(credentialsFile);
-                this._username = lines[0];
-                this._password = lines[1];
+                using (var stream = File.OpenRead(credentialsFile))
+                {
+                    _credentials = (OAuthCredentials) (new BinaryFormatter().Deserialize(stream));
+                }
             }
 
             WithClient(c =>
@@ -36,6 +40,25 @@ namespace LinqTwit.Twitter.Tests
 
                 });
         }
+
+        //[Test]
+        //public void CreateToken()
+        //{
+        //    var cred = new OAuthCredentials()
+        //        {
+        //            AccessToken = _token,
+        //            ConsumerKey = "key goes here",
+        //            ConsumerSecret = "secret goes here"
+        //        };
+
+        //    var credentialsFile =
+        //       Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\creds");
+
+        //    using (var stream = File.OpenWrite(credentialsFile))
+        //    {
+        //       new BinaryFormatter().Serialize(stream, cred);
+        //    }
+        //}
 
         [Test]
         public void Status()
@@ -105,23 +128,19 @@ namespace LinqTwit.Twitter.Tests
         }
 
         [Test]
-        public void SetCredentials()
-        {
-            var client = new TwitterRestClient("twitterEndpoint");
-
-            client.SetCredentials(this._username, this._password);
-            Statuses statuses =
-                                    client.FriendsTimeLine();
-            Assert.That(statuses.Count, Is.Not.EqualTo(0));
-        }
-
-        [Test]
         public void WrongCredentialsThrowsAuthorizationException()
         {
-            var client = new TwitterRestClient("twitterEndpoint");
+            var oldToken = _credentials.AccessToken;
+            _credentials.AccessToken = null;
 
-            client.SetCredentials("rogue_code", "wrong passwrord");
-            Assert.Throws<TwitterAuthorizationException>(() => client.FriendsTimeLine());
+            try
+            {
+                WithClient(client => Assert.Throws<TwitterAuthorizationException>(() => client.FriendsTimeLine()));
+            }
+            finally
+            {
+                _credentials.AccessToken = oldToken;
+            }
         }
 
         [Test]
@@ -129,8 +148,10 @@ namespace LinqTwit.Twitter.Tests
         {
             WithChannel(c =>
                 {
-                    Status s = c.Update("Foo bar");
-                    Assert.That(s.Text, Is.EqualTo("Foo bar"));
+                    var update = Guid.NewGuid().ToString();
+
+                    Status s = c.Update(update);
+                    Assert.That(s.Text, Is.EqualTo(update));
 
                 });
         }
@@ -206,9 +227,7 @@ namespace LinqTwit.Twitter.Tests
 
         private void WithClient(Action<TwitterRestClient> action)
         {
-            TwitterRestClient client = new TwitterRestClient("twitterEndpoint");
-            client.ClientCredentials.UserName.UserName = this._username;
-            client.ClientCredentials.UserName.Password = this._password;
+            var client = new TwitterRestClient("twitterEndpoint", CreateSession());
 
             action(client);
         }
@@ -217,12 +236,32 @@ namespace LinqTwit.Twitter.Tests
         {
             using (new WebChannelFactory<ITwitterRestServiceContract>("twitterEndpoint"))
             {
-                TwitterRestClient client = new TwitterRestClient("twitterEndpoint");
-                client.ClientCredentials.UserName.UserName = this._username;
-                client.ClientCredentials.UserName.Password = this._password;
+                var client = new TwitterRestClient("twitterEndpoint", CreateSession());
 
                 action(client);
             }
+        }
+
+        private IOAuthSession CreateSession()
+        {
+            var context = new OAuthConsumerContext()
+            {
+                ConsumerKey = _credentials.ConsumerKey,
+                ConsumerSecret = _credentials.ConsumerSecret,
+                SignatureMethod = SignatureMethod.HmacSha1,
+                UseHeaderForOAuthParameters = true
+            };
+
+            var session = new OAuthSession(context,
+                                            "http://twitter.com/oauth/request_token",
+                                            "http://twitter.com/oauth/authorize",
+                                            "http://twitter.com/oauth/access_token")
+                {
+                    AccessToken = _credentials.AccessToken
+                };
+
+            return session;
+
         }
     }
 }

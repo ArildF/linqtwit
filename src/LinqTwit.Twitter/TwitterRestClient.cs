@@ -2,15 +2,18 @@
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.ServiceModel.Web;
+using DevDefined.OAuth.Consumer;
+using LinqTwit.Twitter.OAuth;
 
 namespace LinqTwit.Twitter
 {
     public class TwitterRestClient : ClientBase<ITwitterRestServiceContract>, ITwitterRestServiceContract, ILinqApi
     {
-        public TwitterRestClient(string endpointName) : base(endpointName)
+        public TwitterRestClient(string endpointName, IOAuthSession session) : base(endpointName)
         {
-            
+            Endpoint.Behaviors.Add(new OAuthBehavior(session));
         }
+
         public Status GetStatus(string id)
         {
             return this.Channel.GetStatus(id);

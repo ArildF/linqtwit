@@ -3,7 +3,7 @@ using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.ServiceModel.Web;
 using DevDefined.OAuth.Consumer;
-using LinqTwit.Twitter.OAuth;
+using LinqTwit.Twitter.Wcf;
 
 namespace LinqTwit.Twitter
 {
@@ -12,6 +12,7 @@ namespace LinqTwit.Twitter
         public TwitterRestClient(string endpointName, IOAuthSession session) : base(endpointName)
         {
             Endpoint.Behaviors.Add(new OAuthBehavior(session));
+            Endpoint.Behaviors.Add(new PoxBehavior());
         }
 
         public Status GetStatus(string id)
@@ -53,6 +54,11 @@ namespace LinqTwit.Twitter
         public Statuses MentionsTimeLine(string sinceId, string count, string maxId, string page)
         {
             return Invoke(() => this.Channel.MentionsTimeLine(sinceId, count, maxId, page));
+        }
+
+        public RateLimitStatus RateLimitStatus()
+        {
+            return Channel.RateLimitStatus();
         }
 
 

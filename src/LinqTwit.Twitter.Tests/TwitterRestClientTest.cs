@@ -225,6 +225,18 @@ namespace LinqTwit.Twitter.Tests
             yield return (client, args) => client.UserTimeLine("rogue_code", args);
         }
 
+        [Test]
+        public void RateLimitStatus()
+        {
+            WithChannel(client =>
+                {
+                    RateLimitStatus status = client.RateLimitStatus();
+                    Assert.That(status.HourlyLimit, Is.GreaterThan(0));
+                    Assert.That(status.RemainingHits, Is.GreaterThan(0));
+                    Assert.That(status.ResetTimeInSeconds, Is.GreaterThan(0));
+                });
+        }
+
         private void WithClient(Action<TwitterRestClient> action)
         {
             var client = new TwitterRestClient("twitterEndpoint", CreateSession());

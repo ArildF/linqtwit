@@ -67,7 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OAuth\OAuthBehavior.cs" />
+    <Compile Include="Wcf\OAuthBehavior.cs" />
+    <Compile Include="RateLimitStatus.cs" />
     <Compile Include="TimeLineArgs.cs" />
     <Compile Include="ILinqApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="TwitterAuthorizationException.cs" />
     <Compile Include="TwitterRestClient.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="Wcf\PoxBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

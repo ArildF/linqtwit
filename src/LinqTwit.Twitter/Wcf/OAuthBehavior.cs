@@ -4,7 +4,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using DevDefined.OAuth.Consumer;
 
-namespace LinqTwit.Twitter.OAuth
+namespace LinqTwit.Twitter.Wcf
 {
     class OAuthBehavior : IEndpointBehavior
     {

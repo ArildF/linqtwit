@@ -91,6 +91,7 @@
     <Compile Include="QueryModule.cs" />
     <Compile Include="ValueConverters\TweetConverter.cs" />
     <Compile Include="ValueConverters\UserFullNameConverter.cs" />
+    <Compile Include="ViewModels\OAuthLoginViewModel.cs" />
     <Compile Include="ViewModels\QueryEntryViewModel.cs" />
     <Compile Include="ViewModels\QueryResultsContextMenu.cs" />
     <Compile Include="ViewModels\QueryResultsViewModel.cs" />

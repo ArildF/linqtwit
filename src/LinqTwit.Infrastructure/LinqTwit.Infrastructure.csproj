@@ -113,6 +113,7 @@
     <Compile Include="InfrastructureRegistry.cs" />
     <Compile Include="InputBehavior.cs" />
     <Compile Include="InputBindingBehavior.cs" />
+    <Compile Include="IProcessLauncher.cs" />
     <Compile Include="ListBoxBehavior.cs" />
     <Compile Include="MarkupExtensions\FirstFocusableExtension.cs" />
     <Compile Include="MenuKeyNames.cs" />

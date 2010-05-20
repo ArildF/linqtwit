@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOauthSession.cs" />
     <Compile Include="Wcf\OAuthBehavior.cs" />
     <Compile Include="RateLimitStatus.cs" />
     <Compile Include="TimeLineArgs.cs" />

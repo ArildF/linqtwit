@@ -72,6 +72,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TechTalk.SpecFlow">
+      <HintPath>..\..\lib\TechTalk.SpecFlow.dll</HintPath>
+    </Reference>
     <Reference Include="TestUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\TestUtilities.dll</HintPath>
@@ -86,6 +89,12 @@
     <Compile Include="QueryEntryViewModelTest.cs" />
     <Compile Include="QueryResultsContextMenuTest.cs" />
     <Compile Include="QueryResultsViewModelTest.cs" />
+    <Compile Include="Specs\OAuthLoginFeature.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OAuthLoginFeature.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Specs\Steps\OAuthLoginSteps.cs" />
     <Compile Include="TweetScreenControllerTest.cs" />
     <Compile Include="TweetViewModelTest.cs" />
     <Compile Include="UserFullNameConverterTest.cs" />
@@ -132,6 +141,13 @@
       <Name>LinqTwit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Specs\OAuthLoginFeature.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>OAuthLoginFeature.feature.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

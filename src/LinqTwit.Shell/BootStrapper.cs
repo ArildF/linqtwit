@@ -44,7 +44,7 @@ namespace LinqTwit.Shell
         {
             base.ConfigureContainer();
 
-            TwitterRestClient client = new TwitterRestClient("twitterEndpoint", TODO);
+            TwitterRestClient client = new TwitterRestClient("twitterEndpoint", null);
 
             Container.Configure(x =>
             {

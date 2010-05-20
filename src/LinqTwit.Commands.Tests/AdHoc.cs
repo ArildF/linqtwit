@@ -29,7 +29,7 @@ namespace LinqTwit.Commands.Tests
                     c.AddRegistry(new CommandsRegistry());
                     c.AddRegistry(new InfrastructureRegistry());
                     c.ForRequestedType<ILinqApi>().
-                        TheDefault.IsThis(new TwitterRestClient("", TODO));
+                        TheDefault.IsThis(new TwitterRestClient("", null));
 
                 });
 

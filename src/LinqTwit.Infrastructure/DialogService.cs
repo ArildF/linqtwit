@@ -12,10 +12,20 @@ namespace LinqTwit.Infrastructure
     public interface IDialogService
     {
         void Show(object view);
+        bool Show(IModalDialog dialog);
     }
 
     public class DialogService : IDialogService
     {
+        private readonly IModalDispatcher _modalDispatcher;
+        private readonly IRegionManager _manager;
+
+        public DialogService(IModalDispatcher modalDispatcher, IRegionManager manager)
+        {
+            _modalDispatcher = modalDispatcher;
+            _manager = manager;
+        }
+
         public void Show(object view)
         {
             var dialog = new DialogWindow
@@ -27,6 +37,19 @@ namespace LinqTwit.Infrastructure
             };
 
             dialog.ShowDialog();
+        }
+
+        public bool Show(IModalDialog dialog)
+        {
+            var frame = _modalDispatcher.CreateModalFrame();
+
+            dialog.DialogClosed += (sender, args) => frame.Stop();
+
+            _manager.Regions[RegionNames.DialogRegion].Add(dialog);
+
+            _modalDispatcher.Run(frame);
+
+            return dialog.Result ?? false;
         }
 
         protected Style DialogWindowStyle
